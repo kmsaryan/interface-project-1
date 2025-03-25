@@ -1,6 +1,7 @@
+// suggestions.jsx is a presentational component that displays a list of suggestions. It receives two props: suggestions and onSelectSuggestion. The suggestions prop is an array of strings that represent the suggestions to display. The onSelectSuggestion prop is a function that is called when a suggestion is clicked. It takes a single argument, which is the suggestion that was clicked.
 import React from "react";
 import PropTypes from "prop-types";
-import "./Suggestions.css";
+import "../styles/Suggestions.css";
 
 export default function Suggestions({ suggestions, onSelectSuggestion }) {
   return (

@@ -1,8 +1,9 @@
+//ChatInterface.jsx is a component that displays a chat interface with a message area, input area, and buttons for sending messages, viewing suggestions, starting a video call, and connecting to a technician. The component uses the useState hook to manage the messages, user input, and error state. It also includes the Suggestions, VideoCallButton, and TechnicianConnect components.
 import React, { useState } from "react";
 import Suggestions from "./Suggestions";
 import VideoCallButton from "./VideoCallButton";
 import TechnicianConnect from "./TechnicianConnect";
-import "./ChatInterface.css";
+import "../styles/ChatInterface.css";
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([]);

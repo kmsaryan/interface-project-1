@@ -1,5 +1,7 @@
+// TechnicianConnect.jsx is a new component that displays a button to connect to a technician. When the button is clicked, it simulates a connection process and displays a message indicating the connection status. This component can be used in the ChatInterface component to provide users with the option to connect to a technician for assistance.
+// The TechnicianConnect component is a functional component that uses the useState hook to manage the connection status and connection process. It displays a button that, when clicked, simulates a connection process and updates the connection status message accordingly.
 import React, { useState } from "react";
-import "./TechnicianConnect.css";
+import "../styles/TechnicianConnect.css";
 
 export default function TechnicianConnect() {
   const [isConnecting, setIsConnecting] = useState(false);
