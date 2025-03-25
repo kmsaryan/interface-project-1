@@ -28,6 +28,7 @@ interface-project
 │   │   ├── Suggestions.css
 │   │   ├── VideoCallButton.css
 │   │   └── TechnicianConnect.css
+│   │   └── App.css
 │   ├── App.jsx             # Main application component
 │   └── index.jsx           # Entry point for the React application
 ├── package.json            # npm configuration file
