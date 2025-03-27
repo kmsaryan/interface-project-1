@@ -1,0 +1,3 @@
+[submodule "src/react-chatbot-kit"]
+	path = src/react-chatbot-kit
+	url = git@github.com:hmoyen/react-chatbot-kit.git

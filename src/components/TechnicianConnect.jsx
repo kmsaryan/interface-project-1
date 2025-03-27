@@ -11,12 +11,23 @@ export default function TechnicianConnect() {
     setIsConnecting(true);
     setConnectionStatus("Connecting to a technician...");
 
-    // Simulate a connection process
     setTimeout(() => {
       setIsConnecting(false);
-      setConnectionStatus("Connected to a technician!");
+      setConnectionStatus(
+        <>
+          Connected to a technician! <br />
+          <a
+            href="https://meet.google.com/brs-udei-ufr" // Replace with your actual Meet link
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Join the call here
+          </a>
+        </>
+      );
     }, 3000); // Simulate a 3-second connection time
   };
+
 
   return (
     <div className="technician-connect">

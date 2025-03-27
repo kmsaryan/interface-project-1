@@ -46,9 +46,7 @@ export default function ChatInterface() {
         <button onClick={handleSendMessage}>Send</button>
         {error && <div className="error">{error}</div>}
       </div>
-      <Suggestions />
-      <VideoCallButton />
-      <TechnicianConnect />
+
     </div>
   );
 }
