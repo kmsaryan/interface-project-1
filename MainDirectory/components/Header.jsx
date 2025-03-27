@@ -1,3 +1,4 @@
+//Header.jsx is a functional component that renders the header of the application. It contains the logo, navigation links, and authentication buttons. The header is a common component that is used across multiple pages of the application.
 import React from "react";
 import "../styles/Header.css";
 
