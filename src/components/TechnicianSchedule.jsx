@@ -1,14 +1,7 @@
 // TechnicianSchedule.jsx
+import React from "react";
 
-import React, { useState } from "react";
-
-export default function TechnicianSchedule() {
-  const [schedule, setSchedule] = useState([]);
-
-  const addAvailability = (date, time) => {
-    setSchedule([...schedule, { date, time }]);
-  };
-
+export default function TechnicianSchedule({ schedule, addAvailability }) {
   return (
     <div className="technician-schedule">
       <h2>Technician Availability</h2>

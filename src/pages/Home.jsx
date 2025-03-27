@@ -5,6 +5,7 @@ import ChatInterface from "../components/ChatInterface";
 import Suggestions from "../components/Suggestions";
 import VideoCallButton from "../components/VideoCallButton";
 import TechnicianConnect from "../components/TechnicianConnect";
+import TechnicianSchedule from "../components/TechnicianSchedule";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../styles/Home.css";
@@ -12,15 +13,19 @@ import "../styles/Home.css";
 export default function Home({ onSubmitIssue }) {
   const [problem, setProblem] = useState("");
   const [image, setImage] = useState(null);
+  const [technicianSchedule, setTechnicianSchedule] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmitIssue({ problem, image });
   };
 
+  const addAvailability = (date, time) => {
+    setTechnicianSchedule([...technicianSchedule, { date, time }]);
+  };
+
   return (
     <div className="home">
-      <Header />
       <main className="main-content">
         <h1>VOLVO AI ASSISTANT</h1>
         <p>What is your problem?</p>
@@ -38,9 +43,13 @@ export default function Home({ onSubmitIssue }) {
           <ChatInterface />
           <Suggestions />
           <VideoCallButton />
-          <TechnicianConnect />
+          <TechnicianConnect technicianSchedule={technicianSchedule} />
           <button type="submit">Submit</button>
         </form>
+        <TechnicianSchedule
+          schedule={technicianSchedule}
+          addAvailability={addAvailability}
+        />
       </main>
       <Footer />
     </div>
