@@ -1,0 +1,21 @@
+/*Footer.css*/
+
+.footer {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: #f8f8f8;
+}
+
+.footer-section h4 {
+  margin-bottom: 10px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section li {
+  margin-bottom: 5px;
+}
