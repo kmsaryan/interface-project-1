@@ -1,5 +1,5 @@
 //ChatInterface.jsx is a component that displays a chat interface with a message area, input area, and buttons for sending messages, viewing suggestions, starting a video call, and connecting to a technician. The component uses the useState hook to manage the messages, user input, and error state. It also includes the Suggestions, VideoCallButton, and TechnicianConnect components.
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Suggestions from "./Suggestions";
 import VideoCallButton from "./VideoCallButton";
 import TechnicianConnect from "./TechnicianConnect";
@@ -9,6 +9,20 @@ export default function ChatInterface() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    // Simulate fetching suggestions based on user input
+    if (input.length > 2) {
+      setSuggestions([
+        `Try restarting your ${input}`,
+        `Check the ${input} manual`,
+        `Contact support about ${input}`,
+      ]);
+    } else {
+      setSuggestions([]);
+    }
+  }, [input]);
 
   const handleSendMessage = () => {
     if (input.trim() === "") {
@@ -25,6 +39,11 @@ export default function ChatInterface() {
       const response = "I'm sorry, I couldn't fix that. Would you like to connect with a technician?";
       setMessages((prevMessages) => [...prevMessages, { text: response, sender: "assistant" }]);
     }, 1000);
+  };
+
+  const onSelectSuggestion = (suggestion) => {
+    setInput(suggestion);
+    setSuggestions([]);
   };
 
   return (
@@ -46,8 +65,8 @@ export default function ChatInterface() {
         <button onClick={handleSendMessage}>Send</button>
         {error && <div className="error">{error}</div>}
       </div>
-      <Suggestions />
-      <VideoCallButton />
+      <Suggestions suggestions={suggestions} onSelectSuggestion={onSelectSuggestion} />
+      <VideoCallButton onClick={() => setIsConnecting(true)} />
       <TechnicianConnect />
     </div>
   );

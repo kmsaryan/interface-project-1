@@ -1,0 +1,17 @@
+/* Troubleshoot.css */
+
+.troubleshoot {
+  padding: 20px;
+  text-align: center;
+}
+
+.troubleshoot h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.troubleshoot img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 20px;
+}
