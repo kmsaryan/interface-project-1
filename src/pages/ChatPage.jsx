@@ -1,4 +1,5 @@
-//ChatPage.jsx
+// File: src/pages/ChatPage.jsx
+// ChatPage.jsx
 import React, { useState } from "react";
 import ChatInterface from "../components/ChatInterface";
 import VideoCallButton from "../components/VideoCallButton";
@@ -7,6 +8,10 @@ import "../styles/Header.css";
 import "../styles/Footer.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import "../components/ChatInterface.jsx";
+import "../components/VideoCallButton.jsx";
+import "../components/Footer.jsx";
+import "../components/Header.jsx";
 
 export default function ChatPage() {
   const [issueResolved, setIssueResolved] = useState(false);
@@ -17,7 +22,7 @@ export default function ChatPage() {
 
   return (
     <div className="chat-page">
-        <Header />
+      <Header />
       <h1>Chat with Volvo Assistant</h1>
       <ChatInterface />
       {!issueResolved && (
@@ -30,6 +35,7 @@ export default function ChatPage() {
           <button className="live-chat-button">Live Chat (Coming Soon)</button>
         </div>
       )}
+      <Footer />
     </div>
   );
 }

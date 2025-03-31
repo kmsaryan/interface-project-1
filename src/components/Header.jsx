@@ -3,6 +3,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Header.css";
 import logo from "../assets/images/volvo-alt.svg";
+import "../pages/Home.jsx";
+import "../pages/ChatPage.jsx";
+import "../components/ChatInterface.jsx";
 
 export default function Header() {
   return (
