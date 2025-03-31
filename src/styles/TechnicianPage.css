@@ -1,0 +1,40 @@
+.technician-page {
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  height: 100vh;
+}
+
+.technician-page h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.technician-actions {
+  margin-bottom: 20px;
+}
+
+.video-call-button,
+.live-chat-button {
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.video-call-button:hover,
+.live-chat-button:hover {
+  background-color: #357ab8;
+}
+
+.video-call-button:disabled,
+.live-chat-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

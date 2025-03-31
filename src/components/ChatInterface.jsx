@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from "react";
 import Suggestions from "./Suggestions";
 import VideoCallButton from "./VideoCallButton";
-import TechnicianConnect from "./TechnicianConnect";
 import "../styles/ChatInterface.css";
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [file, setFile] = useState(null); // State for file attachments
   const [error, setError] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
@@ -25,13 +25,15 @@ export default function ChatInterface() {
   }, [input]);
 
   const handleSendMessage = () => {
-    if (input.trim() === "") {
-      setError("Please enter a message.");
+    if (input.trim() === "" && !file) {
+      setError("Please enter a message or attach a file.");
       return;
     }
 
-    setMessages([...messages, { text: input, sender: "user" }]);
+    // Add the message to the chat
+    setMessages([...messages, { text: input, file, sender: "user" }]);
     setInput("");
+    setFile(null); // Clear the file input
     setError("");
 
     // Simulate a response from the assistant
@@ -52,22 +54,39 @@ export default function ChatInterface() {
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.sender}`}>
             {msg.text}
+            {msg.file && (
+              <div className="attachment">
+                <img src={URL.createObjectURL(msg.file)} alt="Attachment" />
+              </div>
+            )}
           </div>
         ))}
       </div>
       <div className="input-area">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
-        />
-        <button onClick={handleSendMessage}>Send</button>
+        <div className="input-wrapper">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type your message..."
+          />
+          <label className="attachment-icon">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files[0])}
+              style={{ display: "none" }}
+            />
+            📎
+          </label>
+        </div>
+        <button className="send-button" onClick={handleSendMessage}>
+          Send
+        </button>
         {error && <div className="error">{error}</div>}
       </div>
       <Suggestions suggestions={suggestions} onSelectSuggestion={onSelectSuggestion} />
-      <VideoCallButton onClick={() => setIsConnecting(true)} />
-      <TechnicianConnect />
+      <VideoCallButton />
     </div>
   );
 }

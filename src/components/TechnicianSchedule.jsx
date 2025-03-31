@@ -2,6 +2,11 @@
 import React from "react";
 
 export default function TechnicianSchedule({ schedule, addAvailability }) {
+  if (!schedule) {
+    console.error("The 'schedule' prop is undefined.");
+    return null;
+  }
+
   return (
     <div className="technician-schedule">
       <h2>Technician Availability</h2>

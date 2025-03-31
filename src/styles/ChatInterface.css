@@ -130,3 +130,100 @@
 .text-strong {
     font-weight: bold;
 }
+
+.chat-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message.user {
+    background-color: #d1e7dd;
+    text-align: right;
+}
+
+.message.assistant {
+    background-color: #f8d7da;
+    text-align: left;
+}
+
+.attachment {
+    margin-top: 5px;
+}
+
+.attachment img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 5px;
+}
+
+.input-area {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    border-top: 1px solid #ccc;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #f9f9f9;
+}
+
+.input-wrapper input[type="text"] {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    background-color: transparent;
+}
+
+.attachment-icon {
+    cursor: pointer;
+    font-size: 20px;
+    margin-left: 10px;
+    color: #4a90e2;
+}
+
+.attachment-icon:hover {
+    color: #357ab8;
+}
+
+.send-button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.send-button:hover {
+    background-color: #357ab8;
+}
+
+.error {
+    color: red;
+    margin-top: 5px;
+}
