@@ -31,7 +31,6 @@ export default function Home({ onSubmitIssue = () => {} }) {
         <p>What is your problem?</p>
         <form className="assistant-form" onSubmit={handleSubmit}>
           <ChatInterface />
-          <button type="submit">Submit</button>
         </form>
         <TechnicianConnect technicianSchedule={technicianSchedule} />
         <TechnicianSchedule
