@@ -41,6 +41,7 @@ export default function ChatInterface() {
       const response = "I'm sorry, I couldn't fix that. Would you like to connect with a technician?";
       setMessages((prevMessages) => [...prevMessages, { text: response, sender: "assistant" }]);
     }, 1000);
+    navigate("/chatpage");
   };
 
   const onSelectSuggestion = (suggestion) => {

@@ -45,8 +45,13 @@ This project is designed to create an intuitive interface inspired by ChatGPT's 
 ## Installation
 1. Clone the repository:
    ```
-   git clone <repository-url>
+   git clone --recursive <repository-url>
    ```
+   If you have cloned it without the recursive flag:
+   ```
+   git submodule update --init --recursive
+   ```
+
 2. Navigate to the project directory:
    ```
    cd interface-project

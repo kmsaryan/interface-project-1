@@ -4,9 +4,12 @@ import LoginPage from "./pages/LoginPage";
 import Home from "./pages/Home";
 import "./styles/fonts.css";
 import TechnicianPage from "./pages/TechnicianPage";
+import ChatPage from "./pages/ChatPage";
+
 import "./styles/App.css";
 import Header from "./components/Header";
 import SignInPage from "./pages/SignInPage";
+
 
 function App() {
   return (
@@ -14,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} /> {/* Login Page */}
         <Route path="/home" element={<Home />} /> {/* Customer Home Page */}
+        <Route path="/chatpage" element={<ChatPage />} />
         <Route path="/technician" element={<TechnicianPage />} /> {/* Technician Page */}
         <Route path="/signin" element={<SignInPage />} />
         {/* Add a placeholder for registration */}

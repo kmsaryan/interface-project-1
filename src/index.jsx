@@ -1,16 +1,13 @@
-//index.jsx is the entry point of the application. It is the first file that gets executed when the application is run. It is responsible for rendering the App component in the root element of the HTML document.
-
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";  // Notice the new import path
 import App from "./App";
-import "./styles/ChatInterface.css";
-import "./styles/Suggestions.css";
-import "./styles/VideoCallButton.css";
-import "./styles/TechnicianConnect.css";
 
-ReactDOM.render(
+// Create a root using the new API
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// Render the app inside StrictMode
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
