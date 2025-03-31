@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.fa654069.css",
-    "main.js": "/static/js/main.53620704.js",
+    "main.css": "/static/css/main.c2c2777b.css",
+    "main.js": "/static/js/main.09d61b68.js",
     "static/media/bot1.png": "/static/media/bot1.aeafb21b97b499d9d38b.png",
     "static/media/fonnts.com-Volvo_Novum_Light.ttf": "/static/media/fonnts.com-Volvo_Novum_Light.fc5f9424065e4b691fbd.ttf",
     "static/media/VolvoBroad.ttf": "/static/media/VolvoBroad.0825c0d350e94ad9a864.ttf",
     "static/media/mechanic.png": "/static/media/mechanic.298c8be4aea74daa0169.png",
     "index.html": "/index.html",
-    "main.fa654069.css.map": "/static/css/main.fa654069.css.map",
-    "main.53620704.js.map": "/static/js/main.53620704.js.map"
+    "main.c2c2777b.css.map": "/static/css/main.c2c2777b.css.map",
+    "main.09d61b68.js.map": "/static/js/main.09d61b68.js.map"
   },
   "entrypoints": [
-    "static/css/main.fa654069.css",
-    "static/js/main.53620704.js"
+    "static/css/main.c2c2777b.css",
+    "static/js/main.09d61b68.js"
   ]
 }
