@@ -3,11 +3,16 @@
 import React, { useState } from "react";
 import "../styles/TechnicianConnect.css";
 
-export default function TechnicianConnect() {
+export default function TechnicianConnect({ technicianSchedule }) {
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState("");
 
   const handleConnect = () => {
+    if (technicianSchedule.length === 0) {
+      setConnectionStatus("No technicians are currently available.");
+      return;
+    }
+
     setIsConnecting(true);
     setConnectionStatus("Connecting to a technician...");
 

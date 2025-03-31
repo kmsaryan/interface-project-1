@@ -1,0 +1,25 @@
+/*Solution.css*/
+
+.solution {
+  padding: 20px;
+}
+
+.solution h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.solution ol {
+  list-style: decimal;
+  padding-left: 20px;
+}
+
+.solution li {
+  margin-bottom: 10px;
+}
+
+.solution img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+}

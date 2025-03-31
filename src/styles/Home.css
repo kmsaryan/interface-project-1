@@ -1,0 +1,33 @@
+/*Home.css*/
+.home {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.home h1 {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.home p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.assistant-form {
+  margin-top: 20px;
+}
+
+.assistant-form input {
+  padding: 10px;
+  width: 300px;
+  margin-right: 10px;
+}
+
+.assistant-form button {
+  padding: 10px 20px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
