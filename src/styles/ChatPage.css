@@ -8,7 +8,7 @@
   src: url('../fonts/VolvoBroad.ttf') format('truetype');
 }
 
-.App {
+.ChatPage {
   font-family: 'Novum-Light';
   text-align: center;
 }

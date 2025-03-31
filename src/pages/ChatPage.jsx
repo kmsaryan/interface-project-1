@@ -1,20 +1,20 @@
-import "./styles/App.css";
+import '../styles/ChatPage.css';
 import React, { useState } from "react";
 import MetaTags from "react-meta-tags";
 import Fade from "react-reveal/Fade";
 import Flip from "react-reveal/Flip";
-import Chatbot from "./react-chatbot-kit";
-import config from "./components/chatbotConfig";
-import MessageParser from "./components/MessageParser"; // Import your existing MessageParser
-import ActionProvider from "./components/ActionProvider";
-import TypedReact from "./components/TypedReact";
-import logo from "./assets/volvo.png"; // Import your logo
+import Chatbot from "../react-chatbot-kit";
+import config from "../components/chatbotConfig";
+import MessageParser from "../components/MessageParser"; 
+import ActionProvider from "../components/ActionProvider";
+import TypedReact from "../components/TypedReact";
+import logo from "../assets/volvo.png"; 
 
-export default function App() {
+export default function ChatPage() {
   const [showBot, toggleBot] = useState(false);
 
   return (
-    <div className="App">
+    <div className="ChatPage">
       <MetaTags>
         <title>Volvo CE Chatbot</title>
         <meta name="description" content="Repair AI assistance" />

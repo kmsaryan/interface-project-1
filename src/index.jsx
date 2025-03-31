@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import ChatPage from "./pages/ChatPage";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ChatPage />
   </React.StrictMode>,
   document.getElementById("root")
 );
