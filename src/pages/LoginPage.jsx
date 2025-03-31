@@ -1,32 +1,58 @@
-//loginPage.jsx
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
+// /src/pages/LoginPage.jsx
+
+import React, { useState } from "react";
+import axios from "axios";
 import "../styles/LoginPage.css";
 
-export default function LoginPage() {
-  const navigate = useNavigate();
+const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleCustomerLogin = () => {
-    navigate("/home"); // Redirect to the Home page (Customer)
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleTechnicianLogin = () => {
-    navigate("/technician"); // Redirect to the Technician page
+    try {
+      const response = await axios.post("http://localhost:5000/api/users/login", {
+        email,
+        password,
+      });
+      localStorage.setItem("token", response.data.token); 
+      window.location.href = "/";
+    } catch (err) {
+      setError("Invalid email or password");
+    }
   };
 
   return (
-    <div className="login-page">
-      <Header />
-      <h1>Welcome to Volvo AI Assistant</h1>
-      <div className="login-options">
-        <button className="login-button" onClick={handleCustomerLogin}>
-          Customer
-        </button>
-        <button className="login-button" onClick={handleTechnicianLogin}>
-          Technician
-        </button>
-      </div>
+    <div className="login-container">
+      <h2>Login</h2>
+      {error && <div className="error">{error}</div>}
+      <form onSubmit={handleSubmit}>
+        <div className="input-group">
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="input-group">
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Login</button>
+      </form>
     </div>
   );
-}
+};
+
+export default LoginPage;

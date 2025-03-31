@@ -1,6 +1,9 @@
-//Header.jsx is a functional component that renders the header of the application. It contains the logo, navigation links, and authentication buttons. The header is a common component that is used across multiple pages of the application.
+// /src/components/Header.jsx
+
 import React from "react";
 import "../styles/Header.css";
+import { Link } from "react-router-dom";
+import logo from "../assets/volvo.png";
 
 export default function Header() {
   return (
@@ -17,7 +20,12 @@ export default function Header() {
       </nav>
       <div className="auth-buttons">
         <button className="sign-in">Sign In</button>
-        <button className="register">Register</button>
+        <Link to="/login">
+          <button className="login">Login</button>
+        </Link>
+        <Link to="/register">
+          <button className="register">Register</button>
+        </Link>
       </div>
     </header>
   );
