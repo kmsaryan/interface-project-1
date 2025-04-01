@@ -10,7 +10,6 @@ import Footer from "../components/Footer";
 export default function TechnicianPage() {
   return (
     <div className="technician-page">
-        <Header />
       <h1>Technician Dashboard</h1>
       <div className="technician-actions">
         <button className="video-call-button">Attend Video Call</button>
