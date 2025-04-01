@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../styles/LoginPage.css";
+import Header from "../components/Header";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -11,18 +12,27 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post("http://localhost:5000/api/users/login", {
         email,
         password,
       });
-      localStorage.setItem("token", response.data.token); 
-      window.location.href = "/";
+  
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+  
+      if (response.data.user.role === "customer") {
+        window.location.href = "/customer_home";
+      } else {
+        window.location.href = "/technician_home";
+      }
     } catch (err) {
       setError("Invalid email or password");
     }
   };
+  
+  
 
   return (
     <div className="login-container">

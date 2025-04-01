@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "VolvoNovumLight";
+  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "VolvoBroad";
+  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
+}
+
+body {
+  font-family: "VolvoNovumLight", Arial, sans-serif;
+}
+
+header {
+  font-family: "VolvoBroad", Arial, sans-serif;
+  font-size: 24px;
+  text-transform: uppercase;
+}

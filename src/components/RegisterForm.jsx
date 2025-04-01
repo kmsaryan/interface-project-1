@@ -1,6 +1,6 @@
-// RegisterForm.jsx
 import React, { useState } from "react";
-import '../styles/App.css'
+import { useNavigate } from "react-router-dom";
+import "../styles/App.css";
 import axios from "axios";
 
 export default function RegisterForm() {
@@ -9,6 +9,8 @@ export default function RegisterForm() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("customer");
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,8 +22,10 @@ export default function RegisterForm() {
         password,
         role,
       });
+
       if (response.status === 201) {
         alert("User registered successfully!");
+        navigate("/"); 
       }
     } catch (error) {
       setError("Error registering user");

@@ -1,31 +1,56 @@
-// /src/components/Header.jsx
-
-import React from "react";
-import "../styles/Header.css";
-import { Link } from "react-router-dom";
-import logo from "../assets/volvo.png";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../styles/App.css";
+import logo from "../assets/volvo_logo.png";
 
 export default function Header() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Error parsing user from localStorage:", error);
+        localStorage.removeItem("user");
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/");
+  };
+
   return (
     <header className="header">
-      <div className="logo">LOGO</div>
+      <div className="logo">
+      <img src={logo} alt="Volvo Logo"  />      </div>
       <nav className="nav">
-        <a href="#products">Products</a>
-        <a href="#solutions">Solutions</a>
-        <a href="#community">Community</a>
-        <a href="#resources">Resources</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
-        <a href="#link">Link</a>
+        <Link to="/">HOME</Link>
+        <Link to="/chat">NEWS & MEDIA</Link>
+        <Link to="/technician">NEWS</Link>
       </nav>
       <div className="auth-buttons">
-        <button className="sign-in">Sign In</button>
-        <Link to="/login">
-          <button className="login">Login</button>
-        </Link>
-        <Link to="/register">
-          <button className="register">Register</button>
-        </Link>
+        {user ? (
+          <div className="user-info">
+            <span>Welcome, {user.name}!</span>
+            <button className="logout" onClick={handleLogout}>Sign Out</button>
+          </div>
+        ) : (
+          <>
+            <Link to="/login">
+              <button className="login">Login</button>
+            </Link>
+            <Link to="/register">
+              <button className="register">Register</button>
+            </Link>
+          </>
+        )}
       </div>
     </header>
   );

@@ -1,28 +1,79 @@
+@font-face {
+  font-family: "VolvoNovumLight";
+  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "VolvoBroad";
+  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #000;
+  font-family: "VolvoNovumLight", Arial, sans-serif;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
   color: #fff;
+  
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box; /* Ensures padding is included in the element's total width/height */
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
+
+.logo img {
+  width: 180px;
+  object-fit: contain; /* Ensures the image scales properly */
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end; /* Align links to the right */
 }
 
 .nav a {
   margin: 0 10px;
-  color: #fff;
   text-decoration: none;
+  color: #333;
+  font-family: "VolvoNovumLight", Arial, sans-serif;
+  font-size: 16px;
+}
+
+.user-info span {
+  color: black;
+}
+
+.nav a:hover {
+  color: rgb(142, 142, 142);
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
 }
 
 .auth-buttons button {
   margin-left: 10px;
-  padding: 5px 10px;
+  padding: 10px 15px;
+  font-family: "VolvoNovumLight", Arial, sans-serif;
+  background-color: #b3b9bf;
+  color: rgb(0, 0, 0);
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+}
+
+.auth-buttons button:hover {
+  background-color: #cbd0d5;
 }
 
 .sign-in {

@@ -10,36 +10,30 @@ This project is designed to create an intuitive interface inspired by ChatGPT's 
 - **Technician Connection**: A management system for connecting users to technicians, including status updates and messages.
 
 ## Project Structure
-.
-├── MainDirectory
-│   ├── App.jsx
-│   ├── components
-│   │   ├── ChatInterface.jsx
-│   │   ├── Header.jsx
-│   │   ├── Solution.jsx
-│   │   ├── Suggestions.jsx
-│   │   ├── TechnicianConnect.jsx
-│   │   ├── TechnicianSchedule.jsx
-│   │   ├── Troubleshoot.jsx
-│   │   └── VideoCallButton.jsx
-│   ├── index.jsx
-│   ├── pages
-│   │   └── Home.jsx
-│   └── styles
-│       ├── App.css
-│       ├── ChatInterface.css
-│       ├── Header.css
-│       ├── Solution.css
-│       ├── Suggestions.css
-│       ├── TechnicianConnect.css
-│       ├── Troubleshoot.css
-│       └── VideoCallButton.css
-├── package.json
-├── package-lock.json
+```
+interface-project
 ├── public
-│   ├── favicon.ico
-│   └── index.html
-└── README.md
+│   ├── index.html          # Main HTML file for the application
+│   └── favicon.ico         # Favicon for the application
+├── src
+│   ├── components          # Contains all React components
+│   │   ├── ChatInterface.jsx
+│   │   ├── Suggestions.jsx
+│   │   ├── VideoCallButton.jsx
+│   │   └── TechnicianConnect.jsx
+│   ├── pages               # Contains page components
+│   │   └── Home.jsx
+│   ├── styles              # Contains CSS styles for components
+│   │   ├── ChatInterface.css
+│   │   ├── Suggestions.css
+│   │   ├── VideoCallButton.css
+│   │   └── TechnicianConnect.css
+│   │   └── App.css
+│   ├── App.jsx             # Main application component
+│   └── index.jsx           # Entry point for the React application
+├── package.json            # npm configuration file
+├── .gitignore              # Git ignore file
+└── README.md               # Project documentation
 ```
 
 ## Installation
@@ -60,7 +54,11 @@ This project is designed to create an intuitive interface inspired by ChatGPT's 
    ```
    npm install
    ```
+4. If there is any problem:
 
+   ```
+   npm install <library> --legacy-peer-deps
+   ```
 ## Usage
 To start the application, run:
 ```
