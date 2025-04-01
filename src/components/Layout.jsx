@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import "../styles/App.css"; // (Optional) If you have layout-specific styles.
+import "../styles/Layout.css"; 
 
 const Layout = ({ children }) => {
   return (

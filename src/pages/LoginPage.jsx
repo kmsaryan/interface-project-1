@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-import "../styles/LoginPage.css";
+import "../styles/RegisterLogin.css";
 import Header from "../components/Header";
 
 const LoginPage = () => {

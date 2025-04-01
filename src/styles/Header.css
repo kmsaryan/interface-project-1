@@ -19,25 +19,25 @@
   color: #fff;
   
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
+  width: 100vw; 
+  max-width: 100vw; 
   position: sticky;
   top: 0;
   left: 0;
-  width: 100%;
   z-index: 1000;
-  box-sizing: border-box; /* Ensures padding is included in the element's total width/height */
+  box-sizing: border-box; 
 }
 
 
 .logo img {
   width: 180px;
-  object-fit: contain; /* Ensures the image scales properly */
+  object-fit: contain;
 }
 
 .nav {
   display: flex;
   gap: 20px;
-  justify-content: flex-end; /* Align links to the right */
+  justify-content: flex-end; 
 }
 
 .nav a {
@@ -58,11 +58,12 @@
 
 .auth-buttons {
   display: flex;
-  gap: 10px;
+  gap: 10px; /* Reduce spacing between buttons */
+  align-items: center;
 }
 
 .auth-buttons button {
-  margin-left: 10px;
+  margin: 10px; /* Remove unwanted left margin */
   padding: 10px 15px;
   font-family: "VolvoNovumLight", Arial, sans-serif;
   background-color: #b3b9bf;
@@ -76,13 +77,8 @@
   background-color: #cbd0d5;
 }
 
-.sign-in {
-  background-color: transparent;
-  color: #fff;
-}
-
 .register {
   background-color: #fff;
   color: #000;
-  border-radius: 5px;
 }
+

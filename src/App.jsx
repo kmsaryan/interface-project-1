@@ -11,7 +11,6 @@ import "./styles/App.css";
 function App() {
   return (
     <Router>
-      {/* Apply Layout Globally */}
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} /> {/* Home Page */}

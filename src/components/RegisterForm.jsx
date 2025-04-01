@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/App.css";
+import "../styles/RegisterLogin.css"; 
 import axios from "axios";
 
 export default function RegisterForm() {
@@ -25,7 +25,7 @@ export default function RegisterForm() {
 
       if (response.status === 201) {
         alert("User registered successfully!");
-        navigate("/"); 
+        navigate("/");
       }
     } catch (error) {
       setError("Error registering user");
@@ -33,10 +33,11 @@ export default function RegisterForm() {
   };
 
   return (
-    <div>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="register-container">
+      <h2>Register</h2>
+      {error && <div className="error">{error}</div>}
+      <form onSubmit={handleSubmit} className="register-form">
+        <div className="input-group">
           <label>Name</label>
           <input
             type="text"
@@ -45,7 +46,7 @@ export default function RegisterForm() {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Email</label>
           <input
             type="email"
@@ -54,7 +55,7 @@ export default function RegisterForm() {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Password</label>
           <input
             type="password"
@@ -63,7 +64,7 @@ export default function RegisterForm() {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Role</label>
           <select
             value={role}
