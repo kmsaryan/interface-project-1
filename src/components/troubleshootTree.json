@@ -1,0 +1,16 @@
+{
+    "question": "Is the engine turning on?",
+    "yes": {
+      "question": "Is it making any unusual noise?",
+      "yes": {
+        "solution": "Check for loose parts."
+      },
+      "no": {
+        "solution": "Try restarting the system."
+      }
+    },
+    "no": {
+      "solution": "Check battery or call technician."
+    }
+  }
+  
