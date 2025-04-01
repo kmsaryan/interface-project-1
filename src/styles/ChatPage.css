@@ -1,9 +1,11 @@
 .chat-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f9f9f9;
   padding: 20px;
   text-align: center;
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  height: 100vh;
 }
 
 .chat-page h1 {
@@ -42,4 +44,83 @@
 .live-chat-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.chat-interface {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.chat-interface.chat-layout {
+  justify-content: space-between; /* Ensure input box stays at the bottom */
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.message {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+.message.user {
+  background-color: #d1e7dd;
+  align-self: flex-end;
+}
+
+.message.assistant {
+  background-color: #f8d7da;
+  align-self: flex-start;
+}
+
+.suggestions {
+  margin-bottom: 10px;
+}
+
+.suggestions ul {
+  list-style: none;
+  padding: 0;
+}
+
+.suggestions li {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.suggestions li:hover {
+  background-color: #ced4da;
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.input-area button {
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.input-area button:hover {
+  background-color: #357ab8;
 }

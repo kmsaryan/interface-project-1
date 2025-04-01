@@ -1,7 +1,5 @@
-//ChatInterface.jsx is a component that displays a chat interface with a message area, input area, and buttons for sending messages, viewing suggestions, starting a video call, and connecting to a technician. The component uses the useState hook to manage the messages, user input, and error state. It also includes the Suggestions, VideoCallButton, and TechnicianConnect components.
 import React, { useState, useEffect } from "react";
 import Suggestions from "./Suggestions";
-import VideoCallButton from "./VideoCallButton";
 import "../styles/ChatInterface.css";
 
 export default function ChatInterface() {
@@ -10,19 +8,17 @@ export default function ChatInterface() {
   const [file, setFile] = useState(null); // State for file attachments
   const [error, setError] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(true); // Show suggestions initially
 
   useEffect(() => {
-    // Simulate fetching suggestions based on user input
-    if (input.length > 2) {
-      setSuggestions([
-        `Try restarting your ${input}`,
-        `Check the ${input} manual`,
-        `Contact support about ${input}`,
-      ]);
-    } else {
-      setSuggestions([]);
-    }
-  }, [input]);
+    // Display the first message with suggestions when the component loads
+    setMessages([{ text: "Welcome! How can I assist you today?", sender: "assistant" }]);
+    setSuggestions([
+      "Try restarting your device",
+      "Check the user manual",
+      "Contact support",
+    ]);
+  }, []);
 
   const handleSendMessage = () => {
     if (input.trim() === "" && !file) {
@@ -30,7 +26,7 @@ export default function ChatInterface() {
       return;
     }
 
-    // Add the message to the chat
+    // Add the user's message to the chat
     setMessages([...messages, { text: input, file, sender: "user" }]);
     setInput("");
     setFile(null); // Clear the file input
@@ -41,11 +37,14 @@ export default function ChatInterface() {
       const response = "I'm sorry, I couldn't fix that. Would you like to connect with a technician?";
       setMessages((prevMessages) => [...prevMessages, { text: response, sender: "assistant" }]);
     }, 1000);
+
+    // Hide suggestions after the first message
+    setShowSuggestions(false);
   };
 
-  const onSelectSuggestion = (suggestion) => {
+  const handleSelectSuggestion = (suggestion) => {
     setInput(suggestion);
-    setSuggestions([]);
+    setShowSuggestions(false); // Hide suggestions after selecting one
   };
 
   return (
@@ -62,31 +61,34 @@ export default function ChatInterface() {
           </div>
         ))}
       </div>
-      <div className="input-area">
-        <div className="input-wrapper">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-          />
-          <label className="attachment-icon">
+      {showSuggestions && (
+        <Suggestions suggestions={suggestions} onSelectSuggestion={handleSelectSuggestion} />
+      )}
+      {!showSuggestions && (
+        <div className="input-area">
+          <div className="input-wrapper">
             <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setFile(e.target.files[0])}
-              style={{ display: "none" }}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type your message..."
             />
-            📎
-          </label>
+            <label className="attachment-icon">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files[0])}
+                style={{ display: "none" }}
+              />
+              📎
+            </label>
+          </div>
+          <button className="send-button" onClick={handleSendMessage}>
+            Send
+          </button>
+          {error && <div className="error">{error}</div>}
         </div>
-        <button className="send-button" onClick={handleSendMessage}>
-          Send
-        </button>
-        {error && <div className="error">{error}</div>}
-      </div>
-      <Suggestions suggestions={suggestions} onSelectSuggestion={onSelectSuggestion} />
-      <VideoCallButton />
+      )}
     </div>
   );
 }
