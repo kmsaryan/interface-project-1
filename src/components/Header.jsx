@@ -29,11 +29,13 @@ export default function Header() {
   return (
     <header className="header">
       <div className="logo">
-      <img src={logo} alt="Volvo Logo"  />      </div>
+        <img src={logo} alt="Volvo Logo" />
+      </div>
       <nav className="nav">
         <Link to="/">HOME</Link>
         <Link to="/chat">NEWS & MEDIA</Link>
         <Link to="/technician">NEWS</Link>
+        {user && user.role === "customer" && <Link to="/customer_home">MY SERVICES</Link>}
       </nav>
       <div className="auth-buttons">
         {user ? (

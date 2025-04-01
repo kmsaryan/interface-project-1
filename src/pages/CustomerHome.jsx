@@ -1,10 +1,8 @@
 import React from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import "../styles/App.css";
+import "../styles/CustomerPage.css";
 import { Link } from "react-router-dom";
 
-export default function CustomerHomePage() {
+export default function CustomerHome() {
   return (
     <div className="customer-home-container">
       <main className="main-content">
