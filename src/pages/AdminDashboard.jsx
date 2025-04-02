@@ -1,5 +1,5 @@
 import React from 'react';
-import TreeEditor from './components/TreeEditor';
+import TreeEditor from '../components/TreeEditor';
 import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {

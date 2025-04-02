@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import treeData from '../troubleshootTree.json';
+import treeData from './troubleshootTree.json';
 
 const TreeNode = ({ node, path = [] }) => {
   const [expanded, setExpanded] = useState(true);
