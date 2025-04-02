@@ -11,10 +11,7 @@ export default function TechnicianPage() {
   return (
     <div className="technician-page">
       <h1>Technician Dashboard</h1>
-      <div className="technician-actions">
-        <button className="video-call-button">Attend Video Call</button>
-        <button className="live-chat-button">Answer Live Chat</button>
-      </div>
+
       <TechnicianSchedule />
     </div>
   );

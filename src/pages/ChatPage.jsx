@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import Chatbot from "../react-chatbot-kit";
+import '../styles/ChatPage.css'
 import config from "../components/chatbotConfig";
 import MessageParser from "../components/MessageParser";
 import ActionProvider from "../components/ActionProvider";
 import TypedReact from "../components/TypedReact";
-import logo from "../assets/volvo.png";
+import logo from "../assets/volvo_logo.png";
 
 export default function ChatPage() {
   const [showBot, toggleBot] = useState(false);
@@ -30,8 +31,8 @@ export default function ChatPage() {
         <div className="app-chatbot-container">
           <Chatbot
             config={config}
-            messageParser={MessageParser}  // Use your existing MessageParser
-            actionProvider={ActionProvider} // Use your existing ActionProvider
+            messageParser={MessageParser}
+            actionProvider={ActionProvider}
           />
         </div>
       )}

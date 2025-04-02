@@ -12,7 +12,7 @@ export default function CustomerHome() {
             <h2>Manage My Fleet</h2>
             <p>View and manage your vehicles.</p>
           </Link>
-          <Link to="/help" className="option-card">
+          <Link to="/chatpage" className="option-card">
             <h2>Get Help</h2>
             <p>Find assistance for your vehicles.</p>
           </Link>
