@@ -16,6 +16,20 @@
   margin-bottom: 20px;
 }
 
+.technician-actions button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.technician-actions button:hover {
+  background-color: #357ab8;
+}
+
 .video-call-button,
 .live-chat-button {
   padding: 10px 20px;
@@ -37,4 +51,64 @@
 .live-chat-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.queues {
+  margin-bottom: 20px;
+}
+
+.queues ul {
+  list-style: none;
+  padding: 0;
+}
+
+.queues li {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.live-chat {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.messages {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.message {
+  margin-bottom: 5px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.message.technician {
+  background-color: #d1e7dd;
+  align-self: flex-end;
+}
+
+.message.customer {
+  background-color: #f8d7da;
+  align-self: flex-start;
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
