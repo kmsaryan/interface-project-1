@@ -25,7 +25,7 @@ const LoginPage = () => {
       if (response.data.user.role === "customer") {
         window.location.href = "/customer_home";
       } else {
-        window.location.href = "/technician_home";
+        window.location.href = "/technician";
       }
     } catch (err) {
       setError("Invalid email or password");

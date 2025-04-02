@@ -6,6 +6,9 @@
   
   .main-content {
     flex: 1;
+    overflow: auto;
+    background-color: #ffffff;
+
   }
   
   .footer {
@@ -20,4 +23,6 @@
     color: rgb(54, 53, 53);
     background-color: #f8f8f8;
   }
+  
+
   

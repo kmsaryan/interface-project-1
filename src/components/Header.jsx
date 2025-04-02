@@ -34,8 +34,10 @@ export default function Header() {
       <nav className="nav">
         <Link to="/">HOME</Link>
         <Link to="/chat">NEWS & MEDIA</Link>
-        <Link to="/technician">NEWS</Link>
+        <Link to="/news">NEWS</Link>
         {user && user.role === "customer" && <Link to="/customer_home">MY SERVICES</Link>}
+        {user && user.role === "technician" && <Link to="/technician">MY DASHBOARD</Link>}
+
       </nav>
       <div className="auth-buttons">
         {user ? (
