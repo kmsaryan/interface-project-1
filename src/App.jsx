@@ -15,7 +15,7 @@ import SignInPage from "./pages/SignInPage";
 
 const ProtectedRoute = ({ children }) => {
   const isAdmin = localStorage.getItem('isAdmin');
-  return isAdmin ? children : <Navigate to="/adminl-login" />;
+  return isAdmin ? children : <Navigate to="/admin-login" />;
 };
 
 function App() {
