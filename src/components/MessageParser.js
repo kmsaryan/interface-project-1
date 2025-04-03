@@ -40,33 +40,51 @@ class MessageParser {
   async parse(message) {
     message = message.toLowerCase().trim();
     console.log("User message:", message);
-
+  
     if (message.includes("activate voice control")) {
       console.log("Voice control activated.");
       this.startRecognition();
       return this.actionProvider.handleBotResponse("Voice control activated!");
     }
-
-    if (["hello", "hi", "hey", "Hello!"].includes(message)) {
+  
+    if (["hello", "hi", "hey", "hello!"].includes(message)) {
       return this.actionProvider.handleGreeting();
     }
-
+  
     if (message.includes("help") || message.includes("options")) {
       return this.actionProvider.handleOptions({ withAvatar: true });
     }
-
+  
     if (["thanks", "thank you", "thankyou", "thank"].includes(message) || message.includes("thank")) {
       return this.actionProvider.handleThankYou();
     }
-
+  
     if (["image", "picture"].includes(message)) {
-      const imageUrl = loaderAxleImage; // Replace with your image URL
+      const imageUrl = loaderAxleImage;
       return this.actionProvider.handleImageResponse(imageUrl);
     }
 
+    if (message.includes("technician") || message.includes("need help") || message.includes("mechanic")) {
+      const now = new Date();
+      
+
+      const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const dayOfWeek = daysOfWeek[now.getDay()];
+      
+
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const roundedMinutes = minutes >= 30 ? "30" : "00";
+      const timeSlot = `${hours}:${roundedMinutes}`;
+  
+      console.log(`Finding technician for ${dayOfWeek}, ${timeSlot}`);
+      
+      return this.actionProvider.handleFindTech(dayOfWeek, timeSlot);
+    }
+  
     try {
       const response = await axios.post(API_URL, { question: message });
-
+  
       if (response.data.answer) {
         this.actionProvider.handleBotResponse(response.data.answer);
       } else {
@@ -77,6 +95,7 @@ class MessageParser {
       this.actionProvider.handleBotResponse("I'm having trouble reaching the server. Try again later.");
     }
   }
+  
 }
 
 export default MessageParser;
