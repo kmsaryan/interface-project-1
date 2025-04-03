@@ -1,8 +1,11 @@
 //socket.js
 import { io } from "socket.io-client";
 
-const socket = io(process.env.REACT_APP_SERVER_URL, {
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:5000"; // Use environment variable or default to localhost:5000
+
+const socket = io(SERVER_URL, {
   transports: ["websocket"], // Ensure WebSocket is used for better reliability
+  timeout: 20000, // Increase timeout to handle slower connections
 });
 
 socket.on("connect", () => {
@@ -15,6 +18,16 @@ socket.on("disconnect", (reason) => {
 
 socket.on("connect_error", (error) => {
   console.error(`[SOCKET ERROR]: Connection error`, error);
+  console.error(
+    `Possible causes:
+    1. The server is not running.
+    2. The server is running on a different port or URL.
+    3. Network issues are preventing the connection.
+    Suggested actions:
+    - Verify the server is running and accessible at ${SERVER_URL}.
+    - Check your .env configuration for REACT_APP_SERVER_URL.
+    - Ensure no firewall or network restrictions are blocking the connection.`
+  );
 });
 
 socket.onAny((event, ...args) => {

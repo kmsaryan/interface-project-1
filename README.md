@@ -63,6 +63,29 @@ This project is a customer support interface that allows customers to chat with 
    npm start
    ```
 
+## Configuration
+
+### Environment Variables
+- `REACT_APP_SERVER_URL`: The URL of the WebSocket server (default: `http://localhost:5000`).
+- `PORT`: The port on which the server runs (default: `5000`).
+
+### Steps to Configure
+1. Create a `.env` file in the root directory.
+2. Add the following content:
+   ```
+   REACT_APP_SERVER_URL=http://localhost:5000
+   PORT=5000
+   ```
+3. Restart the server and client after making changes to the `.env` file.
+
+### Troubleshooting Socket Issues
+If you encounter socket connection errors:
+1. Ensure the server is running and accessible at the URL specified in `REACT_APP_SERVER_URL`.
+2. Verify that the port in the `.env` file matches the server's port.
+3. Check for network restrictions (e.g., firewalls) that might block WebSocket connections.
+4. Increase the `timeout` value in `src/utils/socket.js` if the connection is slow.
+5. Review the browser console logs for detailed error messages.
+
 ## Project Structure
 ```
 .
