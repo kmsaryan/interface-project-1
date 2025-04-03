@@ -1,19 +1,12 @@
-import React from 'react';
-import TreeEditor from '../components/TreeEditor';
-import { useNavigate } from 'react-router-dom';
+// src/pages/AdminDashboard.jsx
+import React from "react";
+import TreeEditor from "../components/TreeEditor";
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem('isAdmin');
-    navigate('/');
-  };
-
   return (
-    <div>
-      <h2>Welcome Admin</h2>
-      <button onClick={handleLogout}>Logout</button>
+    <div style={{ padding: '2rem' }}>
+      <h1>Admin Dashboard</h1>
+      <p>Manage your Troubleshooting Tree below:</p>
       <TreeEditor />
     </div>
   );
