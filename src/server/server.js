@@ -33,24 +33,35 @@ io.on("connection", (socket) => {
 
   // Handle customer joining live chat queue
   socket.on("joinLiveChatQueue", (customerDetails) => {
+    console.log(`[DEBUG] Before adding to queue:`, liveChatQueue);
     liveChatQueue.push({ id: socket.id, ...customerDetails });
+    console.log(`[DEBUG] After adding to queue:`, liveChatQueue);
+
     io.emit("updateLiveChatQueue", liveChatQueue); // Notify all technicians
+    console.log(`[DEBUG] Emitted updateLiveChatQueue with data:`, liveChatQueue);
   });
 
   // Handle technician selecting a customer
   socket.on("selectCustomer", (customerId) => {
+    console.log(`[DEBUG] Technician selected customer with ID: ${customerId}`);
     const customer = liveChatQueue.find((c) => c.id === customerId);
     if (customer) {
       liveChatQueue = liveChatQueue.filter((c) => c.id !== customerId);
+      console.log(`[DEBUG] Updated liveChatQueue after selection:`, liveChatQueue);
+
       io.emit("updateLiveChatQueue", liveChatQueue); // Update queue for all technicians
+      console.log(`[DEBUG] Emitted updateLiveChatQueue with data:`, liveChatQueue);
+
       io.to(customerId).emit("technicianConnected", { technicianId: socket.id });
       io.to(socket.id).emit("customerConnected", customer);
+    } else {
+      console.warn(`[WARN] Customer with ID ${customerId} not found in queue.`);
     }
   });
 
   // Handle real-time messaging
   socket.on("sendMessage", ({ to, message }) => {
-    console.log(`Message from ${socket.id} to ${to}: ${message}`);
+    console.log(`[DEBUG] Message from ${socket.id} to ${to}: ${message}`);
     io.to(to).emit("receiveMessage", { from: socket.id, message }); // Send message to the recipient
   });
 
@@ -65,7 +76,10 @@ io.on("connection", (socket) => {
     }
 
     liveChatQueue = liveChatQueue.filter((customer) => customer.id !== socket.id);
+    console.log(`[DEBUG] Updated liveChatQueue after disconnection:`, liveChatQueue);
+
     io.emit("updateLiveChatQueue", liveChatQueue); // Notify all technicians
+    console.log(`[DEBUG] Emitted updateLiveChatQueue with data:`, liveChatQueue);
   });
 });
 
