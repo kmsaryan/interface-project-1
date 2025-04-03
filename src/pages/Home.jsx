@@ -32,11 +32,6 @@ export default function Home({ onSubmitIssue = () => {} }) {
         <form className="assistant-form" onSubmit={handleSubmit}>
           <ChatInterface />
         </form>
-        <TechnicianConnect technicianSchedule={technicianSchedule} />
-        <TechnicianSchedule
-          schedule={technicianSchedule}
-          addAvailability={addAvailability}
-        />
       </main>
       <Footer />
     </div>

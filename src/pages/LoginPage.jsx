@@ -8,7 +8,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const handleCustomerLogin = () => {
-    navigate("/home"); // Redirect to the Home page (Customer)
+    navigate("/chat"); // Redirect to the Home page (Customer)
   };
 
   const handleTechnicianLogin = () => {
@@ -27,6 +27,10 @@ export default function LoginPage() {
           Technician
         </button>
       </div>
+      <p className="login-instructions">
+        Please select your role to proceed.
+      </p>
     </div>
   );
 }
+// need to add styles for the login page

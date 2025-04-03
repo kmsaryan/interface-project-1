@@ -4,140 +4,66 @@
 // The system also tracks the number of technicians online and manages the connection between customers and technicians.
 // The code is divided into two parts: the client-side React component and the server-side Socket.io implementation.
 import React, { useState, useEffect } from "react";
-import socket from "../utils/socket"; // Assume socket is initialized elsewhere
+import socket from "../utils/socket"; // Use the WebSocket client from socket.js
+import ChatInterface from "./ChatInterface";
 import "../styles/LiveChat.css";
 
-export default function LiveChat({ customerId }) {
+export default function LiveChat({ customerDetails }) {
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState("");
-  const [techniciansOnline, setTechniciansOnline] = useState(0);
   const [connectedTechnician, setConnectedTechnician] = useState(null);
+  const [queueStatus, setQueueStatus] = useState("Waiting to connect...");
 
   useEffect(() => {
-    // Join live chat queue
-    socket.emit("joinLiveChatQueue", { name: "Customer", issue: "Issue description" });
-    console.log("[CUSTOMER LOG]: Customer joined the live chat queue");
+    console.log("Joining live chat queue with customer details:", customerDetails);
+    socket.emit("joinLiveChatQueue", customerDetails);
 
-    // Listen for technician status updates
-    socket.on("updateTechnicianStatus", (technicians) => {
-      console.log("[CUSTOMER LOG]: Technicians online", technicians);
-      setTechniciansOnline(technicians.length);
-    });
-
-    // Listen for technician connection
     socket.on("technicianConnected", ({ technicianId }) => {
-      console.log("[CUSTOMER LOG]: Connected to technician", technicianId);
+      console.log("Technician connected:", technicianId);
       setConnectedTechnician(technicianId);
+      setQueueStatus("Connected to a technician!");
     });
 
-    // Listen for messages
-    socket.on("message", ({ from, message }) => {
-      console.log("[CUSTOMER LOG]: Message received", { from, message });
-      setMessages((prevMessages) => [...prevMessages, { from, message }]);
+    socket.on("receiveMessage", ({ from, message }) => {
+      console.log("Message received from:", from, "Message:", message);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: from === socket.id ? "You" : "Technician", text: message },
+      ]);
+    });
+
+    socket.on("error", (error) => {
+      console.error("Socket error:", error);
     });
 
     return () => {
-      socket.off("updateTechnicianStatus");
+      console.log("Cleaning up socket listeners...");
       socket.off("technicianConnected");
-      socket.off("message");
+      socket.off("receiveMessage");
+      socket.off("error");
     };
-  }, []);
+  }, [customerDetails]);
 
-  const sendMessage = () => {
+  const handleSendMessage = ({ text, attachment }) => {
     if (connectedTechnician) {
-      console.log(`[CUSTOMER LOG]: Sending message to ${connectedTechnician}: ${message}`);
-      socket.emit("message", { to: connectedTechnician, message });
-      setMessages((prevMessages) => [...prevMessages, { from: "You", message }]);
-      setMessage("");
+      console.log("Sending message to technician:", connectedTechnician, "Message:", text);
+      socket.emit("sendMessage", { to: connectedTechnician, message: text });
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "You", text, attachment },
+      ]);
+    } else {
+      console.warn("Cannot send message, no technician connected.");
     }
   };
 
   return (
     <div className="live-chat">
-      <p>Technicians Online: {techniciansOnline}</p>
+      <p>{queueStatus}</p>
       {connectedTechnician ? (
-        <div>
-          <div className="messages">
-            {messages.map((msg, index) => (
-              <div key={index} className={`message ${msg.from}`}>
-                <strong>{msg.from}:</strong> {msg.message}
-              </div>
-            ))}
-          </div>
-          <div className="input-area">
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Type your message..."
-            />
-            <button onClick={sendMessage}>Send</button>
-          </div>
-        </div>
+        <ChatInterface messages={messages} onSendMessage={handleSendMessage} />
       ) : (
         <p>Waiting for a technician to connect...</p>
       )}
     </div>
   );
 }
-
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3002", // Replace with your frontend URL
-    methods: ["GET", "POST"],
-  },
-});
-
-let liveChatQueue = []; // Queue for live chat
-let technicians = []; // List of connected technicians
-
-io.on("connection", (socket) => {
-  console.log("A user connected:", socket.id);
-
-  // Handle customer joining live chat queue
-  socket.on("joinLiveChatQueue", (customer) => {
-    liveChatQueue.push({ id: socket.id, ...customer });
-    io.emit("updateLiveChatQueue", liveChatQueue); // Notify all technicians
-  });
-
-  // Handle technician joining
-  socket.on("technicianJoin", (technician) => {
-    technicians.push({ id: socket.id, ...technician });
-    io.emit("updateTechnicianStatus", technicians); // Notify all customers
-  });
-
-  // Handle technician selecting a customer from the queue
-  socket.on("selectCustomer", (customerId) => {
-    const customer = liveChatQueue.find((c) => c.id === customerId);
-    if (customer) {
-      liveChatQueue = liveChatQueue.filter((c) => c.id !== customerId);
-      io.emit("updateLiveChatQueue", liveChatQueue); // Update queue for all technicians
-      io.to(customerId).emit("technicianConnected", { technicianId: socket.id }); // Notify customer
-      io.to(socket.id).emit("customerConnected", customer); // Notify technician
-    }
-  });
-
-  // Handle real-time messaging
-  socket.on("message", ({ to, message }) => {
-    io.to(to).emit("message", { from: socket.id, message });
-  });
-
-  // Handle disconnection
-  socket.on("disconnect", () => {
-    console.log("A user disconnected:", socket.id);
-    liveChatQueue = liveChatQueue.filter((customer) => customer.id !== socket.id);
-    technicians = technicians.filter((technician) => technician.id !== socket.id);
-    io.emit("updateLiveChatQueue", liveChatQueue);
-    io.emit("updateTechnicianStatus", technicians);
-  });
-});
-
-server.listen(5000, () => {
-  console.log("Server is running on http://localhost:5000");
-});

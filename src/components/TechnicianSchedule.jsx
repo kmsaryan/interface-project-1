@@ -1,34 +1,30 @@
 // TechnicianSchedule.jsx
 import React from "react";
 
-export default function TechnicianSchedule({ schedule, addAvailability }) {
-  if (!schedule) {
-    console.error("The 'schedule' prop is undefined.");
-    return null;
+export default function TechnicianSchedule({ schedule }) {
+  if (!schedule || schedule.length === 0) {
+    return <p>No availability added yet.</p>;
   }
 
   return (
     <div className="technician-schedule">
       <h2>Technician Availability</h2>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const date = e.target.date.value;
-          const time = e.target.time.value;
-          addAvailability(date, time);
-        }}
-      >
-        <input type="date" name="date" required />
-        <input type="time" name="time" required />
-        <button type="submit">Add Availability</button>
-      </form>
-      <ul>
-        {schedule.map((slot, index) => (
-          <li key={index}>
-            {slot.date} at {slot.time}
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {schedule.map((slot, index) => (
+            <tr key={index}>
+              <td>{slot.date}</td>
+              <td>{slot.time}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

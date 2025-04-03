@@ -1,113 +1,118 @@
-//TechnicianPage.jsx
+// TechnicianPage.jsx
+// File: src/pages/TechnicianPage.jsx
 import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import TechnicianSchedule from "../components/TechnicianSchedule";
 import "../styles/TechnicianPage.css";
 import "../styles/Header.css";
-import "../components/VideoCallButton";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import socket from '../utils/socket'; // Assume socket is initialized elsewhere
+import socket from '../utils/socket';
+import ChatInterface from "../components/ChatInterface";
 
 export default function TechnicianPage() {
+  const [liveChatQueue, setLiveChatQueue] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [schedule, setSchedule] = useState([]);
   const [showSchedule, setShowSchedule] = useState(false);
-  const [liveChatQueue, setLiveChatQueue] = useState([]);
-  const [videoCallQueue, setVideoCallQueue] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [techniciansOnline, setTechniciansOnline] = useState(0);
   const [notifications, setNotifications] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [customerId, setCustomerId] = useState(null);
 
   useEffect(() => {
-    // Join as a technician
-    socket.emit("technicianJoin", { name: "Technician" });
+    console.log("Registering technician...");
+    socket.emit("registerUser", { role: "technician", name: "Technician" });
 
-    // Listen for queue updates
     socket.on("updateLiveChatQueue", (queue) => {
+      console.log("Received live chat queue update:", queue);
       setLiveChatQueue(queue);
     });
 
-    // Listen for technician status updates
-    socket.on("updateTechnicianStatus", (technicians) => {
-      setTechniciansOnline(technicians.length);
+    socket.on("receiveMessage", ({ from, message }) => {
+      console.log("Received message:", { from, message });
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: from === socket.id ? "You" : "Customer", text: message },
+      ]);
     });
 
     return () => {
+      console.log("Cleaning up socket listeners...");
       socket.off("updateLiveChatQueue");
-      socket.off("updateTechnicianStatus");
+      socket.off("receiveMessage");
     };
   }, []);
 
-  const addAvailability = (date, time) => {
-    setSchedule((prevSchedule) => [...prevSchedule, { date, time }]);
-  };
-
   const handleAddAvailability = () => {
-    const date = prompt("Enter date (YYYY-MM-DD):");
-    const time = prompt("Enter time (HH:MM):");
-    if (date && time) {
-      addAvailability(date, time);
+    if (selectedDate && selectedTime) {
+      const date = selectedDate.toISOString().split("T")[0];
+      const time = selectedTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      console.log("Adding availability:", { date, time });
+      setSchedule((prevSchedule) => [...prevSchedule, { date, time }]);
       alert("Availability added!");
+    } else {
+      alert("Please select both date and time.");
     }
   };
 
-  const handleViewSchedule = () => {
-    setShowSchedule(!showSchedule);
-  };
-
   const handleSelectCustomer = (customerId) => {
-    setSelectedCustomer(customerId);
-    socket.emit("selectCustomer", customerId);
+    console.log("Selecting customer with ID:", customerId);
+    const customer = liveChatQueue.find((c) => c.id === customerId);
+    if (customer) {
+      console.log("Customer found:", customer);
+      setSelectedCustomer(customer);
+      socket.emit("selectCustomer", customerId);
+    } else {
+      console.warn("Customer not found in queue.");
+    }
   };
 
-  const handleSendMessage = (message) => {
-    if (!selectedCustomer) return;
-
-    socket.emit("message", { to: selectedCustomer, message });
-    setMessages((prevMessages) => [...prevMessages, { sender: "technician", text: message }]);
+  const handleSendMessage = ({ text }) => {
+    if (selectedCustomer) {
+      console.log("Sending message to customer:", { to: selectedCustomer.id, text });
+      socket.emit("sendMessage", { to: selectedCustomer.id, message: text });
+      setMessages((prevMessages) => [...prevMessages, { sender: "You", text }]);
+    } else {
+      console.warn("No customer selected. Cannot send message.");
+    }
   };
 
   return (
     <div className="technician-page">
       <Header />
       <h1>Technician Dashboard</h1>
-      <p>Technicians Online: {techniciansOnline}</p>
+      <p>Customers in Queue: {liveChatQueue.length}</p>
       <div className="technician-actions">
-        <button
-          className="video-call-button"
-          onClick={() => window.open("https://meet.google.com", "_blank")}
-        >
-          Attend Video Call
-        </button>
+        <h2>Add Availability</h2>
+        <div>
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
+            placeholderText="Select Date"
+          />
+          <DatePicker
+            selected={selectedTime}
+            onChange={(time) => setSelectedTime(time)}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="h:mm aa"
+            placeholderText="Select Time"
+          />
+          <button onClick={handleAddAvailability}>Add</button>
+        </div>
       </div>
       <div className="queues">
-        <h2>Live Chat Queue</h2>
+        <h2>Customer Queue</h2>
         <ul>
-          {liveChatQueue.map((customer) => (
-            <li key={customer.id}>
+          {liveChatQueue.map((customer, index) => (
+            <li key={customer.id || index}>
               <strong>{customer.name}</strong> - {customer.issue || "No issue provided"}
-              <button onClick={() => handleSelectCustomer(customer.id)}>
-                Connect
-              </button>
-            </li>
-          ))}
-        </ul>
-        <h2>Video Call Queue</h2>
-        <ul>
-          {videoCallQueue.map((customer) => (
-            <li key={customer.id}>
-              <strong>{customer.name}</strong> - {customer.issue || "No issue provided"}
-              <button onClick={() => handleSelectCustomer(customer.id, "videoCall")}>
-                Connect
-              </button>
-              <button
-                onClick={() =>
-                  window.open(`https://meet.google.com/new?customer=${customer.id}`, "_blank")
-                }
-              >
-                Start Video Call
-              </button>
+              <button onClick={() => handleSelectCustomer(customer.id)}>Connect</button>
             </li>
           ))}
         </ul>
@@ -115,30 +120,12 @@ export default function TechnicianPage() {
       {selectedCustomer && (
         <div className="live-chat">
           <h2>Chat with {selectedCustomer.name}</h2>
-          <div className="messages">
-            {messages.map((msg, index) => (
-              <div key={index} className={`message ${msg.sender}`}>
-                {msg.text}
-              </div>
-            ))}
-          </div>
-          <div className="input-area">
-            <input
-              type="text"
-              placeholder="Type your message..."
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSendMessage(e.target.value);
-              }}
-            />
-          </div>
+          <ChatInterface messages={messages} onSendMessage={handleSendMessage} />
         </div>
       )}
       <h2>Technician Schedule</h2>
       <div className="schedule-actions">
-        <button className="add-availability-button" onClick={handleAddAvailability}>
-          Add Availability
-        </button>
-        <button className="view-schedule-button" onClick={handleViewSchedule}>
+        <button className="view-schedule-button" onClick={() => setShowSchedule(!showSchedule)}>
           {showSchedule ? "Hide Schedule" : "View Schedule"}
         </button>
       </div>

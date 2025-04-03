@@ -12,18 +12,14 @@ const io = new Server(server, {
 });
 
 const technicians = new Map(); // Track connected technicians
-const liveChatQueue = [];
+let liveChatQueue = [];
 const videoCallQueue = [];
 
 // Generate unique video call link
 const generateVideoCallLink = () => `https://meet.google.com/${Math.random().toString(36).substring(2, 15)}`;
 
-const log = (message) => {
-  console.log(`[SERVER LOG]: ${message}`);
-};
-
 io.on("connection", (socket) => {
-  log(`A user connected: ${socket.id}`);
+  console.log("A user connected:", socket.id);
 
   // Handle technician connection
   socket.on("technicianConnected", (technicianId) => {
@@ -31,19 +27,10 @@ io.on("connection", (socket) => {
     io.emit("updateTechnicianStatus", Array.from(technicians.values()));
   });
 
-  // Handle technician joining
-  socket.on("technicianJoin", (technician) => {
-    technicians.set(socket.id, { id: socket.id, ...technician });
-    log(`Technician joined: ${JSON.stringify(technician)}`);
-    io.emit("updateTechnicianStatus", Array.from(technicians.values())); // Notify all customers
-    io.emit("updateLiveChatQueue", liveChatQueue); // Send the current queue to the technician
-  });
-
   // Handle customer joining live chat queue
   socket.on("joinLiveChatQueue", (customerDetails) => {
-    liveChatQueue.push({ id: socket.id, ...customerDetails });
-    log(`Customer joined live chat queue: ${JSON.stringify(customerDetails)}`);
-    io.emit("updateLiveChatQueue", liveChatQueue); // Notify all technicians
+    liveChatQueue.push({ id: socket.id, ...customerDetails, connected: true });
+    io.emit("updateLiveChatQueue", liveChatQueue.filter((customer) => customer.connected)); // Send only connected customers
   });
 
   // Handle customer joining video call queue
@@ -54,32 +41,32 @@ io.on("connection", (socket) => {
     io.emit("newCustomer", customerDetails);
   });
 
+  // Handle technician joining
+  socket.on("technicianJoin", (technician) => {
+    technicians.set(socket.id, { id: socket.id, ...technician });
+    io.emit("updateTechnicianStatus", Array.from(technicians.values())); // Notify all customers
+  });
+
   // Handle technician selecting a customer from the queue
   socket.on("selectCustomer", (customerId) => {
-    const customerIndex = liveChatQueue.findIndex((c) => c.id === customerId);
-    if (customerIndex !== -1) {
-      const customer = liveChatQueue.splice(customerIndex, 1)[0];
-      log(`Technician selected customer: ${JSON.stringify(customer)}`);
-      io.emit("updateLiveChatQueue", liveChatQueue); // Update queue for all technicians
-      io.to(customerId).emit("technicianConnected", { technicianId: socket.id }); // Notify customer
-      io.to(socket.id).emit("customerConnected", customer); // Notify technician
-    } else {
-      log(`Customer not found in queue: ${customerId}`);
+    const customer = liveChatQueue.find((c) => c.id === customerId);
+    if (customer) {
+      io.to(customerId).emit("technicianConnected", { technicianId: socket.id });
+      io.to(socket.id).emit("customerConnected", customer);
     }
   });
 
   // Handle real-time messaging
   socket.on("message", ({ to, message }) => {
-    log(`Message sent from ${socket.id} to ${to}: ${message}`);
     io.to(to).emit("message", { from: socket.id, message });
   });
 
   // Handle disconnection
   socket.on("disconnect", () => {
-    log(`A user disconnected: ${socket.id}`);
+    console.log("A user disconnected:", socket.id);
     liveChatQueue = liveChatQueue.filter((customer) => customer.id !== socket.id);
+    io.emit("updateLiveChatQueue", liveChatQueue.filter((customer) => customer.connected)); // Send only connected customers
     technicians.delete(socket.id);
-    io.emit("updateLiveChatQueue", liveChatQueue);
     io.emit("updateTechnicianStatus", Array.from(technicians.values()));
   });
 });
