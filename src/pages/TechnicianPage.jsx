@@ -23,9 +23,10 @@ export default function TechnicianPage() {
     console.log("Registering technician...");
     socket.emit("registerUser", { role: "technician", name: "Technician" });
 
+    // Listen for live chat queue updates
     socket.on("updateLiveChatQueue", (queue) => {
       console.log("Received live chat queue update:", queue);
-      setLiveChatQueue(queue);
+      setLiveChatQueue(queue); // Update the queue state
     });
 
     socket.on("receiveMessage", ({ from, message }) => {
@@ -104,9 +105,16 @@ export default function TechnicianPage() {
 
   const handleEndChat = (customerId) => {
     console.log("Ending chat with customer:", customerId);
+
+    // Send "end chat" message to the customer
+    const endChatMessage = "end chat";
+    socket.emit("sendMessage", { to: customerId, message: endChatMessage });
+
+    // Emit the endChat event to the server
     socket.emit("endChat", { customerId });
+
+    // Remove the chat session from the active chats
     setActiveChats((prevChats) => prevChats.filter((chat) => chat.customer.id !== customerId));
-    socket.emit("notifyCustomerChatEnded", { customerId }); // Notify the customer
   };
 
   return (

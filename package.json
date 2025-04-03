@@ -1,57 +1,39 @@
 {
   "name": "interface-project",
   "version": "1.0.0",
-  "description": "A web application interface inspired by ChatGPT, featuring chat functionality, suggestions, and technician connection.",
+  "description": "A real-time customer support interface with chat, video call, and technician management features.",
   "main": "src/index.jsx",
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "server": "node src/server/server.js"
   },
   "keywords": [
-    "chat",
-    "interface",
     "react",
-    "video call",
-    "technician"
+    "socket.io",
+    "websocket",
+    "real-time",
+    "customer-support"
   ],
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "assert": "^2.1.0",
-    "browserify-zlib": "^0.2.0",
-    "buffer": "^6.0.3",
-    "crypto-browserify": "^3.12.1",
-    "path-browserify": "^1.0.1",
-    "process": "^0.11.10",
-    "querystring-es3": "^0.2.1",
-    "react": "^18.3.1",
-    "react-app-rewired": "^2.2.1",
-    "react-chatbot-kit": "^2.2.2",
-    "react-datepicker": "^8.2.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^7.4.1",
+    "express": "^4.18.2",
+    "http": "^0.0.1-security",
+    "path": "^0.12.7",
+    "react": "^18.2.0",
+    "react-datepicker": "^4.8.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.1",
     "react-scripts": "^5.0.1",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
-    "stream-browserify": "^3.0.0",
-    "stream-http": "^3.2.0",
-    "timers-browserify": "^2.0.12",
-    "url": "^0.11.4",
-    "util": "^0.12.5",
-    "vm-browserify": "^1.1.2"
+    "socket.io": "^4.6.1",
+    "socket.io-client": "^4.6.1"
   },
   "devDependencies": {
     "eslint": "^8.50.0",
     "eslint-plugin-react": "^7.33.0"
-  },
-  "homepage": "./",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kmsaryan/interface-project-1.git"
   },
   "engines": {
     "node": ">=16.0.0",

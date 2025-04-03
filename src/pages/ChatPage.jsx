@@ -6,6 +6,8 @@ import ChatInterface from "../components/ChatInterface";
 import TechnicianSchedule from "../components/TechnicianSchedule"; // Import TechnicianSchedule
 import "../styles/ChatPage.css";
 import socket from "../utils/socket";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ChatPage() {
   const [inLiveChat, setInLiveChat] = useState(false);
@@ -48,6 +50,18 @@ export default function ChatPage() {
       if (message.toLowerCase().includes("would you like to video call")) {
         setShowVideoCallButton(true);
       }
+
+      // Check if the message is "end chat" to notify the customer
+      if (message.toLowerCase() === "end chat") {
+        toast.info("The technician has ended the chat. Please confirm.");
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            sender: "Assistant",
+            text: "The technician has ended the chat. Would you like to end the chat or escalate it?",
+          },
+        ]);
+      }
     });
 
     // Fetch technician schedule from the server
@@ -56,10 +70,28 @@ export default function ChatPage() {
       setTechnicianSchedule(schedule);
     });
 
+    socket.on("chatEnded", () => {
+      console.log("Chat ended by the technician.");
+      setInLiveChat(false);
+      setShowDetailsForm(true); // Return to the customer details form
+      setMessages([]); // Clear chat messages
+    });
+
     return () => {
       socket.off("technicianConnected");
       socket.off("receiveMessage");
       socket.off("updateTechnicianSchedule");
+      socket.off("chatEnded");
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("updateLiveChatQueue", (queue) => {
+      console.log("Updated live chat queue:", queue);
+    });
+
+    return () => {
+      socket.off("updateLiveChatQueue");
     };
   }, []);
 
@@ -84,6 +116,23 @@ export default function ChatPage() {
       ...prevDetails,
       [name]: value,
     }));
+  };
+
+  const handleEndChat = () => {
+    const confirmEnd = window.confirm("Are you sure you want to end this chat?");
+    if (confirmEnd) {
+      console.log("Customer confirmed ending the chat.");
+      socket.emit("endChat", connectedTechnician);
+      setInLiveChat(false);
+      setShowDetailsForm(true); // Return to the customer details form
+      setMessages([]); // Clear chat messages
+    }
+  };
+
+  const handleEscalateChat = () => {
+    console.log("Customer chose to escalate the chat.");
+    toast.success("Your chat has been escalated. A technician will assist you shortly.");
+    // Add escalation logic here if needed
   };
 
   return (
@@ -142,6 +191,10 @@ export default function ChatPage() {
             inLiveChat={inLiveChat}
             showVideoCallButton={showVideoCallButton}
           />
+          <div className="chat-actions">
+            <button onClick={handleEndChat}>End Chat</button>
+            <button onClick={handleEscalateChat}>Escalate Chat</button>
+          </div>
           <button
             className="view-schedule-button"
             onClick={() => setShowSchedule(!showSchedule)}

@@ -1,15 +1,15 @@
 //socket.js
-//src/utils/socket.js
-// This file handles the socket connection and events for the client-side application.
-// It connects to the server, listens for events, and emits events as needed.
-// It also includes error handling and logging for better debugging.
 import { io } from "socket.io-client";
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:5000"; // Use environment variable or default to localhost:5000
+// Ensure the WebSocket client points to the correct server URL
+const serverUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:5000";
+console.log(`[SOCKET LOG]: Attempting to connect to WebSocket server at ${serverUrl}`);
 
-const socket = io(SERVER_URL, {
+const socket = io(serverUrl, {
   transports: ["websocket"], // Ensure WebSocket is used for better reliability
-  timeout: 20000, // Increase timeout to handle slower connections
+  reconnection: true, // Enable reconnection
+  reconnectionAttempts: 10, // Retry up to 10 times
+  timeout: 20000, // 20 seconds timeout
 });
 
 socket.on("connect", () => {
@@ -22,16 +22,15 @@ socket.on("disconnect", (reason) => {
 
 socket.on("connect_error", (error) => {
   console.error(`[SOCKET ERROR]: Connection error`, error);
-  console.error(
-    `Possible causes:
-    1. The server is not running.
-    2. The server is running on a different port or URL.
-    3. Network issues are preventing the connection.
-    Suggested actions:
-    - Verify the server is running and accessible at ${SERVER_URL}.
-    - Check your .env configuration for REACT_APP_SERVER_URL.
-    - Ensure no firewall or network restrictions are blocking the connection.`
-  );
+  console.error(`[SOCKET ERROR DETAILS]:`, error.message);
+});
+
+socket.on("reconnect_attempt", (attempt) => {
+  console.log(`[SOCKET LOG]: Reconnection attempt #${attempt}`);
+});
+
+socket.on("reconnect_failed", () => {
+  console.error(`[SOCKET ERROR]: Reconnection failed after maximum attempts`);
 });
 
 socket.onAny((event, ...args) => {

@@ -9,6 +9,7 @@ export default function LiveChat({ role, userDetails, connectedUser }) {
     role === "customer" ? "Waiting to connect..." : "Select a customer to connect."
   );
   const [connectedUserId, setConnectedUserId] = useState(null);
+  const [notification, setNotification] = useState(null); // State to store notifications
 
   useEffect(() => {
     if (role === "customer") {
@@ -32,25 +33,39 @@ export default function LiveChat({ role, userDetails, connectedUser }) {
       ]);
     });
 
+    socket.on("notification", (data) => {
+      console.log("[NOTIFICATION]:", data);
+      setNotification(data); // Display the notification
+    });
+
     return () => {
       socket.off("technicianConnected");
       socket.off("receiveMessage");
+      socket.off("notification");
     };
   }, [role, userDetails, connectedUser]);
 
   const handleSendMessage = ({ text, attachment }) => {
     if (connectedUserId) {
+      console.log(`[DEBUG] Sending message to ${connectedUserId}: ${text}`);
       socket.emit("sendMessage", { to: connectedUserId, message: text });
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "You", text, attachment },
       ]);
+    } else {
+      console.warn("[WARN] No connected user to send the message to.");
     }
   };
 
   return (
     <div className="live-chat">
       <p>{connectionStatus}</p>
+      {notification && (
+        <div className={`notification ${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
       {connectedUserId ? (
         <ChatInterface messages={messages} onSendMessage={handleSendMessage} />
       ) : (
