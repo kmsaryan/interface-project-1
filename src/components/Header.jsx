@@ -1,27 +1,58 @@
-//Header.jsx is a functional component that renders the header of the application. It contains the logo, navigation links, and authentication buttons. The header is a common component that is used across multiple pages of the application.
-import React from "react";
-import { Link } from "react-router-dom";
-import "../styles/Header.css";
-import logo from "../assets/images/volvo-alt.svg";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../styles/App.css";
+import logo from "../assets/volvo_logo.png";
 
 export default function Header() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Error parsing user from localStorage:", error);
+        localStorage.removeItem("user");
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/");
+  };
+
   return (
     <header className="header">
       <div className="logo">
         <img src={logo} alt="Volvo Logo" />
       </div>
       <nav className="nav">
-        <Link to="/">Home</Link>
-        <Link to="/chat">Chat</Link>
-        <Link to="/technician">Technician</Link>
+        <Link to="/">HOME</Link>
+        <Link to="/chat">NEWS & MEDIA</Link>
+        <Link to="/technician">NEWS</Link>
+        {user && user.role === "customer" && <Link to="/customer_home">MY SERVICES</Link>}
       </nav>
       <div className="auth-buttons">
-        <Link to="/signin">
-          <button className="sign-in">Sign In</button>
-        </Link>
-        <Link to="/register">
-          <button className="register">Register</button>
-        </Link>
+        {user ? (
+          <div className="user-info">
+            <span>Welcome, {user.name}!</span>
+            <button className="logout" onClick={handleLogout}>Sign Out</button>
+          </div>
+        ) : (
+          <>
+            <Link to="/login">
+              <button className="login">Login</button>
+            </Link>
+            <Link to="/register">
+              <button className="register">Register</button>
+            </Link>
+          </>
+        )}
       </div>
     </header>
   );

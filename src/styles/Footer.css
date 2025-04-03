@@ -1,9 +1,20 @@
 /*Footer.css*/
+@font-face {
+  font-family: "VolvoNovumLight";
+  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "VolvoBroad";
+  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
+}
 
 .footer {
   display: flex;
   justify-content: space-around;
   padding: 20px;
+  font-family: "VolvoNovumLight";
+  color:rgb(54, 53, 53);
   background-color: #f8f8f8;
 }
 

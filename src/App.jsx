@@ -3,16 +3,13 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
-import LoginPage from "./pages/LoginPage";
 import Home from "./pages/Home";
-import "./styles/fonts.css";
+import Layout from "./components/Layout";
 import TechnicianPage from "./pages/TechnicianPage";
-import ChatPage from "./pages/ChatPage";
-
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
+import CustomerHome from "./pages/CustomerHome";
 import "./styles/App.css";
-import Header from "./components/Header";
-import SignInPage from "./pages/SignInPage";
-
 const ProtectedRoute = ({ children }) => {
   const isAdmin = localStorage.getItem('isAdmin');
   return isAdmin ? children : <Navigate to="/admin-login" />;
@@ -21,11 +18,13 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} /> {/* Login Page */}
-        <Route path="/home" element={<Home />} /> {/* Customer Home Page */}
-        <Route path="/chatpage" element={<ChatPage />} />
-        <Route path="/admin-login" element={<AdminLogin />} /> {/* Admin Login */}
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} /> {/* Home Page */}
+          <Route path="/customer_home" element={<CustomerHome />} /> {/* Customer Home */}
+          <Route path="/register" element={<RegisterPage />} /> {/* Register Page */}
+          <Route path="/login" element={<LoginPage />} /> {/* Login Page */}
+          <Route path="/admin-login" element={<AdminLogin />} /> {/* Admin Login */}
         <Route
           path="/admin"
           element={
@@ -35,10 +34,9 @@ function App() {
           }
         />  {/* Admin Page */}
         <Route path="/technician" element={<TechnicianPage />} /> {/* Technician Page */}
-        <Route path="/signin" element={<SignInPage />} />
-        {/* Add a placeholder for registration */}
-        <Route path="/register" element={<div>Registration Page Coming Soon</div>} />
-      </Routes>
+          <Route path="/signin" element={<LoginPage />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 }

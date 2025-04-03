@@ -11,3 +11,9 @@
 body {
   font-family: "VolvoNovumLight", Arial, sans-serif;
 }
+
+header {
+  font-family: "VolvoBroad", Arial, sans-serif;
+  font-size: 24px;
+  text-transform: uppercase;
+}
