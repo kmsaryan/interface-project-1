@@ -1,0 +1,72 @@
+.schedule-board {
+    margin: 20px auto;
+    font-family: "VolvoNovumLight", sans-serif;
+    max-width: 90%; 
+    text-align: center;
+}
+
+.schedule-table {
+    width: 80%; 
+    margin: 0 auto; 
+    border-collapse: collapse;
+}
+
+.schedule-table th,
+.schedule-table td {
+    border: 1px solid #ccc;
+    padding: 6px; 
+    font-size: 20px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.schedule-table th {
+    background-color: #f2f2f2;
+    padding: 8px;
+}
+
+.empty-slot {
+    background-color: #fff;
+}
+
+.empty-slot:hover {
+    background-color: #e0f7fa;
+}
+
+.available-slot {
+    background-color: #c8e6c9;
+}
+
+.available-slot:hover {
+    background-color: #a5d6a7;
+}
+
+.busy-slot {
+    background-color: #ffcdd2;
+}
+
+.busy-slot:hover {
+    background-color: #ef9a9a;
+}
+
+.schedule-form-container {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.schedule-form-container form div {
+    margin-bottom: 10px;
+}
+
+.schedule-form-container label {
+    margin-right: 10px;
+}
+
+.schedule-form-container button {
+    margin-right: 10px;
+}

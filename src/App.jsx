@@ -9,11 +9,14 @@ import TechnicianPage from "./pages/TechnicianPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import CustomerHome from "./pages/CustomerHome";
+import Fleet from "./pages/Fleet";
+
 import "./styles/App.css";
 const ProtectedRoute = ({ children }) => {
   const isAdmin = localStorage.getItem('isAdmin');
   return isAdmin ? children : <Navigate to="/admin-login" />;
 };
+import ChatPage from "./pages/ChatPage";
 
 function App() {
   return (
@@ -22,6 +25,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} /> {/* Home Page */}
           <Route path="/customer_home" element={<CustomerHome />} /> {/* Customer Home */}
+          <Route path="/fleet" element={<Fleet />} /> {/* Customer Home */}
+          <Route path="/chatpage" element={<ChatPage />} /> {/* Customer Home */}
           <Route path="/register" element={<RegisterPage />} /> {/* Register Page */}
           <Route path="/login" element={<LoginPage />} /> {/* Login Page */}
           <Route path="/admin-login" element={<AdminLogin />} /> {/* Admin Login */}
