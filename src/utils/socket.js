@@ -1,4 +1,8 @@
 //socket.js
+//src/utils/socket.js
+// This file handles the socket connection and events for the client-side application.
+// It connects to the server, listens for events, and emits events as needed.
+// It also includes error handling and logging for better debugging.
 import { io } from "socket.io-client";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:5000"; // Use environment variable or default to localhost:5000

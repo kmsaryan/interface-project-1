@@ -1,3 +1,8 @@
+//src/utils/server.js
+// This file sets up the Express server and Socket.IO for real-time communication.
+// It handles connections, disconnections, and message exchanges between technicians and customers.
+// It also manages the live chat and video call queues, ensuring smooth communication and scheduling.
+// It includes error handling and logging for better debugging.
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");

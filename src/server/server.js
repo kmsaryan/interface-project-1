@@ -1,3 +1,13 @@
+//server.js
+//src/server/server.js
+// This file sets up the Express server and Socket.IO for real-time communication.
+//       liveChatQueue = liveChatQueue.filter((c) => c.id !== customerId);
+//       io.emit("updateLiveChatQueue", liveChatQueue);
+//     } else {
+//       console.warn(`Customer with ID ${customerId} not found in queue.`);
+//     }
+//   });
+//   // Handle real-time messaging
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
