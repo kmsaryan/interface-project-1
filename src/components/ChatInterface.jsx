@@ -1,15 +1,39 @@
 // ChatInterface.jsx
 import React, { useState, useEffect } from "react";
 import "../styles/ChatInterface.css";
+import Suggestions from "./Suggestions"; // Import the Suggestions component
+import VideoCallButton from "./VideoCallButton"; // Import the VideoCallButton component
 
-export default function ChatInterface({ messages, onSendMessage }) {
+export default function ChatInterface({ messages, onSendMessage, suggestions, role, onJoinLiveChat, inLiveChat }) {
   const [input, setInput] = useState("");
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [attachment, setAttachment] = useState(null);
+  const [chatMessages, setChatMessages] = useState(messages || []); // Local state for chat messages
 
-  // Log messages prop to verify if it's being received correctly
   useEffect(() => {
     console.log("Messages received in ChatInterface:", messages);
+    setChatMessages(messages); // Sync messages with parent state
   }, [messages]);
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInput(value);
+
+    // Filter suggestions based on input
+    if (value.trim() !== "") {
+      const filtered = suggestions.filter((suggestion) =>
+        suggestion.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredSuggestions(filtered);
+    } else {
+      setFilteredSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setInput(suggestion);
+    setFilteredSuggestions([]); // Clear suggestions after selection
+  };
 
   const handleSendMessage = () => {
     if (input.trim() === "" && !attachment) {
@@ -17,34 +41,46 @@ export default function ChatInterface({ messages, onSendMessage }) {
       return;
     }
 
-    console.log("Sending message:", { text: input, attachment });
-    onSendMessage({ text: input, attachment });
+    const newMessage = { sender: "You", text: input, attachment };
+    setChatMessages((prevMessages) => [...prevMessages, newMessage]); // Add the user's message to the chat
+    onSendMessage(newMessage);
+
     setInput("");
     setAttachment(null);
+    setFilteredSuggestions([]); // Clear suggestions after sending
   };
 
   return (
     <div className="chat-interface">
       <div className="messages">
-        {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.sender}`}>
+        {chatMessages.map((msg, index) => (
+          <div key={index} className={`message ${msg.sender.toLowerCase()}`}>
             <p>{msg.text}</p>
             {msg.attachment && (
               <img src={URL.createObjectURL(msg.attachment)} alt="Attachment" />
             )}
           </div>
         ))}
+        {!inLiveChat && role === "customer" && (
+          <div className="dedicated-message-buttons">
+            <button onClick={onJoinLiveChat}>Join Live Chat</button>
+            <VideoCallButton />
+          </div>
+        )}
       </div>
       <div className="input-area">
         <input
           type="text"
           value={input}
-          onChange={(e) => {
-            console.log("Input changed:", e.target.value);
-            setInput(e.target.value);
-          }}
+          onChange={handleInputChange}
           placeholder="Type your message..."
         />
+        {filteredSuggestions.length > 0 && (
+          <Suggestions
+            suggestions={filteredSuggestions}
+            onSelectSuggestion={handleSuggestionClick}
+          />
+        )}
         <input
           type="file"
           onChange={(e) => {

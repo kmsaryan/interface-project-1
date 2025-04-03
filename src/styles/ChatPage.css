@@ -124,3 +124,47 @@
 .input-area button:hover {
   background-color: #357ab8;
 }
+
+.customer-details-form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.customer-details-form h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.customer-details-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.customer-details-form input,
+.customer-details-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.customer-details-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.customer-details-form button:hover {
+  background-color: #357ab8;
+}

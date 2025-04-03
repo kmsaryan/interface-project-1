@@ -10,6 +10,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import socket from '../utils/socket';
 import ChatInterface from "../components/ChatInterface";
+import LiveChat from "../components/LiveChat";
 
 export default function TechnicianPage() {
   const [liveChatQueue, setLiveChatQueue] = useState([]);
@@ -17,10 +18,8 @@ export default function TechnicianPage() {
   const [messages, setMessages] = useState([]);
   const [schedule, setSchedule] = useState([]);
   const [showSchedule, setShowSchedule] = useState(false);
-  const [notifications, setNotifications] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [customerId, setCustomerId] = useState(null);
 
   useEffect(() => {
     console.log("Registering technician...");
@@ -80,6 +79,8 @@ export default function TechnicianPage() {
     }
   };
 
+  console.log("TechnicianPage component is rendering...");
+
   return (
     <div className="technician-page">
       <Header />
@@ -118,10 +119,17 @@ export default function TechnicianPage() {
         </ul>
       </div>
       {selectedCustomer && (
-        <div className="live-chat">
-          <h2>Chat with {selectedCustomer.name}</h2>
-          <ChatInterface messages={messages} onSendMessage={handleSendMessage} />
-        </div>
+        <ChatInterface
+          messages={messages}
+          onSendMessage={({ text }) => {
+            const newMessage = { sender: "You", text };
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+            socket.emit("sendMessage", { to: selectedCustomer.id, message: text });
+          }}
+          suggestions={["Please elaborate.", "Can you clarify?", "What is the issue?"]}
+          role="technician"
+          inLiveChat={true} // Always in live chat for technicians
+        />
       )}
       <h2>Technician Schedule</h2>
       <div className="schedule-actions">
@@ -130,12 +138,6 @@ export default function TechnicianPage() {
         </button>
       </div>
       {showSchedule && <TechnicianSchedule schedule={schedule} />}
-      <h2>Notifications</h2>
-      <ul>
-        {notifications.map((note, index) => (
-          <li key={index}>{note}</li>
-        ))}
-      </ul>
       <Footer />
     </div>
   );

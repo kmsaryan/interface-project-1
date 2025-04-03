@@ -1,68 +1,60 @@
-//livechat.js
-// This code implements a live chat system using React and Socket.io.
-// The customer can send messages to a technician, and the technician can respond.
-// The system also tracks the number of technicians online and manages the connection between customers and technicians.
-// The code is divided into two parts: the client-side React component and the server-side Socket.io implementation.
 import React, { useState, useEffect } from "react";
-import socket from "../utils/socket"; // Use the WebSocket client from socket.js
+import socket from "../utils/socket";
 import ChatInterface from "./ChatInterface";
 import "../styles/LiveChat.css";
 
-export default function LiveChat({ customerDetails }) {
+export default function LiveChat({ role, userDetails, connectedUser }) {
   const [messages, setMessages] = useState([]);
-  const [connectedTechnician, setConnectedTechnician] = useState(null);
-  const [queueStatus, setQueueStatus] = useState("Waiting to connect...");
+  const [connectionStatus, setConnectionStatus] = useState(
+    role === "customer" ? "Waiting to connect..." : "Select a customer to connect."
+  );
+  const [connectedUserId, setConnectedUserId] = useState(null);
 
   useEffect(() => {
-    console.log("Joining live chat queue with customer details:", customerDetails);
-    socket.emit("joinLiveChatQueue", customerDetails);
+    if (role === "customer") {
+      socket.emit("joinLiveChatQueue", userDetails);
 
-    socket.on("technicianConnected", ({ technicianId }) => {
-      console.log("Technician connected:", technicianId);
-      setConnectedTechnician(technicianId);
-      setQueueStatus("Connected to a technician!");
-    });
+      socket.on("technicianConnected", ({ technicianId }) => {
+        setConnectedUserId(technicianId);
+        setConnectionStatus("Connected to a technician!");
+      });
+    }
+
+    if (role === "technician" && connectedUser) {
+      setConnectedUserId(connectedUser.id);
+      setConnectionStatus(`Connected to ${connectedUser.name}`);
+    }
 
     socket.on("receiveMessage", ({ from, message }) => {
-      console.log("Message received from:", from, "Message:", message);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: from === socket.id ? "You" : "Technician", text: message },
+        { sender: from === socket.id ? "You" : role === "customer" ? "Technician" : "Customer", text: message },
       ]);
     });
 
-    socket.on("error", (error) => {
-      console.error("Socket error:", error);
-    });
-
     return () => {
-      console.log("Cleaning up socket listeners...");
       socket.off("technicianConnected");
       socket.off("receiveMessage");
-      socket.off("error");
     };
-  }, [customerDetails]);
+  }, [role, userDetails, connectedUser]);
 
   const handleSendMessage = ({ text, attachment }) => {
-    if (connectedTechnician) {
-      console.log("Sending message to technician:", connectedTechnician, "Message:", text);
-      socket.emit("sendMessage", { to: connectedTechnician, message: text });
+    if (connectedUserId) {
+      socket.emit("sendMessage", { to: connectedUserId, message: text });
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "You", text, attachment },
       ]);
-    } else {
-      console.warn("Cannot send message, no technician connected.");
     }
   };
 
   return (
     <div className="live-chat">
-      <p>{queueStatus}</p>
-      {connectedTechnician ? (
+      <p>{connectionStatus}</p>
+      {connectedUserId ? (
         <ChatInterface messages={messages} onSendMessage={handleSendMessage} />
       ) : (
-        <p>Waiting for a technician to connect...</p>
+        <p>{role === "customer" ? "Waiting for a technician to connect..." : "No customer connected."}</p>
       )}
     </div>
   );
