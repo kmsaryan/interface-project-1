@@ -1,70 +1,86 @@
 # Interface Project
 
 ## Overview
-This project is designed to create an intuitive interface inspired by ChatGPT's UI, enhancing user interaction through chat, suggestions, and video call functionalities. The application aims to provide users with a seamless experience when seeking assistance.
+This project is a customer support interface that allows customers to chat with technicians, view troubleshooting tips, and escalate issues to live chat or video calls. Technicians can manage multiple chat sessions, view customer queues, and update their availability schedules.
 
 ## Features
-- **Chat Interface**: A user-friendly chat interface that allows users to communicate their issues and receive responses.
-- **Suggestions**: A component that displays relevant suggestions based on user input, helping guide the conversation.
-- **Video Call Support**: A button that enables users to initiate a video call with a technician for real-time assistance.
-- **Technician Connection**: A management system for connecting users to technicians, including status updates and messages.
+- **Customer Side**:
+  - AI-powered troubleshooting tips.
+  - Dynamic suggestions while typing in the chat box.
+  - Live chat with technicians.
+  - Option to escalate issues to video calls.
+  - View technician availability schedule.
 
-## Project Structure
-.
-├── MainDirectory
-│   ├── App.jsx
-│   ├── components
-│   │   ├── ChatInterface.jsx
-│   │   ├── Header.jsx
-│   │   ├── Solution.jsx
-│   │   ├── Suggestions.jsx
-│   │   ├── TechnicianConnect.jsx
-│   │   ├── TechnicianSchedule.jsx
-│   │   ├── Troubleshoot.jsx
-│   │   └── VideoCallButton.jsx
-│   ├── index.jsx
-│   ├── pages
-│   │   └── Home.jsx
-│   └── styles
-│       ├── App.css
-│       ├── ChatInterface.css
-│       ├── Header.css
-│       ├── Solution.css
-│       ├── Suggestions.css
-│       ├── TechnicianConnect.css
-│       ├── Troubleshoot.css
-│       └── VideoCallButton.css
-├── package.json
-├── package-lock.json
-├── public
-│   ├── favicon.ico
-│   └── index.html
-└── README.md
-```
+- **Technician Side**:
+  - Manage multiple live chat sessions with customers.
+  - View and update availability schedules.
+  - Dedicated customer queue with smart transitioning to chat sessions.
+
+- **Shared Features**:
+  - Consistent UI with VolvoSans font and a modern color palette.
+  - Material-style icons for chat actions.
+  - Real-time messaging using WebSocket.
 
 ## Installation
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- A WebSocket server (e.g., Socket.IO)
+
+### Steps
 1. Clone the repository:
-   ```
-   git clone <repository-url>
-   ```
-2. Navigate to the project directory:
-   ```
+   ```bash
+   git clone https://github.com/your-repo/interface-project.git
    cd interface-project
    ```
-3. Install the dependencies:
-   ```
+
+2. Install dependencies:
+   ```bash
    npm install
    ```
 
-## Usage
-To start the application, run:
-```
-npm start
-```
-This will launch the application in your default web browser.
+3. Set up environment variables:
+   Create a `.env` file in the root directory with the following content:
+   ```
+   REACT_APP_SERVER_URL=http://localhost:5000
+   ```
 
-## Contributing
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
+4. Start the WebSocket server:
+   ```bash
+   node src/server/server.js
+   ```
+
+5. Start the React application:
+   ```bash
+   npm start
+   ```
+
+## Project Structure
+```
+/src
+  ├── components
+  │   ├── ChatInterface.jsx
+  │   ├── LiveChat.jsx
+  │   ├── Suggestions.jsx
+  │   ├── TechnicianSchedule.jsx
+  │   └── VideoCallButton.jsx
+  ├── pages
+  │   ├── ChatPage.jsx
+  │   └── TechnicianPage.jsx
+  ├── styles
+  │   ├── global.css
+  │   ├── ChatInterface.css
+  │   ├── ChatPage.css
+  │   └── TechnicianPage.css
+  ├── utils
+  │   └── socket.js
+  └── server
+      └── server.js
+```
+
+## Changelog
+See [CHANGELOG.md](./CHANGELOG.md) for details on recent changes.
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
+This project is licensed under the MIT License.
