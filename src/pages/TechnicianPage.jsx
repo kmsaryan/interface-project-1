@@ -8,14 +8,12 @@ import "../styles/TechnicianPage.css";
 import "../styles/Header.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import socket from '../utils/socket';
+import socket from "../utils/socket";
 import ChatInterface from "../components/ChatInterface";
-import LiveChat from "../components/LiveChat";
 
 export default function TechnicianPage() {
   const [liveChatQueue, setLiveChatQueue] = useState([]);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [activeChats, setActiveChats] = useState([]); // Track active chat sessions
   const [schedule, setSchedule] = useState([]);
   const [showSchedule, setShowSchedule] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -32,10 +30,16 @@ export default function TechnicianPage() {
 
     socket.on("receiveMessage", ({ from, message }) => {
       console.log("Received message:", { from, message });
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: from === socket.id ? "You" : "Customer", text: message },
-      ]);
+      setActiveChats((prevChats) =>
+        prevChats.map((chat) =>
+          chat.customer.id === from
+            ? {
+                ...chat,
+                messages: [...chat.messages, { sender: "Customer", text: message }],
+              }
+            : chat
+        )
+      );
     });
 
     return () => {
@@ -62,24 +66,31 @@ export default function TechnicianPage() {
     const customer = liveChatQueue.find((c) => c.id === customerId);
     if (customer) {
       console.log("Customer found:", customer);
-      setSelectedCustomer(customer);
+      setActiveChats((prevChats) => [
+        ...prevChats,
+        { customer, messages: [] }, // Add a new chat session
+      ]);
       socket.emit("selectCustomer", customerId);
+      setLiveChatQueue((prevQueue) => prevQueue.filter((c) => c.id !== customerId)); // Remove from queue
     } else {
       console.warn("Customer not found in queue.");
     }
   };
 
-  const handleSendMessage = ({ text }) => {
-    if (selectedCustomer) {
-      console.log("Sending message to customer:", { to: selectedCustomer.id, text });
-      socket.emit("sendMessage", { to: selectedCustomer.id, message: text });
-      setMessages((prevMessages) => [...prevMessages, { sender: "You", text }]);
-    } else {
-      console.warn("No customer selected. Cannot send message.");
-    }
+  const handleSendMessage = (customerId, text) => {
+    console.log("Sending message to customer:", { to: customerId, text });
+    socket.emit("sendMessage", { to: customerId, message: text });
+    setActiveChats((prevChats) =>
+      prevChats.map((chat) =>
+        chat.customer.id === customerId
+          ? {
+              ...chat,
+              messages: [...chat.messages, { sender: "You", text }],
+            }
+          : chat
+      )
+    );
   };
-
-  console.log("TechnicianPage component is rendering...");
 
   return (
     <div className="technician-page">
@@ -118,19 +129,21 @@ export default function TechnicianPage() {
           ))}
         </ul>
       </div>
-      {selectedCustomer && (
-        <ChatInterface
-          messages={messages}
-          onSendMessage={({ text }) => {
-            const newMessage = { sender: "You", text };
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-            socket.emit("sendMessage", { to: selectedCustomer.id, message: text });
-          }}
-          suggestions={["Please elaborate.", "Can you clarify?", "What is the issue?"]}
-          role="technician"
-          inLiveChat={true} // Always in live chat for technicians
-        />
-      )}
+      <div className="active-chats">
+        <h2>Active Chats</h2>
+        {activeChats.map((chat, index) => (
+          <div key={index} className="live-chat">
+            <h3>Chat with {chat.customer.name}</h3>
+            <ChatInterface
+              messages={chat.messages}
+              onSendMessage={({ text }) => handleSendMessage(chat.customer.id, text)}
+              suggestions={["Please elaborate.", "Can you clarify?", "What is the issue?"]}
+              role="technician"
+              inLiveChat={true}
+            />
+          </div>
+        ))}
+      </div>
       <h2>Technician Schedule</h2>
       <div className="schedule-actions">
         <button className="view-schedule-button" onClick={() => setShowSchedule(!showSchedule)}>
