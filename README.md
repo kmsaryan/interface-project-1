@@ -58,26 +58,90 @@ This project is a customer support interface that allows customers to chat with 
 
 ## Project Structure
 ```
-/src
-  ├── components
-  │   ├── ChatInterface.jsx
-  │   ├── LiveChat.jsx
-  │   ├── Suggestions.jsx
-  │   ├── TechnicianSchedule.jsx
-  │   └── VideoCallButton.jsx
-  ├── pages
-  │   ├── ChatPage.jsx
-  │   └── TechnicianPage.jsx
-  ├── styles
-  │   ├── global.css
-  │   ├── ChatInterface.css
-  │   ├── ChatPage.css
-  │   └── TechnicianPage.css
-  ├── utils
-  │   └── socket.js
-  └── server
-      └── server.js
+.
+├── CHANGELOG.md
+├── config-overrides.js
+├── package.json
+├── package-lock.json
+├── public
+│   ├── favicon.ico
+│   └── index.html
+├── README.md
+└── src
+    ├── App.jsx
+    ├── assets
+    │   ├── fonts
+    │   │   ├── VolvoBroad.ttf
+    │   │   └── Volvo_Novum_Light.ttf
+    │   └── images
+    │       ├── Customer.gif
+    │       ├── ExcavatersB.jpeg
+    │       ├── ExcavatersC.jpeg
+    │       ├── ExcavatersD.jpeg
+    │       ├── Technicain1.jpeg
+    │       ├── Technicain2.jpeg
+    │       ├── Technician.gif
+    │       └── volvo-alt.svg
+    ├── components
+    │   ├── ChatInterface.jsx
+    │   ├── Footer.jsx
+    │   ├── Header.jsx
+    │   ├── LiveChat.jsx
+    │   ├── Solution.jsx
+    │   ├── Suggestions.jsx
+    │   ├── TechnicianConnect.jsx
+    │   ├── TechnicianSchedule.jsx
+    │   ├── Troubleshoot.jsx
+    │   └── VideoCallButton.jsx
+    ├── index.jsx
+    ├── pages
+    │   ├── ChatPage.jsx
+    │   ├── Home.jsx
+    │   ├── LoginPage.jsx
+    │   ├── SignInPage.jsx
+    │   └── TechnicianPage.jsx
+    ├── server
+    │   └── server.js
+    ├── styles
+    │   ├── App.css
+    │   ├── ChatInterface.css
+    │   ├── ChatPage.css
+    │   ├── fonts.css
+    │   ├── Footer.css
+    │   ├── global.css
+    │   ├── Header.css
+    │   ├── Home.css
+    │   ├── LiveChat.css
+    │   ├── LoginPage.css
+    │   ├── SignInPage.css
+    │   ├── Solution.css
+    │   ├── Suggestions.css
+    │   ├── TechnicianConnect.css
+    │   ├── TechnicianPage.css
+    │   ├── Troubleshoot.css
+    │   └── VideoCallButton.css
+    └── utils
+        ├── server.js
+        ├── socket.js
 ```
+
+## Scripts
+- **Start Development Server**:
+  ```bash
+  npm start
+  ```
+- **Run WebSocket Server**:
+  ```bash
+  node src/server/server.js
+  ```
+- **Build for Production**:
+  ```bash
+  npm run build
+  ```
+- **Lint Code**:
+  ```bash
+  npm run lint
+  ```
 
 ## Changelog
 See [CHANGELOG.md](./CHANGELOG.md) for details on recent changes.
