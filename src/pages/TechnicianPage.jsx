@@ -106,7 +106,39 @@ export default function TechnicianPage() {
     <div className="technician-page">
       <Header />
       <h1>Technician Dashboard</h1>
-      <p>Customers in Queue: {liveChatQueue.length}</p>
+      <div className="technician-layout">
+        <div className="customer-queue">
+          <h2>Customer Queue</h2>
+          <ul>
+            {liveChatQueue.map((customer, index) => (
+              <li key={customer.id || index} className="queue-item">
+                <div>
+                  <strong>{customer.name}</strong> - {customer.issue || "No issue provided"}
+                </div>
+                <button onClick={() => handleSelectCustomer(customer.id)}>Connect</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="chat-sessions">
+          {activeChats.length > 0 ? (
+            activeChats.map((chat, index) => (
+              <div key={index} className="chat-session">
+                <h3>Chat with {chat.customer.name}</h3>
+                <ChatInterface
+                  messages={chat.messages}
+                  onSendMessage={({ text }) => handleSendMessage(chat.customer.id, text)}
+                  suggestions={["Please elaborate.", "Can you clarify?", "What is the issue?"]}
+                  role="technician"
+                  inLiveChat={true}
+                />
+              </div>
+            ))
+          ) : (
+            <p>No active chats</p>
+          )}
+        </div>
+      </div>
       <div className="technician-actions">
         <h2>Add Availability</h2>
         <div>
@@ -135,32 +167,6 @@ export default function TechnicianPage() {
         </button>
       </div>
       {showSchedule && <TechnicianSchedule schedule={schedule} />}
-      <div className="queues">
-        <h2>Customer Queue</h2>
-        <ul>
-          {liveChatQueue.map((customer, index) => (
-            <li key={customer.id || index}>
-              <strong>{customer.name}</strong> - {customer.issue || "No issue provided"}
-              <button onClick={() => handleSelectCustomer(customer.id)}>Connect</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="active-chats">
-        <h2>Active Chats</h2>
-        {activeChats.map((chat, index) => (
-          <div key={index} className="live-chat">
-            <h3>Chat with {chat.customer.name}</h3>
-            <ChatInterface
-              messages={chat.messages}
-              onSendMessage={({ text }) => handleSendMessage(chat.customer.id, text)}
-              suggestions={["Please elaborate.", "Can you clarify?", "What is the issue?"]}
-              role="technician"
-              inLiveChat={true}
-            />
-          </div>
-        ))}
-      </div>
       <Footer />
     </div>
   );

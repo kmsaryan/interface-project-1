@@ -1,33 +1,49 @@
 .technician-page {
-  padding: 20px;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+  background-color: #F9F9F9;
+  font-family: "VolvoSans", Arial, sans-serif;
+  padding: 20px;
+  gap: 20px;
 }
 
 .technician-page h1 {
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 20px;
-  color: #333;
+  color: #00457C;
+  text-align: center;
 }
 
 .technician-actions {
-  margin-bottom: 20px;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .technician-actions button {
   margin-right: 10px;
-  padding: 10px 20px;
-  background-color: #4a90e2;
+  padding: 10px 15px;
+  background-color: #007CC3;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .technician-actions button:hover {
-  background-color: #357ab8;
+  background-color: #00457C;
+}
+
+.technician-actions h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #007CC3;
+  text-align: center;
 }
 
 .video-call-button,
@@ -54,12 +70,18 @@
 }
 
 .queues {
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .queues ul {
   list-style: none;
   padding: 0;
+}
+
+.queues h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #007CC3;
 }
 
 .queues li {
@@ -70,6 +92,36 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.queue-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #F9F9F9;
+  transition: background-color 0.3s;
+}
+
+.queue-item:hover {
+  background-color: #E9ECEF;
+}
+
+.queue-item button {
+  padding: 10px 15px;
+  background-color: #007CC3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.queue-item button:hover {
+  background-color: #00457C;
 }
 
 .live-chat {
@@ -111,4 +163,149 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+.technician-layout {
+  display: flex;
+  gap: 20px;
+}
+
+.customer-queue {
+  flex: 1;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
+  padding: 15px;
+  max-height: 500px;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.customer-queue h2 {
+  font-size: 20px;
+  color: #007CC3;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.chat-sessions {
+  flex: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.chat-session {
+  flex: 1 1 calc(50% - 20px);
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chat-session h3 {
+  font-size: 18px;
+  color: #007CC3;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.chat-interface .messages {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #F9F9F9;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+}
+
+.chat-interface .message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.chat-interface .message.user {
+  background-color: #D1E7DD;
+  text-align: right;
+  align-self: flex-end;
+}
+
+.chat-interface .message.assistant {
+  background-color: #F8D7DA;
+  text-align: left;
+  align-self: flex-start;
+}
+
+.chat-interface .input-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+}
+
+.chat-interface .input-area input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  font-family: "VolvoSans", Arial, sans-serif;
+  font-size: 14px;
+}
+
+.chat-interface .input-area input:focus {
+  outline: none;
+  border-color: #007CC3;
+  box-shadow: 0 0 5px rgba(0, 124, 195, 0.5);
+}
+
+.chat-interface .input-area .attachment-icon {
+  font-size: 20px;
+  color: #007CC3;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.chat-interface .input-area .attachment-icon:hover {
+  color: #00457C;
+}
+
+.chat-interface .input-area .send-button {
+  padding: 10px 15px;
+  background-color: #007CC3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.chat-interface .input-area .send-button:hover {
+  background-color: #00457C;
+}
+
+.schedule-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.schedule-actions button {
+  padding: 10px 15px;
+  background-color: #007CC3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.schedule-actions button:hover {
+  background-color: #00457C;
 }

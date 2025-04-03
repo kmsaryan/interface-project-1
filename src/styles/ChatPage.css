@@ -2,16 +2,16 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f9f9f9;
+  background-color: #F9F9F9;
   padding: 20px;
   text-align: center;
-  font-family: Arial, sans-serif;
+  font-family: "VolvoSans", Arial, sans-serif;
 }
 
 .chat-page h1 {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #333;
+  color: #00457C;
 }
 
 .technician-options {
@@ -28,7 +28,7 @@
 .video-call-button {
   padding: 10px 20px;
   margin: 10px;
-  background-color: #4a90e2;
+  background-color: #007CC3;
   color: white;
   border: none;
   border-radius: 5px;
@@ -38,7 +38,7 @@
 
 .live-chat-button:hover,
 .video-call-button:hover {
-  background-color: #357ab8;
+  background-color: #00457C;
 }
 
 .live-chat-button:disabled {
@@ -129,20 +129,22 @@
   max-width: 400px;
   margin: 20px auto;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #CCCCCC;
   border-radius: 5px;
-  background-color: #f9f9f9;
+  background-color: #FFFFFF;
 }
 
 .customer-details-form h2 {
   margin-bottom: 20px;
   text-align: center;
+  color: #007CC3;
 }
 
 .customer-details-form label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: #333333;
 }
 
 .customer-details-form input,
@@ -150,14 +152,14 @@
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
-  border: 1px solid #ccc;
+  border: 1px solid #CCCCCC;
   border-radius: 5px;
 }
 
 .customer-details-form button {
   width: 100%;
   padding: 10px;
-  background-color: #4a90e2;
+  background-color: #007CC3;
   color: white;
   border: none;
   border-radius: 5px;
@@ -166,5 +168,5 @@
 }
 
 .customer-details-form button:hover {
-  background-color: #357ab8;
+  background-color: #00457C;
 }

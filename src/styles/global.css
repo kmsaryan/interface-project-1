@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "VolvoSans";
+  src: url("../assets/fonts/VolvoSans-Regular.woff2") format("woff2"),
+       url("../assets/fonts/VolvoSans-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "VolvoSans";
+  src: url("../assets/fonts/VolvoSans-Bold.woff2") format("woff2"),
+       url("../assets/fonts/VolvoSans-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
+body {
+  font-family: "VolvoSans", Arial, sans-serif;
+  background-color: #F9F9F9;
+  color: #333333;
+  margin: 0;
+  padding: 0;
+}
