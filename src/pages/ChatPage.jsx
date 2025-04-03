@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ChatInterface from "../components/ChatInterface";
+import TechnicianSchedule from "../components/TechnicianSchedule"; // Import TechnicianSchedule
 import "../styles/ChatPage.css";
 import socket from "../utils/socket";
 
@@ -16,8 +17,21 @@ export default function ChatPage() {
     machine: "",
   });
   const [showDetailsForm, setShowDetailsForm] = useState(true);
+  const [showVideoCallButton, setShowVideoCallButton] = useState(false);
+  const [showSchedule, setShowSchedule] = useState(false); // State to toggle schedule visibility
+  const [technicianSchedule, setTechnicianSchedule] = useState([]); // State to store the schedule
 
   useEffect(() => {
+    // Predefined troubleshooting tips
+    const troubleshootingTips = [
+      { sender: "Assistant", text: "Welcome! How can I assist you today?" },
+      { sender: "Assistant", text: "Here are some basic troubleshooting tips:" },
+      { sender: "Assistant", text: "1. Restart your machine." },
+      { sender: "Assistant", text: "2. Check all cable connections." },
+      { sender: "Assistant", text: "3. Ensure the machine is powered on." },
+    ];
+    setMessages(troubleshootingTips);
+
     socket.on("technicianConnected", ({ technicianId }) => {
       setConnectedTechnician(technicianId);
       setInLiveChat(true);
@@ -29,11 +43,23 @@ export default function ChatPage() {
         ...prevMessages,
         { sender: "Technician", text: message },
       ]);
+
+      // Check if the technician's message contains a request for a video call
+      if (message.toLowerCase().includes("would you like to video call")) {
+        setShowVideoCallButton(true);
+      }
+    });
+
+    // Fetch technician schedule from the server
+    socket.on("updateTechnicianSchedule", (schedule) => {
+      console.log("Received technician schedule:", schedule);
+      setTechnicianSchedule(schedule);
     });
 
     return () => {
       socket.off("technicianConnected");
       socket.off("receiveMessage");
+      socket.off("updateTechnicianSchedule");
     };
   }, []);
 
@@ -106,14 +132,24 @@ export default function ChatPage() {
           </form>
         </div>
       ) : (
-        <ChatInterface
-          messages={messages}
-          onSendMessage={handleSendMessage}
-          suggestions={["How can I help you?", "What is your issue?", "Can you provide more details?"]}
-          role="customer"
-          onJoinLiveChat={handleJoinLiveChat}
-          inLiveChat={inLiveChat}
-        />
+        <>
+          <ChatInterface
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            suggestions={["How can I help you?", "What is your issue?", "Can you provide more details?"]}
+            role="customer"
+            onJoinLiveChat={handleJoinLiveChat}
+            inLiveChat={inLiveChat}
+            showVideoCallButton={showVideoCallButton}
+          />
+          <button
+            className="view-schedule-button"
+            onClick={() => setShowSchedule(!showSchedule)}
+          >
+            {showSchedule ? "Hide Technician Schedule" : "View Technician Schedule"}
+          </button>
+          {showSchedule && <TechnicianSchedule schedule={technicianSchedule} />}
+        </>
       )}
       <Footer />
     </div>

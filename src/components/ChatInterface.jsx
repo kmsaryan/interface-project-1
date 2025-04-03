@@ -4,7 +4,15 @@ import "../styles/ChatInterface.css";
 import Suggestions from "./Suggestions"; // Import the Suggestions component
 import VideoCallButton from "./VideoCallButton"; // Import the VideoCallButton component
 
-export default function ChatInterface({ messages, onSendMessage, suggestions, role, onJoinLiveChat, inLiveChat }) {
+export default function ChatInterface({
+  messages,
+  onSendMessage,
+  suggestions,
+  role,
+  onJoinLiveChat,
+  inLiveChat,
+  showVideoCallButton, // New prop to control video call button visibility
+}) {
   const [input, setInput] = useState("");
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [attachment, setAttachment] = useState(null);
@@ -64,6 +72,10 @@ export default function ChatInterface({ messages, onSendMessage, suggestions, ro
         {!inLiveChat && role === "customer" && (
           <div className="dedicated-message-buttons">
             <button onClick={onJoinLiveChat}>Join Live Chat</button>
+          </div>
+        )}
+        {inLiveChat && showVideoCallButton && (
+          <div className="dedicated-message-buttons">
             <VideoCallButton />
           </div>
         )}

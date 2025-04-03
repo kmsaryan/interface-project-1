@@ -14,7 +14,7 @@ import ChatInterface from "../components/ChatInterface";
 export default function TechnicianPage() {
   const [liveChatQueue, setLiveChatQueue] = useState([]);
   const [activeChats, setActiveChats] = useState([]); // Track active chat sessions
-  const [schedule, setSchedule] = useState([]);
+  const [schedule, setSchedule] = useState([]); // Technician's schedule
   const [showSchedule, setShowSchedule] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -42,10 +42,16 @@ export default function TechnicianPage() {
       );
     });
 
+    socket.on("updateTechnicianSchedule", (updatedSchedule) => {
+      console.log("Received updated schedule:", updatedSchedule);
+      setSchedule(updatedSchedule);
+    });
+
     return () => {
       console.log("Cleaning up socket listeners...");
       socket.off("updateLiveChatQueue");
       socket.off("receiveMessage");
+      socket.off("updateTechnicianSchedule");
     };
   }, []);
 
@@ -53,8 +59,12 @@ export default function TechnicianPage() {
     if (selectedDate && selectedTime) {
       const date = selectedDate.toISOString().split("T")[0];
       const time = selectedTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-      console.log("Adding availability:", { date, time });
-      setSchedule((prevSchedule) => [...prevSchedule, { date, time }]);
+      const newAvailability = { date, time };
+      console.log("Adding availability:", newAvailability);
+
+      const updatedSchedule = [...schedule, newAvailability];
+      setSchedule(updatedSchedule);
+      socket.emit("updateTechnicianSchedule", updatedSchedule); // Notify the server about the updated schedule
       alert("Availability added!");
     } else {
       alert("Please select both date and time.");
@@ -118,6 +128,13 @@ export default function TechnicianPage() {
           <button onClick={handleAddAvailability}>Add</button>
         </div>
       </div>
+      <h2>Technician Schedule</h2>
+      <div className="schedule-actions">
+        <button className="view-schedule-button" onClick={() => setShowSchedule(!showSchedule)}>
+          {showSchedule ? "Hide Schedule" : "View Schedule"}
+        </button>
+      </div>
+      {showSchedule && <TechnicianSchedule schedule={schedule} />}
       <div className="queues">
         <h2>Customer Queue</h2>
         <ul>
@@ -144,13 +161,6 @@ export default function TechnicianPage() {
           </div>
         ))}
       </div>
-      <h2>Technician Schedule</h2>
-      <div className="schedule-actions">
-        <button className="view-schedule-button" onClick={() => setShowSchedule(!showSchedule)}>
-          {showSchedule ? "Hide Schedule" : "View Schedule"}
-        </button>
-      </div>
-      {showSchedule && <TechnicianSchedule schedule={schedule} />}
       <Footer />
     </div>
   );

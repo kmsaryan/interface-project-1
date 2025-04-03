@@ -13,6 +13,7 @@ const io = new Server(server, {
 
 const users = new Map(); // Map to track connected users (socketId -> userDetails)
 let liveChatQueue = []; // Array to track live chat queue
+let technicianSchedule = []; // Store the technician's schedule
 
 app.get("/", (req, res) => {
   res.send("Welcome to the WebSocket Server!"); // Respond with a simple message
@@ -65,6 +66,16 @@ io.on("connection", (socket) => {
     io.to(to).emit("receiveMessage", { from: socket.id, message }); // Send message to the recipient
   });
 
+  // Handle updating the technician's schedule
+  socket.on("updateTechnicianSchedule", (updatedSchedule) => {
+    technicianSchedule = updatedSchedule;
+    io.emit("updateTechnicianSchedule", technicianSchedule); // Broadcast the updated schedule
+    console.log("Technician schedule updated:", technicianSchedule);
+  });
+
+  // Emit the current schedule to newly connected clients
+  socket.emit("updateTechnicianSchedule", technicianSchedule);
+
   // Handle disconnection
   socket.on("disconnect", () => {
     console.log("A user disconnected:", socket.id);
@@ -82,6 +93,19 @@ io.on("connection", (socket) => {
     console.log(`[DEBUG] Emitted updateLiveChatQueue with data:`, liveChatQueue);
   });
 });
+
+// Emit technician schedule to all connected clients
+function broadcastTechnicianSchedule() {
+  const schedule = [
+    { date: "2023-10-01", time: "10:00 AM" },
+    { date: "2023-10-01", time: "02:00 PM" },
+    { date: "2023-10-02", time: "11:00 AM" },
+  ]; // Example schedule
+  io.emit("updateTechnicianSchedule", schedule);
+}
+
+// Call this function whenever the schedule is updated
+broadcastTechnicianSchedule();
 
 server.listen(5000, () => {
   console.log("Server is running on http://localhost:5000");
