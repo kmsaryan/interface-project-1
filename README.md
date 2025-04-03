@@ -46,12 +46,19 @@ This project is a customer support interface that allows customers to chat with 
    REACT_APP_SERVER_URL=http://localhost:5000
    ```
 
-4. Start the WebSocket server:
+4. Configure `stream-http`:
+   - Ensure that the `stream-http` library and its dependencies are installed:
+     ```bash
+     npm install stream-http readable-stream
+     ```
+   - Verify that the `stream-http` library is correctly configured in the `src/utils/stream-http` directory.
+
+5. Start the WebSocket server:
    ```bash
    node src/server/server.js
    ```
 
-5. Start the React application:
+6. Start the React application:
    ```bash
    npm start
    ```
@@ -123,6 +130,45 @@ This project is a customer support interface that allows customers to chat with 
     └── utils
         ├── server.js
         ├── socket.js
+        └── stream-http
+            ├── index.js
+            ├── lib
+            │   ├── capability.js
+            │   ├── request.js
+            │   └── response.js
+            ├── LICENSE
+            ├── node_modules
+            │   └── readable-stream
+            │       ├── CONTRIBUTING.md
+            │       ├── errors-browser.js
+            │       ├── errors.js
+            │       ├── experimentalWarning.js
+            │       ├── GOVERNANCE.md
+            │       ├── lib
+            │       │   ├── internal
+            │       │   │   └── streams
+            │       │   │       ├── async_iterator.js
+            │       │   │       ├── buffer_list.js
+            │       │   │       ├── destroy.js
+            │       │   │       ├── end-of-stream.js
+            │       │   │       ├── from-browser.js
+            │       │   │       ├── from.js
+            │       │   │       ├── pipeline.js
+            │       │   │       ├── state.js
+            │       │   │       ├── stream-browser.js
+            │       │   │       └── stream.js
+            │       │   ├── _stream_duplex.js
+            │       │   ├── _stream_passthrough.js
+            │       │   ├── _stream_readable.js
+            │       │   ├── _stream_transform.js
+            │       │   └── _stream_writable.js
+            │       ├── LICENSE
+            │       ├── package.json
+            │       ├── readable-browser.js
+            │       ├── readable.js
+            │       └── README.md
+            ├── package.json
+            └── README.md
 ```
 
 ## Scripts
