@@ -24,6 +24,8 @@ const TreeEditor = () => {
   const [question, setQuestion] = useState("");
   const [solution, setSolution] = useState("");
   const [editingPath, setEditingPath] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+
 
   useEffect(() => {
     setTreeData(troubleshootTree);
@@ -36,6 +38,8 @@ const TreeEditor = () => {
         onClick={() => handleSelectNode(node, path)}
       >
         {node.question ? `Q: ${node.question}` : `Solution: ${node.solution}`}
+        {node.image && (<img src={node.image} alt="Node Visual" style={{ width: "100px", display: "block" }} />
+)}
       </p>
       {node.responses &&
         Object.entries(node.responses).map(([key, child]) => (
@@ -51,6 +55,7 @@ const TreeEditor = () => {
     setSelectedNode(node);
     setQuestion(node.question || "");
     setSolution(node.solution || "");
+    setImageUrl(node.image || "");
     setEditingPath(path);
   };
 
@@ -64,9 +69,11 @@ const TreeEditor = () => {
     if (question) {
       current.question = question;
       delete current.solution;
+      delete current.image;
       current.responses = current.responses || { Yes: {}, No: {} };
     } else if (solution) {
-      current.solution = solution;
+      current.solution = solution; 
+      current.image = imageUrl;
       delete current.question;
       delete current.responses;
     }
@@ -98,6 +105,9 @@ const TreeEditor = () => {
           <input value={question} onChange={(e) => setQuestion(e.target.value)} /><br />
           <label>Solution:</label>
           <input value={solution} onChange={(e) => setSolution(e.target.value)} /><br />
+          <label>Image URL:</label>
+          <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} /><br />
+          {imageUrl && <img src={imageUrl} alt="Preview" style={{ width: "200px", marginTop: "10px" }} />}
           <button onClick={handleSaveNode}>Save</button>
           <button onClick={handleDeleteNode} style={{ color: "red" }}>Delete</button>
         </div>

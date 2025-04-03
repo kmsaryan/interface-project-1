@@ -1,16 +1,24 @@
 {
-    "question": "Is the engine turning on?",
+  "question": "Is the engine starting?",
+  "yes": {
+    "question": "Does it make a clicking sound?",
     "yes": {
-      "question": "Is it making any unusual noise?",
-      "yes": {
-        "solution": "Check for loose parts."
-      },
-      "no": {
-        "solution": "Try restarting the system."
+      "solution": {
+        "text": "Check the battery connection.",
+        "image": "/images/battery_connection.jpg"
       }
     },
     "no": {
-      "solution": "Check battery or call technician."
+      "solution": {
+        "text": "Inspect the ignition switch.",
+        "image": "/images/ignition_switch.jpg"
+      }
+    }
+  },
+  "no": {
+    "solution": {
+      "text": "Verify fuel level and pump functionality.",
+      "image": "/images/fuel_check.jpg"
     }
   }
-  
+}
