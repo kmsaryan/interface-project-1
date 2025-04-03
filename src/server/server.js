@@ -35,7 +35,8 @@ io.on("connection", (socket) => {
   // Handle customer joining live chat queue
   socket.on("joinLiveChatQueue", (customerDetails) => {
     console.log(`[DEBUG] Before adding to queue:`, liveChatQueue);
-    liveChatQueue.push({ id: socket.id, ...customerDetails });
+    const customerData = { id: socket.id, ...customerDetails }; // Ensure all customer details are included
+    liveChatQueue.push(customerData);
     console.log(`[DEBUG] After adding to queue:`, liveChatQueue);
 
     io.emit("updateLiveChatQueue", liveChatQueue); // Notify all technicians

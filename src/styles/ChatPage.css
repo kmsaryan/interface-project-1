@@ -126,47 +126,99 @@
 }
 
 .customer-details-form {
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 20px;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 25px;
   border: 1px solid #CCCCCC;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: #FFFFFF;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .customer-details-form h2 {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   text-align: center;
   color: #007CC3;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 .customer-details-form label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   font-weight: bold;
   color: #333333;
+  font-size: 14px;
 }
 
 .customer-details-form input,
 .customer-details-form textarea {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
+  padding: 12px;
+  margin-bottom: 20px;
   border: 1px solid #CCCCCC;
   border-radius: 5px;
+  font-size: 14px;
+  font-family: "VolvoSans", Arial, sans-serif;
+  background-color: #F9F9F9;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.customer-details-form input:focus,
+.customer-details-form textarea:focus {
+  outline: none;
+  border-color: #007CC3;
+  box-shadow: 0 0 5px rgba(0, 124, 195, 0.5);
 }
 
 .customer-details-form button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background-color: #007CC3;
   color: white;
   border: none;
   border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .customer-details-form button:hover {
   background-color: #00457C;
+  transform: scale(1.02);
+}
+
+.customer-details-form button:active {
+  transform: scale(0.98);
+}
+
+.schedule-display {
+  margin-top: 20px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-display table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.schedule-display th,
+.schedule-display td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #CCCCCC;
+}
+
+.schedule-display th {
+  background-color: #007CC3;
+  color: white;
+}
+
+.schedule-display td {
+  background-color: #F9F9F9;
 }

@@ -148,7 +148,26 @@ export default function ChatPage() {
           >
             {showSchedule ? "Hide Technician Schedule" : "View Technician Schedule"}
           </button>
-          {showSchedule && <TechnicianSchedule schedule={technicianSchedule} />}
+          {showSchedule && (
+            <div className="schedule-display">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {technicianSchedule.map((entry, index) => (
+                    <tr key={index}>
+                      <td>{entry.date}</td>
+                      <td>{entry.time}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </>
       )}
       <Footer />

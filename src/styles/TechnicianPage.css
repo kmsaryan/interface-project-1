@@ -202,6 +202,9 @@
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .chat-session h3 {
@@ -291,6 +294,21 @@
   background-color: #00457C;
 }
 
+.end-chat-button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #FF4D4D;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.end-chat-button:hover {
+  background-color: #CC0000;
+}
+
 .schedule-actions {
   margin-top: 20px;
   text-align: center;
@@ -308,4 +326,78 @@
 
 .schedule-actions button:hover {
   background-color: #00457C;
+}
+
+.availability-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.schedule-display {
+  margin-top: 20px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-display table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.schedule-display th,
+.schedule-display td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #CCCCCC;
+}
+
+.schedule-display th {
+  background-color: #007CC3;
+  color: white;
+}
+
+.schedule-display td {
+  background-color: #F9F9F9;
+}
+
+.chat-interface .input-area input[type="file"] {
+  display: none;
+}
+
+.chat-interface .input-area label.attachment-icon {
+  font-size: 20px;
+  color: #007CC3;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.chat-interface .input-area label.attachment-icon:hover {
+  color: #00457C;
+}
+
+.chat-interface .message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+  position: relative;
+}
+
+.chat-interface .message.user {
+  background-color: #D1E7DD;
+  text-align: right;
+  align-self: flex-end;
+}
+
+.chat-interface .message.assistant {
+  background-color: #F8D7DA;
+  text-align: left;
+  align-self: flex-start;
 }

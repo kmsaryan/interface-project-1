@@ -102,6 +102,13 @@ export default function TechnicianPage() {
     );
   };
 
+  const handleEndChat = (customerId) => {
+    console.log("Ending chat with customer:", customerId);
+    socket.emit("endChat", { customerId });
+    setActiveChats((prevChats) => prevChats.filter((chat) => chat.customer.id !== customerId));
+    socket.emit("notifyCustomerChatEnded", { customerId }); // Notify the customer
+  };
+
   return (
     <div className="technician-page">
       <Header />
@@ -132,6 +139,12 @@ export default function TechnicianPage() {
                   role="technician"
                   inLiveChat={true}
                 />
+                <button
+                  className="end-chat-button"
+                  onClick={() => handleEndChat(chat.customer.id)}
+                >
+                  End Chat
+                </button>
               </div>
             ))
           ) : (
@@ -141,7 +154,7 @@ export default function TechnicianPage() {
       </div>
       <div className="technician-actions">
         <h2>Add Availability</h2>
-        <div>
+        <div className="availability-form">
           <DatePicker
             selected={selectedDate}
             onChange={(date) => setSelectedDate(date)}
@@ -166,7 +179,26 @@ export default function TechnicianPage() {
           {showSchedule ? "Hide Schedule" : "View Schedule"}
         </button>
       </div>
-      {showSchedule && <TechnicianSchedule schedule={schedule} />}
+      {showSchedule && (
+        <div className="schedule-display">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {schedule.map((entry, index) => (
+                <tr key={index}>
+                  <td>{entry.date}</td>
+                  <td>{entry.time}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       <Footer />
     </div>
   );
