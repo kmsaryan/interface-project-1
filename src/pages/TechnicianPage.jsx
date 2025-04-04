@@ -1,221 +1,121 @@
-// TechnicianPage.jsx
-// File: src/pages/TechnicianPage.jsx
 import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import TechnicianSchedule from "../components/TechnicianSchedule";
-import "../styles/TechnicianPage.css";
-import "../styles/Header.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import socket from "../utils/socket";
-import ChatInterface from "../components/ChatInterface";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "../styles/TechnicianPage.css";
+import technicianGif from "../assets/images/Technician.gif"; // Import technician GIF
+import "../styles/Notification.css"; // Import Notification styles
+import "../styles/ChatWindow.css"; // Import ChatWindow styles
+import "../styles/TechnicianPage.css"; // Import TechnicianPage styles
+import "../styles/fonts.css"; // Import fonts
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-export default function TechnicianPage() {
-  const [liveChatQueue, setLiveChatQueue] = useState([]);
-  const [activeChats, setActiveChats] = useState([]); // Track active chat sessions
-  const [schedule, setSchedule] = useState([]); // Technician's schedule
-  const [showSchedule, setShowSchedule] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+// TechnicianPage component
+const TechnicianPage = () => {
+  const [customers, setCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [activeChatCustomerId, setActiveChatCustomerId] = useState(null); // Track active chat customer
+  const [notification, setNotification] = useState(""); // Notification state
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
-    console.log("Registering technician...");
-    socket.emit("registerUser", { role: "technician", name: "Technician" });
-
-    // Listen for live chat queue updates
     socket.on("updateLiveChatQueue", (queue) => {
-      console.log("Received live chat queue update:", queue);
-      setLiveChatQueue(queue); // Update the queue state
+      setCustomers(queue); // Update customer list dynamically
     });
 
-    socket.on("receiveMessage", ({ from, message }) => {
-      console.log("Received message:", { from, message });
-      setActiveChats((prevChats) =>
-        prevChats.map((chat) =>
-          chat.customer.id === from
-            ? {
-                ...chat,
-                messages: [...chat.messages, { sender: "Customer", text: message }],
-              }
-            : chat
-        )
-      );
+    socket.on("customerConnected", (customer) => {
+      setActiveChatCustomerId(customer.id); // Set active chat customer ID
+      setNotification(`Connected to customer: ${customer.name}`);
     });
 
-    socket.on("updateTechnicianSchedule", (updatedSchedule) => {
-      console.log("Received updated schedule:", updatedSchedule);
-      setSchedule(updatedSchedule);
+    socket.on("customerNotFound", ({ customerId }) => {
+      setNotification(`Customer with ID ${customerId} is no longer available.`);
+    });
+
+    socket.on("customerAlreadyInChat", ({ customerId }) => {
+      setNotification(`Customer with ID ${customerId} is already in an active chat.`);
+    });
+
+    socket.on("chatEnded", () => {
+      setNotification("Chat has ended.");
+      setActiveChatCustomerId(null); // Reset active chat customer ID
     });
 
     return () => {
-      console.log("Cleaning up socket listeners...");
       socket.off("updateLiveChatQueue");
-      socket.off("receiveMessage");
-      socket.off("updateTechnicianSchedule");
+      socket.off("customerConnected");
+      socket.off("customerNotFound");
+      socket.off("customerAlreadyInChat");
+      socket.off("chatEnded");
     };
   }, []);
 
-  const handleAddAvailability = () => {
-    if (selectedDate && selectedTime) {
-      const date = selectedDate.toISOString().split("T")[0];
-      const time = selectedTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-      const newAvailability = { date, time };
-      console.log("Adding availability:", newAvailability);
-
-      const updatedSchedule = [...schedule, newAvailability];
-      setSchedule(updatedSchedule);
-      socket.emit("updateTechnicianSchedule", updatedSchedule); // Notify the server about the updated schedule
-      alert("Availability added!");
-    } else {
-      alert("Please select both date and time.");
-    }
-  };
-
   const handleSelectCustomer = (customerId) => {
-    console.log("Selecting customer with ID:", customerId);
-    const customer = liveChatQueue.find((c) => c.id === customerId);
-    if (customer) {
-      console.log("Customer found:", customer);
-      setActiveChats((prevChats) => [
-        ...prevChats,
-        { customer, messages: [] }, // Add a new chat session
-      ]);
-      socket.emit("selectCustomer", customerId);
-      setLiveChatQueue((prevQueue) => prevQueue.filter((c) => c.id !== customerId)); // Remove from queue
-    } else {
-      console.warn("Customer not found in queue.");
-    }
+    const customer = customers.find((c) => c.id === customerId);
+    setSelectedCustomer(customer); // Display customer details
   };
 
-  const handleSendMessage = (customerId, text) => {
-    console.log("Sending message to customer:", { to: customerId, text });
-    socket.emit("sendMessage", { to: customerId, message: text });
-    setActiveChats((prevChats) =>
-      prevChats.map((chat) =>
-        chat.customer.id === customerId
-          ? {
-              ...chat,
-              messages: [...chat.messages, { sender: "You", text }],
-            }
-          : chat
-      )
-    );
+  const handleStartChat = (customerId) => {
+    if (!customerId) {
+      setNotification("No customer selected for chat.");
+      return;
+    }
+    socket.emit("selectCustomer", customerId); // Start chat with customer
+    navigate("/livechat", { state: { role: "technician", customerId } }); // Redirect to Live Chat Page with role and customerId
   };
 
   const handleEndChat = (customerId) => {
-    const confirmEnd = window.confirm("Are you sure you want to end this chat?");
-    if (confirmEnd) {
-      console.log("Ending chat with customer:", customerId);
+    socket.emit("endChat", { customerId }); // Emit endChat event to server
+    setActiveChatCustomerId(null); // Reset active chat customer ID
+  };
 
-      // Send "end chat" message to the customer
-      const endChatMessage = "end chat";
-      socket.emit("sendMessage", { to: customerId, message: endChatMessage });
-
-      // Emit the endChat event to the server
-      socket.emit("endChat", { customerId });
-
-      // Remove the chat session from the active chats
-      setActiveChats((prevChats) => prevChats.filter((chat) => chat.customer.id !== customerId));
-
-      // Show a toast notification
-      toast.success("Chat ended successfully.");
-    }
+  const handleDismissNotification = () => {
+    setNotification(""); // Clear the notification
   };
 
   return (
     <div className="technician-page">
-      <Header />
       <h1>Technician Dashboard</h1>
+      <img src={technicianGif} alt="Technician GIF" className="technician-gif" />
       <div className="technician-layout">
+        {/* Customer Queue */}
         <div className="customer-queue">
           <h2>Customer Queue</h2>
-          <ul>
-            {liveChatQueue.map((customer, index) => (
-              <li key={customer.id || index} className="queue-item">
-                <div>
-                  <strong>{customer.name}</strong> - {customer.issue || "No issue provided"}
-                </div>
-                <button onClick={() => handleSelectCustomer(customer.id)}>Connect</button>
-              </li>
-            ))}
-          </ul>
+          {customers.map((customer) => (
+            <div
+              key={customer.id}
+              className={`queue-item ${
+                activeChatCustomerId === customer.id ? "in-chat" : ""
+              }`}
+            >
+              <span>{customer.name}</span>
+              <button
+                onClick={() => handleSelectCustomer(customer.id)}
+                disabled={activeChatCustomerId === customer.id}
+              >
+                {activeChatCustomerId === customer.id ? "In Chat" : "View"}
+              </button>
+              <span>{new Date(customer.joinedAt).toLocaleTimeString()}</span>
+            </div>
+          ))}
         </div>
-        <div className="chat-sessions">
-          {activeChats.length > 0 ? (
-            activeChats.map((chat, index) => (
-              <div key={index} className="chat-session">
-                <h3>Chat with {chat.customer.name}</h3>
-                <ChatInterface
-                  messages={chat.messages}
-                  onSendMessage={({ text }) => handleSendMessage(chat.customer.id, text)}
-                  suggestions={["Please elaborate.", "Can you clarify?", "What is the issue?"]}
-                  role="technician"
-                  inLiveChat={true}
-                />
-                <button
-                  className="end-chat-button"
-                  onClick={() => handleEndChat(chat.customer.id)}
-                >
-                  End Chat
-                </button>
-              </div>
-            ))
+
+        {/* Customer Details */}
+        <div className="customer-details">
+          {selectedCustomer ? (
+            <>
+              <h2>Customer Details</h2>
+              <p><strong>Name:</strong> {selectedCustomer.name}</p>
+              <p><strong>Issue:</strong> {selectedCustomer.issue}</p>
+              <p><strong>Machine:</strong> {selectedCustomer.machine}</p>
+              <button onClick={() => handleStartChat(selectedCustomer.id)}>Start Chat</button>
+              <button onClick={() => handleEndChat(selectedCustomer.id)}>End Chat</button>
+            </>
           ) : (
-            <p>No active chats</p>
+            <p>Select a customer to view details.</p>
           )}
         </div>
       </div>
-      <div className="technician-actions">
-        <h2>Add Availability</h2>
-        <div className="availability-form">
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            placeholderText="Select Date"
-          />
-          <DatePicker
-            selected={selectedTime}
-            onChange={(time) => setSelectedTime(time)}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            timeCaption="Time"
-            dateFormat="h:mm aa"
-            placeholderText="Select Time"
-          />
-          <button onClick={handleAddAvailability}>Add</button>
-        </div>
-      </div>
-      <h2>Technician Schedule</h2>
-      <div className="schedule-actions">
-        <button className="view-schedule-button" onClick={() => setShowSchedule(!showSchedule)}>
-          {showSchedule ? "Hide Schedule" : "View Schedule"}
-        </button>
-      </div>
-      {showSchedule && (
-        <div className="schedule-display">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {schedule.map((entry, index) => (
-                <tr key={index}>
-                  <td>{entry.date}</td>
-                  <td>{entry.time}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-      <Footer />
     </div>
   );
-}
+};
+
+export default TechnicianPage;

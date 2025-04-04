@@ -1,23 +1,23 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
+import GlobalHomePage from "./pages/GlobalHomePage"; // Import GlobalHomePage
 import Home from "./pages/Home";
-import ChatPage from "./pages/ChatPage";
 import TechnicianPage from "./pages/TechnicianPage";
+import LiveChat from "./pages/LiveChat";
 import SignInPage from "./pages/SignInPage";
+import RegistrationPage from "./pages/RegistrationPage";
 import "./styles/fonts.css";
 import "./styles/App.css";
-import Header from "./components/Header";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} /> {/* Login Page */}
-      <Route path="/home" element={<Home />} /> {/* Customer Home Page */}
-      <Route path="/chat" element={<ChatPage />} /> {/* Route to ChatPage */}
-      <Route path="/technician" element={<TechnicianPage />} /> {/* Technician Page */}
+      <Route path="/" element={<GlobalHomePage />} /> {/* Default Landing Page */}
+      <Route path="/register" element={<RegistrationPage />} />
       <Route path="/signin" element={<SignInPage />} />
-      <Route path="/register" element={<div>Registration Page Coming Soon</div>} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/technician" element={<TechnicianPage />} />
+      <Route path="/livechat" element={<LiveChat />} />
     </Routes>
   );
 }

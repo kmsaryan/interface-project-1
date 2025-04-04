@@ -46,25 +46,59 @@ function setupWebSocket(server) {
 
     // Handle customer joining live chat queue
     socket.on("joinLiveChatQueue", (customerDetails) => {
-      liveChatQueue.push({ id: socket.id, ...customerDetails });
-      io.emit("updateLiveChatQueue", liveChatQueue);
+      if (!liveChatQueue.some((customer) => customer.id === socket.id)) {
+        liveChatQueue.push({ id: socket.id, ...customerDetails, joinedAt: Date.now() });
+        console.log(`[WEBSOCKET LOG]: Customer added to liveChatQueue:`, liveChatQueue);
+        io.emit("updateLiveChatQueue", liveChatQueue); // Notify all technicians
+      }
     });
 
     // Handle technician selecting a customer
     socket.on("selectCustomer", (customerId) => {
       const customer = liveChatQueue.find((c) => c.id === customerId);
+      const isCustomerInActiveChat = Array.from(activeChats.values()).includes(customerId);
+
+      if (isCustomerInActiveChat) {
+        console.warn(`[WARN] Customer with ID ${customerId} is already in an active chat.`);
+        io.to(socket.id).emit("customerAlreadyInChat", { customerId });
+        return;
+      }
+
       if (customer) {
+        // Remove customer from queue and map technician to customer
         liveChatQueue = liveChatQueue.filter((c) => c.id !== customerId);
         activeChats.set(socket.id, customerId);
-        io.emit("updateLiveChatQueue", liveChatQueue);
+        io.emit("updateLiveChatQueue", liveChatQueue); // Update queue for all technicians
         io.to(customerId).emit("technicianConnected", { technicianId: socket.id });
         io.to(socket.id).emit("customerConnected", customer);
+        console.log(`[WEBSOCKET LOG]: Technician ${socket.id} connected to customer ${customerId}`);
+      } else {
+        console.warn(`[WARN] Customer with ID ${customerId} not found in queue.`);
+        io.to(socket.id).emit("customerNotFound", { customerId });
       }
     });
 
     // Handle real-time messaging
-    socket.on("sendMessage", ({ to, message }) => {
-      io.to(to).emit("receiveMessage", { from: socket.id, message });
+    socket.on("sendMessage", ({ to, message, attachment }) => {
+      if (to) {
+        io.to(to).emit("receiveMessage", { from: socket.id, message, attachment, timestamp: Date.now() });
+        console.log(`[WEBSOCKET LOG]: Message sent from ${socket.id} to ${to}`);
+      } else {
+        console.warn(`[WARN] Message not sent. Missing recipient (to).`);
+      }
+    });
+
+    // Handle ending the chat
+    socket.on("endChat", ({ customerId }) => {
+      const technicianId = Array.from(activeChats.entries()).find(([techId, custId]) => custId === customerId)?.[0];
+      if (technicianId) {
+        activeChats.delete(technicianId); // Remove the active chat
+        io.to(customerId).emit("chatEnded"); // Notify the customer
+        io.to(technicianId).emit("chatEnded"); // Notify the technician
+        console.log(`[WEBSOCKET LOG]: Chat ended between technician ${technicianId} and customer ${customerId}`);
+      } else {
+        console.warn(`[WARN] No active chat found for customer ID ${customerId}`);
+      }
     });
 
     // Handle disconnection
@@ -76,9 +110,11 @@ function setupWebSocket(server) {
       if (user?.role === "technician") {
         const customerId = activeChats.get(socket.id);
         if (customerId) {
-          const customer = liveChatQueue.find((c) => c.id === customerId);
+          // Return the customer to the queue if the technician disconnects
+          const customer = activeChats.get(socket.id);
           if (customer) {
             liveChatQueue.push(customer);
+            io.emit("updateLiveChatQueue", liveChatQueue); // Notify all technicians
           }
           activeChats.delete(socket.id);
         }

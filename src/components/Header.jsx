@@ -11,18 +11,11 @@ export default function Header() {
         <img src={logo} alt="Volvo Logo" />
       </div>
       <nav className="nav">
-        <Link to="/">Home</Link>
-        <Link to="/chat">Chat</Link>
-        <Link to="/technician">Technician</Link>
+        <Link to="/register">Register</Link>
+        <Link to="/signin">Sign In</Link>
+        <Link to="/home">Customer Dashboard</Link>
+        <Link to="/technician">Technician Dashboard</Link>
       </nav>
-      <div className="auth-buttons">
-        <Link to="/signin">
-          <button className="sign-in">Sign In</button>
-        </Link>
-        <Link to="/register">
-          <button className="register">Register</button>
-        </Link>
-      </div>
     </header>
   );
 }

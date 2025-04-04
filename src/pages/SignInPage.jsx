@@ -8,11 +8,15 @@ export default function SignInPage() {
   const navigate = useNavigate();
 
   const handleCustomerLogin = () => {
-    navigate("/home");
+    navigate("/home"); // Redirect to Customer Home Page
   };
 
   const handleTechnicianLogin = () => {
-    navigate("/technician");
+    navigate("/technician"); // Redirect to Technician Dashboard
+  };
+
+  const handleRegister = () => {
+    navigate("/register"); // Redirect to Registration Page
   };
 
   return (
@@ -27,6 +31,12 @@ export default function SignInPage() {
           Technician
         </button>
       </div>
+      <p className="sign-in-instructions">
+        Don't have an account?{" "}
+        <button className="register-link" onClick={handleRegister}>
+          Register Here
+        </button>
+      </p>
     </div>
   );
 }

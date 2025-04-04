@@ -1,6 +1,7 @@
 /*Home.css*/
 .home {
   text-align: center;
+  padding: 20px;
   margin: 50px 0;
 }
 
@@ -14,20 +15,40 @@
   margin: 10px 0;
 }
 
-.assistant-form {
+.main-content {
   margin-top: 20px;
+}
+
+.assistant-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .assistant-form input {
   padding: 10px;
   width: 300px;
-  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .assistant-form button {
   padding: 10px 20px;
-  background-color: #000;
-  color: #fff;
+  background-color: #007bff;
+  color: white;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+}
+
+.assistant-form button:hover {
+  background-color: #0056b3;
+}
+
+.customer-gif {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  display: block;
 }

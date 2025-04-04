@@ -1,36 +1,63 @@
-//Home.jsx
-//Home.jsx is a functional component that represents the home page of the application. It contains the main content of the application, including the ChatInterface, Suggestions, VideoCallButton, and TechnicianConnect components. The Home component is a simple container component that renders the child components in a specific layout.
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ChatInterface from "../components/ChatInterface";
-import TechnicianConnect from "../components/TechnicianConnect";
-import TechnicianSchedule from "../components/TechnicianSchedule";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import socket from "../utils/socket";
 import "../styles/Home.css";
+import customerGif from "../assets/images/Customer.gif"; // Import customer GIF
 
-export default function Home({ onSubmitIssue = () => {} }) {
-  const [technicianSchedule, setTechnicianSchedule] = useState([]);
+export default function Home() {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    issue: "",
+    machine: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Redirect to the chat page
-    navigate("/chat");
-  };
-
-  const addAvailability = (date, time) => {
-    setTechnicianSchedule([...technicianSchedule, { date, time }]);
+    socket.emit("joinLiveChatQueue", formData); // Add customer to live chat queue
+    navigate("/livechat", { state: { role: "customer" } }); // Redirect to Live Chat Page with role
   };
 
   return (
     <div className="home">
       <Header />
       <main className="main-content">
-        <h1>VOLVO AI ASSISTANT</h1>
-        <p>What is your problem?</p>
+        <h1>Customer Dashboard</h1>
+        <p>Fill out the form below to start a live chat with a technician.</p>
+        <img src={customerGif} alt="Customer GIF" className="customer-gif" />
         <form className="assistant-form" onSubmit={handleSubmit}>
-          <ChatInterface />
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="issue"
+            placeholder="Describe your issue"
+            value={formData.issue}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="machine"
+            placeholder="Machine Type"
+            value={formData.machine}
+            onChange={handleInputChange}
+            required
+          />
+          <button type="submit">Start Live Chat</button>
         </form>
       </main>
       <Footer />
