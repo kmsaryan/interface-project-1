@@ -1,9 +1,23 @@
 // /src/components/treeService.js
 const API_BASE = 'http://localhost:5000/api/tree'; // ajuste se seu backend estiver em outra porta ou domínio
 
-export const fetchTree = async () => {
-  const response = await fetch(API_BASE);
-  return response.json();
+export const fetchTreeList = async () => {
+    const response = await fetch(`${API_BASE}/trees`);
+    return response.json();
+};
+
+export const fetchTree = async (rootId) => {
+    const response = await fetch(`${API_BASE}/tree/${rootId}`);
+    return response.json();
+};
+
+export const createTree = async (question) => {
+    const response = await fetch(`${API_BASE}/trees`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question }),
+    });
+    return response.json();
 };
 
 export const addNode = async (node) => {
