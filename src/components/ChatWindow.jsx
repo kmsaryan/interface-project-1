@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Message from "./Message";
 import "../styles/ChatWindow.css"; // Import styles
 import socket from "../utils/socket"; // Import socket to identify sender
 
 const ChatWindow = ({ messages, role }) => {
+  const messagesEndRef = useRef(null);
+
+  // Scroll to the bottom of the chat window whenever messages are updated
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <div className="chat-window">
       {messages.length === 0 ? (
@@ -20,6 +27,7 @@ const ChatWindow = ({ messages, role }) => {
               isSender={msg.from === socket.id} // Determine if the message is sent by the current user
             />
           ))}
+          <div ref={messagesEndRef} /> {/* Scroll anchor */}
         </div>
       )}
     </div>

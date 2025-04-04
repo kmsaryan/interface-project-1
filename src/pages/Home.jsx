@@ -12,6 +12,7 @@ export default function Home() {
     name: "",
     issue: "",
     machine: "",
+    priority: "Medium", // Default priority
   });
 
   const handleInputChange = (e) => {
@@ -57,6 +58,16 @@ export default function Home() {
             onChange={handleInputChange}
             required
           />
+          <select
+            name="priority"
+            value={formData.priority}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
           <button type="submit">Start Live Chat</button>
         </form>
       </main>

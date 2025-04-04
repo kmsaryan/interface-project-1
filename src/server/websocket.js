@@ -18,6 +18,8 @@ function setupWebSocket(server) {
 
   io.on("connection", (socket) => {
     console.log(`[WEBSOCKET LOG]: A user connected: ${socket.id}`);
+    users.set(socket.id, { status: "online" }); // Set user status to online
+    io.emit("updateUserStatus", Array.from(users.values())); // Notify all clients
 
     // Log all events for debugging
     socket.onAny((event, ...args) => {
@@ -47,7 +49,13 @@ function setupWebSocket(server) {
     // Handle customer joining live chat queue
     socket.on("joinLiveChatQueue", (customerDetails) => {
       if (!liveChatQueue.some((customer) => customer.id === socket.id)) {
-        liveChatQueue.push({ id: socket.id, ...customerDetails, joinedAt: Date.now() });
+        const customerWithDefaults = {
+          id: socket.id,
+          ...customerDetails,
+          joinedAt: Date.now(),
+          priority: customerDetails.priority || "Medium", // Ensure priority has a default value
+        };
+        liveChatQueue.push(customerWithDefaults);
         console.log(`[WEBSOCKET LOG]: Customer added to liveChatQueue:`, liveChatQueue);
         io.emit("updateLiveChatQueue", liveChatQueue); // Notify all technicians
       }
@@ -104,6 +112,8 @@ function setupWebSocket(server) {
     // Handle disconnection
     socket.on("disconnect", () => {
       console.log(`[WEBSOCKET LOG]: A user disconnected: ${socket.id}`);
+      users.delete(socket.id);
+      io.emit("updateUserStatus", Array.from(users.values())); // Notify all clients
       const user = users.get(socket.id);
       users.delete(socket.id);
 

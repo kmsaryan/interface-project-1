@@ -2,27 +2,29 @@ import React, { useState, useEffect } from "react";
 import socket from "../utils/socket";
 import "../styles/TechnicianPage.css";
 import technicianGif from "../assets/images/Technician.gif"; // Import technician GIF
-import "../styles/Notification.css"; // Import Notification styles
-import "../styles/ChatWindow.css"; // Import ChatWindow styles
-import "../styles/TechnicianPage.css"; // Import TechnicianPage styles
-import "../styles/fonts.css"; // Import fonts
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
+import UserList from "../components/UserList";
+import ChatList from "../components/ChatList";
 
-// TechnicianPage component
 const TechnicianPage = () => {
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [activeChatCustomerId, setActiveChatCustomerId] = useState(null); // Track active chat customer
-  const [notification, setNotification] = useState(""); // Notification state
-  const navigate = useNavigate(); // Initialize navigate
+  const [activeChatCustomerId, setActiveChatCustomerId] = useState(null);
+  const [notification, setNotification] = useState("");
+  const [users, setUsers] = useState([]);
+  const [activeChats, setActiveChats] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [priorityFilter, setPriorityFilter] = useState("All");
+  const navigate = useNavigate();
 
   useEffect(() => {
     socket.on("updateLiveChatQueue", (queue) => {
-      setCustomers(queue); // Update customer list dynamically
+      console.log("[DEBUG] Received liveChatQueue:", queue); // Debugging log
+      setCustomers(queue);
     });
 
     socket.on("customerConnected", (customer) => {
-      setActiveChatCustomerId(customer.id); // Set active chat customer ID
+      setActiveChatCustomerId(customer.id);
       setNotification(`Connected to customer: ${customer.name}`);
     });
 
@@ -34,9 +36,15 @@ const TechnicianPage = () => {
       setNotification(`Customer with ID ${customerId} is already in an active chat.`);
     });
 
-    socket.on("chatEnded", () => {
+    socket.on("chatEnded", ({ customerId }) => {
       setNotification("Chat has ended.");
-      setActiveChatCustomerId(null); // Reset active chat customer ID
+      setActiveChats((prevChats) => prevChats.filter((chat) => chat.id !== customerId));
+      setActiveChatCustomerId(null);
+      setSelectedCustomer(null); // Clear selected customer on chat end
+    });
+
+    socket.on("updateUserStatus", (updatedUsers) => {
+      setUsers(updatedUsers);
     });
 
     return () => {
@@ -45,12 +53,18 @@ const TechnicianPage = () => {
       socket.off("customerNotFound");
       socket.off("customerAlreadyInChat");
       socket.off("chatEnded");
+      socket.off("updateUserStatus");
     };
   }, []);
 
   const handleSelectCustomer = (customerId) => {
     const customer = customers.find((c) => c.id === customerId);
-    setSelectedCustomer(customer); // Display customer details
+    if (customer) {
+      setSelectedCustomer(customer); // Update selected customer
+      setActiveChatCustomerId(null); // Clear active chat if viewing details
+    } else {
+      setNotification("No customer selected for chat.");
+    }
   };
 
   const handleStartChat = (customerId) => {
@@ -58,18 +72,42 @@ const TechnicianPage = () => {
       setNotification("No customer selected for chat.");
       return;
     }
-    socket.emit("selectCustomer", customerId); // Start chat with customer
-    navigate("/livechat", { state: { role: "technician", customerId } }); // Redirect to Live Chat Page with role and customerId
+    socket.emit("selectCustomer", customerId);
+    setActiveChatCustomerId(customerId); // Set active chat customer ID
+    setSelectedCustomer(null); // Clear selected customer details
+    navigate("/livechat", { state: { role: "technician", customerId, name: selectedCustomer?.name, queue: customers } });
   };
 
   const handleEndChat = (customerId) => {
-    socket.emit("endChat", { customerId }); // Emit endChat event to server
-    setActiveChatCustomerId(null); // Reset active chat customer ID
+    const confirmEnd = window.confirm("Are you sure you want to end this chat?");
+    if (confirmEnd) {
+      socket.emit("endChat", { customerId });
+      setActiveChats((prevChats) => prevChats.filter((chat) => chat.id !== customerId)); // Remove from active chats
+      setActiveChatCustomerId(null); // Clear active chat
+      setSelectedCustomer(null); // Clear selected customer details
+      setNotification("Chat ended. Redirecting to home...");
+      setTimeout(() => navigate("/technician"), 2000); // Redirect after 2 seconds
+    }
+  };
+
+  const handleEscalateChat = (customerId) => {
+    const confirmEscalate = window.confirm("Are you sure you want to escalate this chat?");
+    if (confirmEscalate) {
+      const escalationDetails = { customerId, technicianId: socket.id, escalationType: "Supervisor" };
+      socket.emit("escalateChat", escalationDetails);
+      alert("Chat escalated to a supervisor.");
+    }
   };
 
   const handleDismissNotification = () => {
-    setNotification(""); // Clear the notification
+    setNotification("");
   };
+
+  const filteredCustomers = customers.filter((customer) => {
+    const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPriority = priorityFilter === "All" || customer.priority === priorityFilter;
+    return matchesSearch && matchesPriority;
+  });
 
   return (
     <div className="technician-page">
@@ -79,7 +117,21 @@ const TechnicianPage = () => {
         {/* Customer Queue */}
         <div className="customer-queue">
           <h2>Customer Queue</h2>
-          {customers.map((customer) => (
+          <div className="queue-filters">
+            <input
+              type="text"
+              placeholder="Search by name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)}>
+              <option value="All">All Priorities</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          {filteredCustomers.map((customer) => (
             <div
               key={customer.id}
               className={`queue-item ${
@@ -87,6 +139,9 @@ const TechnicianPage = () => {
               }`}
             >
               <span>{customer.name}</span>
+              <span className={`priority ${customer.priority?.toLowerCase() || "medium"}`}>
+                {customer.priority || "Medium"} {/* Fallback for missing priority */}
+              </span>
               <button
                 onClick={() => handleSelectCustomer(customer.id)}
                 disabled={activeChatCustomerId === customer.id}
@@ -96,6 +151,17 @@ const TechnicianPage = () => {
               <span>{new Date(customer.joinedAt).toLocaleTimeString()}</span>
             </div>
           ))}
+        </div>
+
+        {/* Active Chats */}
+        <div className="active-chats">
+          <h2>Active Chats</h2>
+          <ChatList
+            chats={activeChats}
+            onSelectChat={(chatId) =>
+              setSelectedCustomer(activeChats.find((chat) => chat.id === chatId))
+            }
+          />
         </div>
 
         {/* Customer Details */}
@@ -108,12 +174,29 @@ const TechnicianPage = () => {
               <p><strong>Machine:</strong> {selectedCustomer.machine}</p>
               <button onClick={() => handleStartChat(selectedCustomer.id)}>Start Chat</button>
               <button onClick={() => handleEndChat(selectedCustomer.id)}>End Chat</button>
+              <button onClick={() => handleEscalateChat(selectedCustomer.id)}>Escalate</button>
             </>
           ) : (
             <p>Select a customer to view details.</p>
           )}
         </div>
+
+        {/* Online Users */}
+        <div className="online-users">
+          <h2>Online Users</h2>
+          <UserList users={users} />
+        </div>
       </div>
+
+      {/* Notification */}
+      {notification && (
+        <div className="notification">
+          <span>{notification}</span>
+          <button className="dismiss-button" onClick={handleDismissNotification}>
+            ✖
+          </button>
+        </div>
+      )}
     </div>
   );
 };
