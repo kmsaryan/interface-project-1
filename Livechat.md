@@ -48,7 +48,6 @@ Define the following in a `.env` file:
 ```properties
 REACT_APP_FRONTEND_URL=http://localhost:3000
 REACT_APP_BACKEND_URL=http://localhost:5000
-BACKEND_PORT=5000
 GENERATE_SOURCEMAP=false
 
 ```
