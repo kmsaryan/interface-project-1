@@ -1,12 +1,23 @@
 //socket.js
 import { io } from "socket.io-client";
 
-// Ensure the WebSocket client points to the correct server URL
-const serverUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:5000";
+// Dynamically determine the WebSocket server URL
+const getWebSocketURL = () => {
+  if (process.env.REACT_APP_BACKEND_URL) {
+    return process.env.REACT_APP_BACKEND_URL.replace(/^http/, "ws");
+  }
+  if (window.location.hostname.includes("github.dev")) {
+    // Ensure the WebSocket URL uses port 5000
+    return `wss://${window.location.hostname.replace("-3000", "-5000")}`;
+  }
+  return "ws://localhost:5000"; // Default for local development
+};
+
+const serverUrl = getWebSocketURL();
 console.log(`[SOCKET LOG]: Attempting to connect to WebSocket server at ${serverUrl}`);
 
 const socket = io(serverUrl, {
-  transports: ["websocket"], // Ensure WebSocket is used for better reliability
+  transports: ["websocket"], // Ensure WebSocket is used
   reconnection: true, // Enable reconnection
   reconnectionAttempts: 10, // Retry up to 10 times
   timeout: 20000, // 20 seconds timeout

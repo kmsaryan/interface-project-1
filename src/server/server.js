@@ -1,19 +1,16 @@
 const express = require("express");
 const http = require("http");
-const { Server } = require("socket.io");
+const setupWebSocket = require("./websocket");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000", // Allow requests from React frontend
-    methods: ["GET", "POST"],
-  },
-});
+const io = setupWebSocket(server);
 
 const users = new Map(); // Map to track connected users (socketId -> userDetails)
 let liveChatQueue = []; // Array to track live chat queue
 let activeChats = new Map(); // Map to track active chats (technicianId -> customerId)
+
+const PORT = process.env.PORT || 5000;
 
 app.get("/", (req, res) => {
   res.send("Welcome to the WebSocket Server!"); // Respond with a simple message
@@ -81,6 +78,9 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(5000, () => {
-  console.log("Server is running on http://localhost:5000");
+server.listen(PORT, () => {
+  const host = process.env.CODESPACE_NAME
+    ? `https://${process.env.CODESPACE_NAME}-5000.app.github.dev`
+    : `http://localhost:${PORT}`;
+  console.log(`Server is running on ${host}`);
 });

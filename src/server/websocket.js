@@ -8,7 +8,7 @@ let technicianSchedule = []; // Store the technician's schedule
 function setupWebSocket(server) {
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000", // Allow requests from React frontend
+      origin: process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000", // Use frontend URL from .env
       methods: ["GET", "POST"],
       credentials: true,
     },
@@ -38,7 +38,9 @@ function setupWebSocket(server) {
       }
 
       if (userDetails.role === "technician") {
-        io.emit("updateTechnicianStatus", Array.from(users.values()).filter(user => user.role === "technician"));
+        // Emit only if there is a change in the technician list
+        const technicians = Array.from(users.values()).filter(user => user.role === "technician");
+        io.emit("updateTechnicianStatus", technicians);
       }
     });
 

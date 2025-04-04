@@ -6,7 +6,9 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Replace with your frontend URL
+    origin: process.env.CODESPACE_NAME
+      ? `https://\${process.env.CODESPACE_NAME}-3000.app.github.dev`
+      : "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -72,5 +74,8 @@ io.on("connection", (socket) => {
 });
 
 server.listen(5000, () => {
-  console.log("Server is running on http://localhost:5000");
+  const host = process.env.CODESPACE_NAME
+    ? `https://\${process.env.CODESPACE_NAME}-5000.app.github.dev`
+    : "http://localhost:5000";
+  console.log(`Server is running on ${host}`);
 });
