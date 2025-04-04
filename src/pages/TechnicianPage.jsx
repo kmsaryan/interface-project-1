@@ -10,6 +10,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import socket from "../utils/socket";
 import ChatInterface from "../components/ChatInterface";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function TechnicianPage() {
   const [liveChatQueue, setLiveChatQueue] = useState([]);
@@ -104,17 +106,23 @@ export default function TechnicianPage() {
   };
 
   const handleEndChat = (customerId) => {
-    console.log("Ending chat with customer:", customerId);
+    const confirmEnd = window.confirm("Are you sure you want to end this chat?");
+    if (confirmEnd) {
+      console.log("Ending chat with customer:", customerId);
 
-    // Send "end chat" message to the customer
-    const endChatMessage = "end chat";
-    socket.emit("sendMessage", { to: customerId, message: endChatMessage });
+      // Send "end chat" message to the customer
+      const endChatMessage = "end chat";
+      socket.emit("sendMessage", { to: customerId, message: endChatMessage });
 
-    // Emit the endChat event to the server
-    socket.emit("endChat", { customerId });
+      // Emit the endChat event to the server
+      socket.emit("endChat", { customerId });
 
-    // Remove the chat session from the active chats
-    setActiveChats((prevChats) => prevChats.filter((chat) => chat.customer.id !== customerId));
+      // Remove the chat session from the active chats
+      setActiveChats((prevChats) => prevChats.filter((chat) => chat.customer.id !== customerId));
+
+      // Show a toast notification
+      toast.success("Chat ended successfully.");
+    }
   };
 
   return (

@@ -34,12 +34,14 @@ export default function ChatPage() {
     ];
     setMessages(troubleshootingTips);
 
+    // Listen for technician connection
     socket.on("technicianConnected", ({ technicianId }) => {
       setConnectedTechnician(technicianId);
       setInLiveChat(true);
       console.log("Connected to technician:", technicianId);
     });
 
+    // Listen for messages from the technician
     socket.on("receiveMessage", ({ from, message }) => {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -53,23 +55,12 @@ export default function ChatPage() {
 
       // Check if the message is "end chat" to notify the customer
       if (message.toLowerCase() === "end chat") {
-        toast.info("The technician has ended the chat. Please confirm.");
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            sender: "Assistant",
-            text: "The technician has ended the chat. Would you like to end the chat or escalate it?",
-          },
-        ]);
+        toast.info("The technician has ended the chat.");
+        setInLiveChat(false); // End the live chat session
       }
     });
 
-    // Fetch technician schedule from the server
-    socket.on("updateTechnicianSchedule", (schedule) => {
-      console.log("Received technician schedule:", schedule);
-      setTechnicianSchedule(schedule);
-    });
-
+    // Listen for chat end event
     socket.on("chatEnded", () => {
       console.log("Chat ended by the technician.");
       setInLiveChat(false);
@@ -77,11 +68,17 @@ export default function ChatPage() {
       setMessages([]); // Clear chat messages
     });
 
+    // Listen for technician schedule updates
+    socket.on("updateTechnicianSchedule", (schedule) => {
+      console.log("Received technician schedule:", schedule);
+      setTechnicianSchedule(schedule);
+    });
+
     return () => {
       socket.off("technicianConnected");
       socket.off("receiveMessage");
-      socket.off("updateTechnicianSchedule");
       socket.off("chatEnded");
+      socket.off("updateTechnicianSchedule");
     };
   }, []);
 
@@ -191,10 +188,12 @@ export default function ChatPage() {
             inLiveChat={inLiveChat}
             showVideoCallButton={showVideoCallButton}
           />
-          <div className="chat-actions">
-            <button onClick={handleEndChat}>End Chat</button>
-            <button onClick={handleEscalateChat}>Escalate Chat</button>
-          </div>
+          {inLiveChat ? (
+            <div className="chat-actions">
+              <button onClick={handleEndChat}>End Chat</button>
+              <button onClick={handleEscalateChat}>Escalate Chat</button>
+            </div>
+          ) : null}
           <button
             className="view-schedule-button"
             onClick={() => setShowSchedule(!showSchedule)}
