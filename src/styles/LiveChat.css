@@ -39,6 +39,7 @@
 
 .live-chat-page {
   display: flex;
+  flex-direction: column;
   height: 100vh;
   background-color: #ffffff; /* Chat Window Background */
 }
@@ -46,7 +47,7 @@
 .queue-section {
   flex: 1;
   background-color: #f7f7f7; /* Light Gray */
-  padding: 16px;
+  padding: 15px;
   border-right: 1px solid #e1e1e1; /* Light Gray Border */
 }
 
@@ -81,6 +82,7 @@
   border: 1px solid #e1e1e1; /* Light Gray Border */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
 }
 
 .queue-card p {
@@ -111,13 +113,14 @@
 
 /* Chat section - main container */
 .chat-section {
-  flex: 2;
+  flex: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden; /* Prevent overflow at this level */
   max-height: 100vh; /* Ensure it doesn't exceed the viewport height */
   position: relative;
+  padding: 15px;
 }
 
 /* Chat container - holds both chat window and input */

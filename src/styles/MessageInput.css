@@ -1,23 +1,21 @@
 .message-input {
   display: flex;
   align-items: center;
-  background-color: #ffffff; /* White background */
-  padding: 10px;
-  border: 1px solid #2a609d; /* Blue border */
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
-  flex-shrink: 0; /* Prevent the input from shrinking */
-  margin: 10px 0; /* Ensure consistent margin */
+  background-color: #ffffff;
+  padding: 10px; /* Uniform padding */
+  border: 1px solid #2a609d;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 10px 0; /* Consistent margin */
 }
 
 .message-input input {
-  flex: 1;
-  padding: 12px;
+  flex: 1; /* Allow the input to expand */
+  padding: 10px; /* Uniform padding */
   border: 1px solid #ccc;
   border-radius: 20px;
   outline: none;
   font-size: 14px;
-  margin-left: 8px;
 }
 
 .message-input input:focus {
@@ -28,7 +26,7 @@
   font-size: 20px;
   color: #007bff;
   cursor: pointer;
-  margin-right: 8px;
+  margin-right: 10px;
 }
 
 .attachment-icon:hover {
