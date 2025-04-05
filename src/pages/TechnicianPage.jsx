@@ -166,9 +166,9 @@ const TechnicianPage = () => {
 
         {/* Customer Details */}
         <div className="customer-details">
+          <h2>Customer Details</h2>
           {selectedCustomer ? (
             <>
-              <h2>Customer Details</h2>
               <p><strong>Name:</strong> {selectedCustomer.name}</p>
               <p><strong>Issue:</strong> {selectedCustomer.issue}</p>
               <p><strong>Machine:</strong> {selectedCustomer.machine}</p>

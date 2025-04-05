@@ -1,9 +1,13 @@
 .message-input {
   display: flex;
   align-items: center;
-  padding: 8px;
-  background-color: #ffffff;
-  border-top: 1px solid #e0e0e0;
+  background-color: #ffffff; /* White background */
+  padding: 10px;
+  border: 1px solid #2a609d; /* Blue border */
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
+  flex-shrink: 0; /* Prevent the input from shrinking */
+  margin: 10px 0; /* Ensure consistent margin */
 }
 
 .message-input input {

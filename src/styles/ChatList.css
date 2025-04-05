@@ -1,8 +1,10 @@
 .chat-list {
-  background-color: #ffffff;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff; /* White background */
+  padding: 10px;
+  border: 1px solid #e1e1e1; /* Light gray border */
+  border-radius: 5px;
+  overflow-y: auto; /* Enable scrolling for the chat list */
+  flex-shrink: 0; /* Prevent the list from shrinking */
 }
 
 .chat-list div {

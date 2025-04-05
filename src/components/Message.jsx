@@ -2,7 +2,7 @@ import React from "react";
 
 const Message = ({ sender, text, timestamp, attachment, isSender }) => {
   return (
-    <div className={`message ${isSender ? "sent" : "received"}`} style={{ maxHeight: "100%", overflowY: "auto" }}>
+    <div className={`message ${isSender ? "sent" : "received"}`}>
       <div className="message-header">
         <span>{sender}</span>
       </div>
@@ -20,7 +20,7 @@ const Message = ({ sender, text, timestamp, attachment, isSender }) => {
           </div>
         )}
       </div>
-      <div className="message-timestamp" style={{ textAlign: "right" }}>
+      <div className="message-timestamp">
         {new Date(timestamp).toLocaleTimeString()}
       </div>
     </div>

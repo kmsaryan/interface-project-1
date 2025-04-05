@@ -138,8 +138,10 @@ const LiveChat = () => {
             </>
           )}
         </header>
-        <ChatWindow messages={messages} role={role} />
-        <MessageInput onSendMessage={handleSendMessage} />
+        <div className="chat-container">
+          <ChatWindow messages={messages} role={role} socket={socket} />
+          <MessageInput onSendMessage={handleSendMessage} />
+        </div>
       </div>
     </div>
   );
