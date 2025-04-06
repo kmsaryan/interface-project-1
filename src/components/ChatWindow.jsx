@@ -2,7 +2,7 @@
 import React from "react";
 import "../styles/ChatWindow.css"; // Import styles
 
-const ChatWindow = ({ messages, socket, readReceipts }) => {
+const ChatWindow = ({ messages, socket, readReceipts, typingIndicator }) => {
   return (
     <div className="chat-window">
       {messages.map((msg, index) => {
@@ -39,6 +39,7 @@ const ChatWindow = ({ messages, socket, readReceipts }) => {
           </div>
         );
       })}
+      {typingIndicator && <div className="typing-indicator">Typing...</div>}
     </div>
   );
 };

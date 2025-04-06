@@ -17,44 +17,31 @@ const LiveChat = () => {
   const [readReceipts, setReadReceipts] = useState({}); // Track read receipts
 
   useEffect(() => {
-    if (role === "technician") {
-      socket.emit("registerUser", { role: "technician", name: "Technician" });
+    const handleReceiveMessage = (message) => {
+      const senderId = message.from;
+      setMessages((prev) => ({
+        ...prev,
+        [senderId]: [...(prev[senderId] || []), message],
+      }));
+      socket.emit("readReceipt", { from: senderId }); // Send read receipt
+    };
 
-      socket.on("receiveMessage", (message) => {
-        const senderId = message.from;
-        setMessages((prev) => ({
-          ...prev,
-          [senderId]: [...(prev[senderId] || []), message],
-        }));
-        socket.emit("readReceipt", { from: senderId }); // Send read receipt
-      });
-
-      socket.on("customerTyping", (customerId) => {
-        if (selectedCustomer?.id === customerId) {
-          setTypingIndicator(true);
-          setTimeout(() => setTypingIndicator(false), 2000);
-        }
-      });
-    } else if (role === "customer") {
-      socket.emit("registerUser", { role: "customer", name });
-
-      socket.on("technicianConnected", (technician) => {
-        setConnectedTechnician(technician);
-      });
-
-      socket.on("receiveMessage", (message) => {
-        const senderId = message.from;
-        setMessages((prev) => ({
-          ...prev,
-          [senderId]: [...(prev[senderId] || []), message],
-        }));
-        socket.emit("readReceipt", { from: senderId }); // Send read receipt
-      });
-
-      socket.on("technicianTyping", () => {
+    const handleTyping = (id) => {
+      if ((role === "technician" && selectedCustomer?.id === id) || (role === "customer" && connectedTechnician?.technicianId === id)) {
         setTypingIndicator(true);
         setTimeout(() => setTypingIndicator(false), 2000);
-      });
+      }
+    };
+
+    if (role === "technician") {
+      socket.emit("registerUser", { role: "technician", name: "Technician" });
+      socket.on("receiveMessage", handleReceiveMessage);
+      socket.on("customerTyping", handleTyping);
+    } else if (role === "customer") {
+      socket.emit("registerUser", { role: "customer", name });
+      socket.on("technicianConnected", (technician) => setConnectedTechnician(technician));
+      socket.on("receiveMessage", handleReceiveMessage);
+      socket.on("technicianTyping", handleTyping);
     }
 
     socket.on("readReceipt", ({ from }) => {
@@ -62,13 +49,15 @@ const LiveChat = () => {
     });
 
     return () => {
-      socket.off("receiveMessage");
-      socket.off("customerTyping");
-      socket.off("technicianConnected");
-      socket.off("technicianTyping");
+      socket.off("receiveMessage", handleReceiveMessage);
+      socket.off("customerTyping", handleTyping);
+      socket.off("technicianTyping", handleTyping);
       socket.off("readReceipt");
+      if (role === "customer") {
+        socket.off("technicianConnected");
+      }
     };
-  }, [role, name, selectedCustomer]);
+  }, [role, name, selectedCustomer, connectedTechnician]);
 
   const handleSendMessage = (message) => {
     const recipientId = role === "technician" ? selectedCustomer?.id : connectedTechnician?.technicianId;
