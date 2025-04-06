@@ -243,3 +243,28 @@
     max-width: 90%;
   }
 }
+
+/* ===========================
+  Button Group
+  =========================== */
+.button-group {
+  display: flex;
+  gap: 1rem; /* Add spacing between buttons */
+}
+
+/* ===========================
+  Active Chats
+  =========================== */
+.active-chats {
+  margin-top: 2rem;
+}
+
+.chat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}

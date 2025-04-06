@@ -16,7 +16,7 @@ const TechnicianPage = () => {
   const [activeChatCustomerId, setActiveChatCustomerId] = useState(null);
   const [notification, setNotification] = useState("");
   const [users, setUsers] = useState([]);
-  const [activeChats, setActiveChats] = useState([]);
+  const [activeChats, setActiveChats] = useState([]); // Track active chats
   const [searchTerm, setSearchTerm] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("All");
   const navigate = useNavigate();
@@ -79,9 +79,9 @@ const TechnicianPage = () => {
     const customer = customers.find((c) => c.id === customerId);
     if (customer) {
       socket.emit("selectCustomer", customerId);
-      setActiveChatCustomerId(customerId); // Set active chat customer ID
+      setActiveChats((prevChats) => [...prevChats, customer]); // Add to active chats
       setSelectedCustomer(null); // Clear selected customer details
-      navigate("/livechat", { state: { role: "technician", customerId, name: customer.name, queue: customers } });
+      navigate("/livechat", { state: { role: "technician", customerId, name: customer.name, queue: customers } }); // Navigate to LiveChat
     } else {
       setNotification("Customer not found in the queue.");
     }
@@ -180,9 +180,11 @@ const TechnicianPage = () => {
                 <p><strong>Name:</strong> {selectedCustomer.name}</p>
                 <p><strong>Issue:</strong> {selectedCustomer.issue}</p>
                 <p><strong>Machine:</strong> {selectedCustomer.machine}</p>
-                <button onClick={() => handleStartChat(selectedCustomer.id)}>Start Chat</button>
-                <button onClick={() => handleEndChat(selectedCustomer.id)}>End Chat</button>
-                <button onClick={() => handleEscalateChat(selectedCustomer.id)}>Escalate</button>
+                <div className="button-group">
+                  <button onClick={() => handleStartChat(selectedCustomer.id)}>Start Chat</button>
+                  <button onClick={() => handleEndChat(selectedCustomer.id)}>End Chat</button>
+                  <button onClick={() => handleEscalateChat(selectedCustomer.id)}>Escalate</button>
+                </div>
               </>
             ) : (
               <p>Select a customer to view details.</p>
@@ -210,6 +212,16 @@ const TechnicianPage = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="active-chats">
+        <h2>Active Chats</h2>
+        {activeChats.map((chat) => (
+          <div key={chat.id} className="chat-item">
+            <span>{chat.name}</span>
+            <button onClick={() => setSelectedCustomer(chat)}>View Chat</button>
+          </div>
+        ))}
       </div>
 
       {/* Notification */}

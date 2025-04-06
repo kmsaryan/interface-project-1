@@ -59,7 +59,8 @@
   background-color: var(--background-light);
   border-radius: 10px;
   padding: 1rem;
-  height: 100%; /* Fill available height */
+  width: 100vh;
+  height: 100vh; /* Fill available height */
   box-sizing: border-box;
 }
 

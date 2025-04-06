@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import socket from "../utils/socket"; // Import socket instance
 import "../styles/global.css"; // Ensure global styles are imported
 import "../styles/Home.css";
 
@@ -31,15 +32,19 @@ export default function LiveChatForm() {
         machine: formData.machine,
         priority: formData.priority,
       });
-      navigate("/livechat", { state: { role: "customer" } });
+      navigate("/livechat", { state: { role: "customer", ...formData } });
     } else if (formData.role === "technician") {
       // Emit technician data and navigate to technician dashboard
+      if (!formData.expertise || !formData.availability) {
+        alert("Please fill out all fields for technician registration.");
+        return;
+      }
       socket.emit("registerTechnician", {
         name: formData.name,
         expertise: formData.expertise,
         availability: formData.availability,
       });
-      navigate("/technician");
+      navigate("/technician", { state: { role: "technician", ...formData } });
     }
   };
 

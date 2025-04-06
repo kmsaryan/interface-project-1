@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ChatWindow from "../components/ChatWindow";
@@ -9,6 +9,7 @@ import "../styles/LiveChat.css"; // Styles for the chat interface
 
 const LiveChat = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { role, customerId, name, queue = [] } = location.state || {};
   const [messages, setMessages] = useState({});
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -93,46 +94,44 @@ const LiveChat = () => {
     }
   };
 
-  if (role === "customer") {
-    return (
-      <>
-        <div className="live-chat-page">
-          <div className="chat-container">
-            <div className="chat-sidebar">
-              <h3>Technician Details</h3>
-              {connectedTechnician ? (
-                <div className="technician-details">
-                  <p><strong>Name:</strong> {connectedTechnician.name}</p>
-                  <p><strong>ID:</strong> {connectedTechnician.technicianId}</p>
-                  <p><strong>Status:</strong> Online</p>
-                </div>
-              ) : (
-                <p>No technician connected.</p>
-              )}
-            </div>
-            <div className="chat-main">
-              <ChatWindow
-                messages={messages[connectedTechnician?.technicianId] || []}
-                socket={socket} // Pass the socket instance
-                readReceipts={readReceipts} // Pass read receipts
-                role={role} // Pass the role
-              />
-              <MessageInput onSendMessage={handleSendMessage} onTyping={handleTyping} />
-              {typingIndicator && <div className="typing-indicator">Technician is typing...</div>}
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
+  const handleEndChat = () => {
+    const confirmEnd = window.confirm("Are you sure you want to end this chat?");
+    if (confirmEnd) {
+      const recipientId = role === "technician" ? selectedCustomer?.id : connectedTechnician?.technicianId;
+      if (recipientId) {
+        socket.emit("endChat", { customerId: recipientId });
+        setMessages({});
+        setSelectedCustomer(null);
+        setConnectedTechnician(null);
+        alert("Chat ended.");
+        navigate(role === "technician" ? "/technician" : "/customer_home"); // Navigate to dashboard
+      }
+    }
+  };
+
+  useEffect(() => {
+    socket.on("chatEnded", () => {
+      alert("The other side has ended the chat.");
+      setMessages({});
+      setSelectedCustomer(null);
+      setConnectedTechnician(null);
+      navigate(role === "technician" ? "/technician" : "/customer_home"); // Navigate to dashboard
+    });
+
+    return () => {
+      socket.off("chatEnded");
+    };
+  }, [role, navigate]);
 
   return (
-    <>
-      <div className="live-chat-page">
-        <div className="chat-container">
-          <div className="chat-sidebar">
-            <h3>Customer Queue</h3>
-            {queue.map((customer) => (
+    <div className="live-chat-page">  
+      <div className="chat-container">
+        <div className="chat-sidebar">
+
+          <h3>{role === "technician" ? "Customer Queue" : "Technician Details"}</h3> 
+          
+          {role === "technician" ? (
+            queue.map((customer) => (
               <div
                 key={customer.id}
                 className={`queue-item ${selectedCustomer?.id === customer.id ? "selected" : ""}`}
@@ -140,21 +139,42 @@ const LiveChat = () => {
               >
                 <span>{customer.name}</span>
               </div>
-            ))}
-          </div>
-          <div className="chat-main">
+            
+            ))
+          ) : (
+            connectedTechnician ? (
+              <div className="technician-details">
+                <p><strong>Name:</strong> {connectedTechnician.name}</p>
+                <p><strong>ID:</strong> {connectedTechnician.technicianId}</p>
+                <p><strong>Status:</strong> Online</p>
+              </div>
+            ) : (
+              <p>No technician connected.</p>
+            )
+          )}
+        </div>
+        <div className="chat-main">
+          
+          <div className="chat-window">
             <ChatWindow
-              messages={messages[selectedCustomer?.id] || []}
-              socket={socket} // Pass the socket instance
-              readReceipts={readReceipts} // Pass read receipts
-              role={role} // Pass the role
+              messages={messages[selectedCustomer?.id || connectedTechnician?.technicianId] || []}
+              socket={socket}
+              readReceipts={readReceipts}
+              role={role}
             />
-            <MessageInput onSendMessage={handleSendMessage} onTyping={handleTyping} />
-            {typingIndicator && <div className="typing-indicator">Customer is typing...</div>}
           </div>
+          <div className="chat-actions">
+            <button className="end-chat-button" onClick={handleEndChat}>End Chat</button> {/* Moved here */}
+          </div>
+          <MessageInput onSendMessage={handleSendMessage} onTyping={handleTyping} />
+          {typingIndicator && (
+            <div className="typing-indicator">
+              {role === "technician" ? "Customer is typing..." : "Technician is typing..."}
+            </div>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
