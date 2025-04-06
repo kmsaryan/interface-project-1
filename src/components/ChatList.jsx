@@ -1,3 +1,4 @@
+// File: src/components/ChatList.jsx
 import React from "react";
 import "../styles/ChatList.css"; // Import styles
 

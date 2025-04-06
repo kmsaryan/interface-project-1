@@ -1,23 +1,288 @@
+/* ===========================
+  Font Definitions
+  =========================== */
 @font-face {
-  font-family: "VolvoSans";
-  src: url("../assets/fonts/VolvoSans-Regular.woff2") format("woff2"),
-       url("../assets/fonts/VolvoSans-Regular.woff") format("woff");
+  font-family: "VolvoNovumLight";
+  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "VolvoSans";
-  src: url("../assets/fonts/VolvoSans-Bold.woff2") format("woff2"),
-       url("../assets/fonts/VolvoSans-Bold.woff") format("woff");
+  font-family: "VolvoBroad";
+  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
   font-weight: bold;
   font-style: normal;
 }
 
-body {
-  font-family: "VolvoSans", Arial, sans-serif;
-  background-color: #F9F9F9;
-  color: #333333;
+/* ===========================
+  Global Variables
+  =========================== */
+:root {
+  --background: #ffffff;
+  --background-base: #f7f7f7;
+  --button-marketing: #2a609d;
+  --button-marketing-hover: #4781c4;
+  --button-marketing-pressed: #234d7d;
+  --button-primary: #212121;
+  --button-primary-hover: #333333;
+  --button-primary-pressed: #3d3d3d;
+  --border-subtle: #e1e1e1;
+  --highlight: #2a609d;
+  --hover: #f7f7f7;
+  --selected-subtle: #ededed;
+  --text: #212121;
+  --text-subtle: #575757;
+  --error: #bf2012;
+  --success: #177844;
+  --warning: #ffa000;
+}
+
+/* ===========================
+  Global Reset
+  =========================== */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===========================
+  Base Styles
+  =========================== */
+body {
+  font-family: "VolvoNovumLight", Arial, sans-serif;
+  background-color: var(--background-base);
+  color: var(--text);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+a {
+  text-decoration: none;
+  color: var(--highlight);
+}
+
+a:hover {
+  color: var(--button-marketing-hover);
+}
+
+a:active {
+  color: var(--button-marketing-pressed);
+}
+
+/* ===========================
+  Utility Classes
+  =========================== */
+.text-center {
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+.gap-2 {
+  gap: 2rem;
+}
+
+.rounded {
+  border-radius: 0.5rem;
+}
+
+.shadow {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ===========================
+  Common Layout Styles
+  =========================== */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* ===========================
+  Common Button Styles
+  =========================== */
+.button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.875rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.button-primary {
+  background-color: var(--button-primary);
+  color: var(--background);
+}
+
+.button-primary:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.button-primary:active {
+  background-color: var(--button-primary-pressed);
+}
+
+.button-secondary {
+  background-color: var(--button-secondary);
+  color: var(--text);
+}
+
+.button-secondary:hover {
+  background-color: var(--button-secondary-hover);
+}
+
+.button-secondary:active {
+  background-color: var(--button-secondary-pressed);
+}
+
+.button-disabled {
+  background-color: var(--disabled);
+  color: var(--text-subtle);
+  cursor: not-allowed;
+}
+
+/* ===========================
+  Common Card Styles
+  =========================== */
+.card {
+  background-color: var(--background);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: var(--highlight);
+  margin-bottom: 0.5rem;
+}
+
+.card-body {
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+/* ===========================
+  Common Typography Styles
+  =========================== */
+.heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text);
+  text-align: center;
+}
+
+.subheading {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: var(--highlight);
+}
+
+.text-muted {
+  color: var(--text-subtle);
+  font-size: 0.875rem;
+}
+
+/* ===========================
+  Common Input Styles
+  =========================== */
+.input {
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 5px;
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--highlight);
+  box-shadow: 0 0 5px rgba(42, 96, 157, 0.5);
+}
+
+.select {
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 5px;
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+/* ===========================
+  Common Badge Styles
+  =========================== */
+.badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  color: var(--background);
+}
+
+.badge-high {
+  background-color: var(--error);
+}
+
+.badge-medium {
+  background-color: var(--warning);
+}
+
+.badge-low {
+  background-color: var(--success);
 }

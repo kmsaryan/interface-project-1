@@ -1,4 +1,6 @@
+//Message.jsx
 import React from "react";
+import "../styles/Message.css"; // Import the new stylesheet
 
 const Message = ({ sender, text, timestamp, attachment, isSender }) => {
   return (

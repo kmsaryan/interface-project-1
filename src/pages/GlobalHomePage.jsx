@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/GlobalHomePage.css";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import "../styles/GlobalHomePage.css"; // Page-specific styles
 import "../styles/fonts.css"; // Import custom fonts
 import "../styles/App.css"; // Import global styles
 import technician1 from "../assets/images/Technicain1.jpeg";
@@ -21,6 +23,7 @@ export default function GlobalHomePage() {
 
   return (
     <div className="global-home-page">
+      <Header />
       <header className="global-header">
         <h1>Welcome to Volvo AI Assistant</h1>
         <p>Your one-stop solution for customer and technician support</p>
@@ -41,6 +44,7 @@ export default function GlobalHomePage() {
           Register
         </button>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,149 +1,171 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom"; // Import Link for navigation
+import { useLocation } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import ChatWindow from "../components/ChatWindow";
 import MessageInput from "../components/MessageInput";
 import socket from "../utils/socket";
-import "../styles/LiveChat.css";
+import "../styles/LiveChat.css"; // Styles for the chat interface
 
 const LiveChat = () => {
-  const location = useLocation(); // Access navigation state
-  const navigate = useNavigate(); // Initialize navigate
-  const { role, customerId, name, queue } = location.state || {}; // Extract role, customerId, name, and queue from state
-  const [messages, setMessages] = useState([]);
-  const [recipientId, setRecipientId] = useState(customerId || null); // Track the recipient ID
-  const [chatPartnerName, setChatPartnerName] = useState(name || "Unknown"); // Track the name of the person being chatted with
+  const location = useLocation();
+  const { role, customerId, name, queue = [] } = location.state || {};
+  const [messages, setMessages] = useState({});
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [connectedTechnician, setConnectedTechnician] = useState(null);
+  const [typingIndicator, setTypingIndicator] = useState(false);
+  const [readReceipts, setReadReceipts] = useState({}); // Track read receipts
 
   useEffect(() => {
-    // Persist chat partner details across tabs
-    if (!chatPartnerName && role === "technician" && queue) {
-      const customer = queue.find((c) => c.id === customerId);
-      if (customer) setChatPartnerName(customer.name);
+    if (role === "technician") {
+      socket.emit("registerUser", { role: "technician", name: "Technician" });
+
+      socket.on("receiveMessage", (message) => {
+        const senderId = message.from;
+        setMessages((prev) => ({
+          ...prev,
+          [senderId]: [...(prev[senderId] || []), message],
+        }));
+        socket.emit("readReceipt", { from: senderId }); // Send read receipt
+      });
+
+      socket.on("customerTyping", (customerId) => {
+        if (selectedCustomer?.id === customerId) {
+          setTypingIndicator(true);
+          setTimeout(() => setTypingIndicator(false), 2000);
+        }
+      });
+    } else if (role === "customer") {
+      socket.emit("registerUser", { role: "customer", name });
+
+      socket.on("technicianConnected", (technician) => {
+        setConnectedTechnician(technician);
+      });
+
+      socket.on("receiveMessage", (message) => {
+        const senderId = message.from;
+        setMessages((prev) => ({
+          ...prev,
+          [senderId]: [...(prev[senderId] || []), message],
+        }));
+        socket.emit("readReceipt", { from: senderId }); // Send read receipt
+      });
+
+      socket.on("technicianTyping", () => {
+        setTypingIndicator(true);
+        setTimeout(() => setTypingIndicator(false), 2000);
+      });
     }
 
-    // Listen for incoming messages
-    socket.on("receiveMessage", (message) => {
-      setMessages((prev) => {
-        // Avoid duplicate messages
-        if (prev.some((msg) => msg.timestamp === message.timestamp && msg.from === message.from)) {
-          return prev;
-        }
-        return [...prev, message];
-      });
-    });
-
-    // Handle connection events
-    socket.on("customerConnected", (customer) => {
-      if (role === "technician") {
-        setRecipientId(customer.id); // Set recipient ID for technician
-        setChatPartnerName(customer.name); // Set chat partner name
-      }
-    });
-
-    socket.on("technicianConnected", (technician) => {
-      if (role === "customer") {
-        setRecipientId(technician.technicianId); // Set recipient ID for customer
-        setChatPartnerName("Technician"); // Set chat partner name
-      }
-    });
-
-    // Handle chat ended event
-    socket.on("chatEnded", () => {
-      alert("Chat has ended.");
-      setMessages([]); // Clear messages
-      setRecipientId(null); // Reset recipient ID
-      setChatPartnerName("Unknown"); // Reset chat partner name
+    socket.on("readReceipt", ({ from }) => {
+      setReadReceipts((prev) => ({ ...prev, [from]: true })); // Mark messages as read
     });
 
     return () => {
       socket.off("receiveMessage");
-      socket.off("customerConnected");
+      socket.off("customerTyping");
       socket.off("technicianConnected");
-      socket.off("chatEnded");
+      socket.off("technicianTyping");
+      socket.off("readReceipt");
     };
-  }, [role, customerId, chatPartnerName, queue]);
+  }, [role, name, selectedCustomer]);
 
-  const handleSendMessage = ({ message, attachment }) => {
-    if (recipientId) {
-      const data = { to: recipientId, message, attachment, timestamp: Date.now() };
-      setMessages((prev) => [...prev, { ...data, from: socket.id }]); // Add sent message to state
-      socket.emit("sendMessage", data); // Emit message to server
+  const handleSendMessage = (message) => {
+    const recipientId = role === "technician" ? selectedCustomer?.id : connectedTechnician?.technicianId;
+    if (!recipientId) {
+      console.warn("No recipient ID found. Message not sent.");
+      return;
+    }
+
+    const newMessage = {
+      to: recipientId,
+      message: typeof message === "string" ? message : JSON.stringify(message),
+      timestamp: Date.now(),
+      from: socket.id,
+    };
+
+    setMessages((prev) => ({
+      ...prev,
+      [recipientId]: [...(prev[recipientId] || []), newMessage],
+    }));
+
+    if (socket.connected) {
+      socket.emit("sendMessage", newMessage);
     } else {
-      console.warn("Recipient ID is not set. Cannot send message.");
+      console.error("Socket is not connected. Message not sent.");
     }
   };
 
-  const handleEndChat = () => {
-    const confirmEnd = window.confirm("Are you sure you want to end this chat?");
-    if (confirmEnd) {
-      socket.emit("endChat", { customerId: recipientId });
-      alert("Chat has ended.");
+  const handleTyping = () => {
+    if (role === "technician" && selectedCustomer) {
+      socket.emit("technicianTyping", selectedCustomer.id);
+    } else if (role === "customer" && connectedTechnician) {
+      socket.emit("customerTyping", connectedTechnician.technicianId);
     }
   };
 
-  const handleEscalateToVideoCall = () => {
-    const confirmEscalate = window.confirm("Are you sure you want to escalate this chat to a video call?");
-    if (confirmEscalate) {
-      const meetLink = `https://meet.google.com/${Math.random().toString(36).substring(2, 15)}`;
-      socket.emit("escalateToVideoCall", { customerId: recipientId, meetLink });
-      alert(`Video call link: ${meetLink}`);
-    }
-  };
-
-  const handleCustomerEndChat = () => {
-    const confirmEnd = window.confirm("Are you sure you want to end this chat?");
-    if (confirmEnd) {
-      socket.emit("endChat", { customerId: socket.id });
-      alert("You have ended the chat.");
-      navigate("/home"); // Redirect to customer home page
-    }
-  };
-
-  const handleCustomerEscalate = () => {
-    const confirmEscalate = window.confirm("Do you want to escalate this issue?");
-    if (confirmEscalate) {
-      socket.emit("escalateChat", { customerId: socket.id, escalationType: "Supervisor" });
-      alert("Your issue has been escalated.");
-    }
-  };
+  if (role === "customer") {
+    return (
+      <>
+        <Header />
+        <div className="live-chat-page">
+          <div className="chat-container">
+            <div className="chat-sidebar">
+              <h3>Technician Details</h3>
+              {connectedTechnician ? (
+                <div className="technician-details">
+                  <p><strong>Name:</strong> {connectedTechnician.name}</p>
+                  <p><strong>ID:</strong> {connectedTechnician.technicianId}</p>
+                  <p><strong>Status:</strong> Online</p>
+                </div>
+              ) : (
+                <p>No technician connected.</p>
+              )}
+            </div>
+            <div className="chat-main">
+              <ChatWindow
+                messages={messages[connectedTechnician?.technicianId] || []}
+                readReceipts={readReceipts}
+              />
+              <MessageInput onSendMessage={handleSendMessage} onTyping={handleTyping} />
+              {typingIndicator && <div className="typing-indicator">Technician is typing...</div>}
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
-    <div className="live-chat-page">
-      {role === "technician" && ( // Show the back link only for technicians
-        <div className="queue-section">
-          <Link to="/technician" className="back-link">← Back to Technician Dashboard</Link>
-          <h3>Customer Queue</h3>
-          <div className="queue-list">
-            {queue?.map((customer) => (
-              <div key={customer.id} className="queue-card">
-                <p><strong>Name:</strong> {customer.name}</p>
-                <p><strong>Time Elapsed:</strong> {Math.floor((Date.now() - customer.joinedAt) / 60000)} mins</p>
-                <button className="end-chat-button" onClick={handleEndChat}>End Chat</button>
-                <button className="escalate-button" onClick={handleEscalateToVideoCall}>Escalate to Video Call</button>
+    <>
+      <Header />
+      <div className="live-chat-page">
+        <div className="chat-container">
+          <div className="chat-sidebar">
+            <h3>Customer Queue</h3>
+            {queue.map((customer) => (
+              <div
+                key={customer.id}
+                className={`queue-item ${selectedCustomer?.id === customer.id ? "selected" : ""}`}
+                onClick={() => setSelectedCustomer(customer)}
+              >
+                <span>{customer.name}</span>
               </div>
             ))}
           </div>
-        </div>
-      )}
-      <div className="chat-section">
-        <header className="chat-header">
-          <h2>Chat with {chatPartnerName || "Unknown"}</h2>
-          {role === "customer" && (
-            <>
-              <button className="end-chat-button" onClick={handleCustomerEndChat}>
-                End Chat
-              </button>
-              <button className="escalate-button" onClick={handleCustomerEscalate}>
-                Escalate Issue
-              </button>
-            </>
-          )}
-        </header>
-        <div className="chat-container">
-          <ChatWindow messages={messages} role={role} socket={socket} />
-          <MessageInput onSendMessage={handleSendMessage} />
+          <div className="chat-main">
+            <ChatWindow
+              messages={messages[selectedCustomer?.id] || []}
+              readReceipts={readReceipts}
+            />
+            <MessageInput onSendMessage={handleSendMessage} onTyping={handleTyping} />
+            {typingIndicator && <div className="typing-indicator">Customer is typing...</div>}
+          </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

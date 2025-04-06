@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import socket from "../utils/socket";
-import "../styles/Home.css";
+import "../styles/global.css"; // Ensure global styles are imported
 import customerGif from "../assets/images/Customer.gif"; // Import customer GIF
+import "../styles/Home.css";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function Home() {
   };
 
   return (
-    <div className="home">
+    <div className="container">
       <Header />
       <main className="main-content">
         <h1>Customer Dashboard</h1>

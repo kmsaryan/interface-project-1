@@ -1,6 +1,6 @@
 .notification {
-  background-color: #ffeb3b;
-  color: #333;
+  background-color: var(--warning); /* Use global variable */
+  color: var(--text); /* Use global variable */
   padding: 12px;
   border-radius: 8px;
   font-size: 14px;
@@ -22,12 +22,12 @@
 .dismiss-button {
   background: none;
   border: none;
-  color: #333;
+  color: var(--text);
   font-size: 16px;
   cursor: pointer;
   margin-left: 10px;
 }
 
 .dismiss-button:hover {
-  color: #000;
+  color: var(--highlight); /* Use global variable */
 }

@@ -1,546 +1,242 @@
+/* TechnicianPage.css */
+
+/* ===========================
+  Global Layout and Utilities
+  =========================== */
 .technician-page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background-color: #f9f9f9;
-  font-family: "VolvoSans", Arial, sans-serif;
-  padding: 20px;
-  gap: 20px; /* Consistent spacing between sections */
-}
-
-.technician-page h1 {
-  font-size: 28px;
-  margin-bottom: 20px;
-  color: #00457C;
-  text-align: center;
-}
-
-.technician-actions {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.technician-actions button {
-  margin-right: 10px;
-  padding: 10px 15px;
-  background-color: #007CC3;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.technician-actions button:hover {
-  background-color: #00457C;
-}
-
-.technician-actions h2 {
-  font-size: 20px;
-  margin-bottom: 15px;
-  color: #007CC3;
-  text-align: center;
-}
-
-.video-call-button,
-.live-chat-button {
-  padding: 10px 20px;
-  margin: 10px;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.video-call-button:hover,
-.live-chat-button:hover {
-  background-color: #357ab8;
-}
-
-.video-call-button:disabled,
-.live-chat-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.queues {
-  margin-top: 20px;
-}
-
-.queues ul {
-  list-style: none;
-  padding: 0;
-}
-
-.queues h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: #007CC3;
-}
-
-.queues li {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.queue-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  background-color: #f9f9f9;
-  transition: background-color 0.3s;
-}
-
-.queue-item:hover {
-  background-color: #e9ecef;
-}
-
-.queue-item button {
-  padding: 5px 10px;
-  background-color: #007CC3;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.queue-item button:hover {
-  background-color: #00457C;
-}
-
-.queue-item.selected {
-  background-color: #e0f7fa;
-  border-color: #007cc3;
-}
-
-.live-chat {
-  margin-top: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-}
-
-.messages {
-  max-height: 200px;
+  gap: 1rem;
+  padding: 1rem;
   overflow-y: auto;
-  margin-bottom: 10px;
+  background-color: var(--background-base);
 }
 
-.message {
-  margin-bottom: 5px;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.message.technician {
-  background-color: #d1e7dd;
-  align-self: flex-end;
-}
-
-.message.customer {
-  background-color: #f8d7da;
-  align-self: flex-start;
-}
-
-.input-area {
+.actions {
   display: flex;
-  gap: 10px;
+  gap: 1rem;
 }
 
-.input-area input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+/* ===========================
+  Header
+  =========================== */
+.technician-page h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text);
+  text-align: center;
 }
 
+/* ===========================
+  Technician Layout
+  =========================== */
 .technician-layout {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr; /* Flexible layout */
-  gap: 20px; /* Consistent spacing between columns */
+  grid-template-columns: 30% 70%;
+  gap: 1rem;
+  height: calc(100vh - 150px);
+  margin: 1rem 0;
+  max-height: calc(100vh - 150px);
+  box-sizing: border-box;
+  padding-right: 1rem;
 }
 
+/* ===========================
+  Shared Card Styles
+  =========================== */
+.card,
 .customer-queue,
 .active-chats,
 .customer-details,
 .online-users {
-  background-color: #ffffff;
-  border: 1px solid #ccc;
+  background-color: var(--background);
+  border: 1px solid var(--border-subtle);
   border-radius: 10px;
-  padding: 15px;
+  padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 100%;
+  overflow-y: auto;
+  margin: 0.5rem;
 }
 
-.customer-queue h2,
-.active-chats h2,
-.customer-details h2,
-.online-users h2 {
-  font-size: 18px;
-  color: #007cc3;
-  margin-bottom: 10px;
-}
-
+/* ===========================
+  Customer Queue
+  =========================== */
 .customer-queue {
-  flex: 1;
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-  border-radius: 10px;
-  padding: 15px;
-  max-height: 500px;
-  overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  height: 50%; /* Take 50% of the left column */
+  flex-grow: 1;
 }
 
-.customer-queue .queue-item.in-chat {
-  background-color: #e0f7fa;
-  border-color: #007cc3;
-}
-
-.chat-sessions {
-  flex: 2;
+/* ===========================
+  Queue Item
+  =========================== */
+.queue-item {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.chat-session {
-  flex: 1 1 calc(50% - 20px);
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
-}
-
-.chat-session h3 {
-  font-size: 18px;
-  color: #007CC3;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.chat-interface .messages {
-  max-height: 300px;
-  overflow-y: auto;
-  margin-bottom: 10px;
   padding: 10px;
-  background-color: #F9F9F9;
-  border: 1px solid #CCCCCC;
+  border: 1px solid var(--border-subtle);
   border-radius: 5px;
+  background-color: var(--background);
 }
 
-.chat-interface .message {
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 15px;
-  font-size: 14px;
-  line-height: 1.5;
+.queue-item:hover {
+  background-color: var(--hover);
 }
 
-.chat-interface .message.user {
-  background-color: #D1E7DD;
-  text-align: right;
-  align-self: flex-end;
+.queue-item.in-chat {
+  background-color: var(--selected-subtle);
+  border-color: var(--highlight);
 }
 
-.chat-interface .message.assistant {
-  background-color: #F8D7DA;
-  text-align: left;
-  align-self: flex-start;
+.queue-item .priority {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  color: var(--background);
 }
 
-.chat-interface .input-area {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-  border-radius: 5px;
-}
-
-.chat-interface .input-area input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #CCCCCC;
-  border-radius: 5px;
-  font-family: "VolvoSans", Arial, sans-serif;
-  font-size: 14px;
-}
-
-.chat-interface .input-area input:focus {
-  outline: none;
-  border-color: #007CC3;
-  box-shadow: 0 0 5px rgba(0, 124, 195, 0.5);
-}
-
-.chat-interface .input-area .attachment-icon {
-  font-size: 20px;
-  color: #007CC3;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-.chat-interface .input-area .attachment-icon:hover {
-  color: #00457C;
-}
-
-.chat-interface .input-area .send-button {
-  padding: 10px 15px;
-  background-color: #007CC3;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.chat-interface .input-area .send-button:hover {
-  background-color: #00457C;
-}
-
-.end-chat-button {
-  margin-top: 10px;
-  padding: 10px 15px;
-  background-color: #FF4D4D;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.end-chat-button:hover {
-  background-color: #CC0000;
-}
-
-.schedule-actions {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.schedule-actions button {
-  padding: 10px 15px;
-  background-color: #007CC3;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.schedule-actions button:hover {
-  background-color: #00457C;
-}
-
-.availability-form {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.schedule-display {
-  margin-top: 20px;
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.schedule-display table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.schedule-display th,
-.schedule-display td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #CCCCCC;
-}
-
-.schedule-display th {
-  background-color: #007CC3;
-  color: white;
-}
-
-.schedule-display td {
-  background-color: #F9F9F9;
-}
-
-.chat-interface .input-area input[type="file"] {
-  display: none;
-}
-
-.chat-interface .input-area label.attachment-icon {
-  font-size: 20px;
-  color: #007CC3;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-.chat-interface .input-area label.attachment-icon:hover {
-  color: #00457C;
-}
-
-.chat-interface .message {
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 15px;
-  font-size: 14px;
-  line-height: 1.5;
-  position: relative;
-}
-
-.chat-interface .message.user {
-  background-color: #D1E7DD;
-  text-align: right;
-  align-self: flex-end;
-}
-
-.chat-interface .message.assistant {
-  background-color: #F8D7DA;
-  text-align: left;
-  align-self: flex-start;
-}
-
-.customer-card {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.customer-card button {
-  margin-right: 10px;
-}
-
-.customer-details {
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
-}
-
+/* ===========================
+  Customer Details
+  =========================== */
 .customer-details h2 {
-  font-size: 20px;
-  color: #007CC3;
-  margin-bottom: 10px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--text);
 }
 
 .customer-details button {
-  padding: 10px 15px;
-  background-color: #007CC3;
-  color: white;
+  background-color: var(--button-primary);
+  color: var(--background);
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-size: 0.875rem;
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: 0.5rem;
 }
 
 .customer-details button:hover {
-  background-color: #00457C;
+  background-color: var(--button-primary-hover);
 }
 
+.customer-details button:active {
+  background-color: var(--button-primary-pressed);
+}
+
+/* ===========================
+  Online Users
+  =========================== */
+.online-users h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--text);
+}
+
+/* ===========================
+  Notification
+  =========================== */
+.notification {
+  background-color: var(--warning);
+  color: var(--background);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ===========================
+  Custom Button
+  =========================== */
+.custom-button {
+  font-size: 1rem;
+  padding: 12px 20px;
+}
+
+/* ===========================
+  Dashboard Layout
+  =========================== */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===========================
+  Technician GIF
+  =========================== */
 .technician-gif {
   width: 100%;
-  max-width: 400px;
-  margin: 20px auto;
+  max-width: 1200px;
+  height: auto;
   display: block;
+  margin: 0 auto;
 }
 
-.customer-details-chat {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* ===========================
+  Responsive Adjustments
+  =========================== */
+@media (max-width: 1024px) {
+  .technician-layout {
+    grid-template-columns: 1fr;
+    max-height: calc(100vh - 120px);
+    padding-right: 0.5rem;
+  }
+
+  .card,
+  .customer-queue,
+  .active-chats,
+  .customer-details,
+  .online-users {
+    max-height: 50%;
+    margin: 0.5rem;
+    padding: 0.5rem;
+  }
 }
 
-.chat-window-container {
-  flex: 1;
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+@media (max-width: 768px) {
+  .technician-layout {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    max-height: calc(100vh - 100px);
+    padding-right: 0.5rem;
+  }
+
+  .card,
+  .customer-queue,
+  .active-chats,
+  .customer-details,
+  .online-users {
+    max-height: 45%;
+  }
 }
 
-.chat-frame {
-  flex: 1;
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
+@media (max-width: 576px) {
+  .technician-layout {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    max-height: calc(100vh - 80px);
+    padding-right: 0.5rem;
+  }
+
+  .card,
+  .customer-queue,
+  .active-chats,
+  .customer-details,
+  .online-users {
+    max-height: 50%;
+  }
 }
 
-.chat-frame-content {
-  width: 100%;
-  height: 400px;
-  border: none;
+@media (max-width: 768px) {
+  .technician-gif {
+    max-width: 100%;
+  }
 }
 
-.queue-filters {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.queue-filters input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.queue-filters select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.priority {
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: white;
-  text-transform: uppercase;
-}
-
-.priority.high {
-  background-color: #ff4d4d;
-}
-
-.priority.medium {
-  background-color: #ffa500;
-}
-
-.priority.low {
-  background-color: #4caf50;
+@media (max-width: 576px) {
+  .technician-gif {
+    max-width: 90%;
+  }
 }

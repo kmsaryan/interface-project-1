@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "../styles/RegistrationPage.css";
+import "../styles/global.css";
 
 export default function RegistrationPage() {
   const navigate = useNavigate();
@@ -53,6 +55,7 @@ export default function RegistrationPage() {
         </select>
         <button type="submit">Register</button>
       </form>
+      <Footer />
     </div>
   );
 }

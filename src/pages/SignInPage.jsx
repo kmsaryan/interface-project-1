@@ -2,8 +2,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "../styles/SignInPage.css";
-
+import "../styles/fonts.css"; // Import fonts
+import "../styles/global.css"; // Import global styles
 export default function SignInPage() {
   const navigate = useNavigate();
 
@@ -37,6 +39,7 @@ export default function SignInPage() {
           Register Here
         </button>
       </p>
+      <Footer />
     </div>
   );
 }

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import socket from "../utils/socket";
+import "../styles/global.css";
 import "../styles/TechnicianPage.css";
 import technicianGif from "../assets/images/Technician.gif"; // Import technician GIF
 import { useNavigate } from "react-router-dom";
 import UserList from "../components/UserList";
 import ChatList from "../components/ChatList";
+import "../styles/global.css"; // Import global styles
 
 const TechnicianPage = () => {
   const [customers, setCustomers] = useState([]);
@@ -72,10 +76,15 @@ const TechnicianPage = () => {
       setNotification("No customer selected for chat.");
       return;
     }
-    socket.emit("selectCustomer", customerId);
-    setActiveChatCustomerId(customerId); // Set active chat customer ID
-    setSelectedCustomer(null); // Clear selected customer details
-    navigate("/livechat", { state: { role: "technician", customerId, name: selectedCustomer?.name, queue: customers } });
+    const customer = customers.find((c) => c.id === customerId);
+    if (customer) {
+      socket.emit("selectCustomer", customerId);
+      setActiveChatCustomerId(customerId); // Set active chat customer ID
+      setSelectedCustomer(null); // Clear selected customer details
+      navigate("/livechat", { state: { role: "technician", customerId, name: customer.name, queue: customers } });
+    } else {
+      setNotification("Customer not found in the queue.");
+    }
   };
 
   const handleEndChat = (customerId) => {
@@ -104,87 +113,103 @@ const TechnicianPage = () => {
   };
 
   const filteredCustomers = customers.filter((customer) => {
+    if (!customer || !customer.name) {
+      console.warn("[WARN] Invalid customer object:", customer);
+      return false; // Exclude invalid customers
+    }
     const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPriority = priorityFilter === "All" || customer.priority === priorityFilter;
     return matchesSearch && matchesPriority;
   });
 
+  const technicians = users.filter((user) => user.role === "technician"); // Define technicians
+  const customersList = users.filter((user) => user.role === "customer"); // Define customers
+
   return (
-    <div className="technician-page">
+    <div className="container technician-page">
+      <Header />
       <h1>Technician Dashboard</h1>
       <img src={technicianGif} alt="Technician GIF" className="technician-gif" />
       <div className="technician-layout">
-        {/* Customer Queue */}
-        <div className="customer-queue">
-          <h2>Customer Queue</h2>
-          <div className="queue-filters">
-            <input
-              type="text"
-              placeholder="Search by name..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)}>
-              <option value="All">All Priorities</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
-            </select>
-          </div>
-          {filteredCustomers.map((customer) => (
-            <div
-              key={customer.id}
-              className={`queue-item ${
-                activeChatCustomerId === customer.id ? "in-chat" : ""
-              }`}
-            >
-              <span>{customer.name}</span>
-              <span className={`priority ${customer.priority?.toLowerCase() || "medium"}`}>
-                {customer.priority || "Medium"} {/* Fallback for missing priority */}
-              </span>
-              <button
-                onClick={() => handleSelectCustomer(customer.id)}
-                disabled={activeChatCustomerId === customer.id}
-              >
-                {activeChatCustomerId === customer.id ? "In Chat" : "View"}
-              </button>
-              <span>{new Date(customer.joinedAt).toLocaleTimeString()}</span>
+        {/* Left Column */}
+        <div>
+          <div className="customer-queue">
+            <h2>Customer Queue</h2>
+            <div className="queue-filters">
+              <input
+                type="text"
+                placeholder="Search by name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)}>
+                <option value="All">All Priorities</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
             </div>
-          ))}
+            {filteredCustomers.map((customer) => (
+              <div
+                key={customer.id}
+                className={`queue-item ${
+                  activeChatCustomerId === customer.id ? "in-chat" : ""
+                }`}
+              >
+                <span>{customer.name || "Unknown"}</span> {/* Fallback for missing name */}
+                <span className={`priority ${customer.priority?.toLowerCase() || "medium"}`}>
+                  {customer.priority || "Medium"} {/* Fallback for missing priority */}
+                </span>
+                <span className="time-elapsed">
+                  {customer.joinedAt
+                    ? `${Math.floor((Date.now() - customer.joinedAt) / 60000)} min ago`
+                    : "N/A"}
+                </span>
+                <button
+                  onClick={() => handleSelectCustomer(customer.id)}
+                  disabled={activeChatCustomerId === customer.id}
+                >
+                  {activeChatCustomerId === customer.id ? "In Chat" : "View"}
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="customer-details">
+            <h2>Customer Details</h2>
+            {selectedCustomer ? (
+              <>
+                <p><strong>Name:</strong> {selectedCustomer.name}</p>
+                <p><strong>Issue:</strong> {selectedCustomer.issue}</p>
+                <p><strong>Machine:</strong> {selectedCustomer.machine}</p>
+                <button onClick={() => handleStartChat(selectedCustomer.id)}>Start Chat</button>
+                <button onClick={() => handleEndChat(selectedCustomer.id)}>End Chat</button>
+                <button onClick={() => handleEscalateChat(selectedCustomer.id)}>Escalate</button>
+              </>
+            ) : (
+              <p>Select a customer to view details.</p>
+            )}
+          </div>
         </div>
 
-        {/* Active Chats */}
-        <div className="active-chats">
-          <h2>Active Chats</h2>
-          <ChatList
-            chats={activeChats}
-            onSelectChat={(chatId) =>
-              setSelectedCustomer(activeChats.find((chat) => chat.id === chatId))
-            }
-          />
-        </div>
-
-        {/* Customer Details */}
-        <div className="customer-details">
-          <h2>Customer Details</h2>
-          {selectedCustomer ? (
-            <>
-              <p><strong>Name:</strong> {selectedCustomer.name}</p>
-              <p><strong>Issue:</strong> {selectedCustomer.issue}</p>
-              <p><strong>Machine:</strong> {selectedCustomer.machine}</p>
-              <button onClick={() => handleStartChat(selectedCustomer.id)}>Start Chat</button>
-              <button onClick={() => handleEndChat(selectedCustomer.id)}>End Chat</button>
-              <button onClick={() => handleEscalateChat(selectedCustomer.id)}>Escalate</button>
-            </>
-          ) : (
-            <p>Select a customer to view details.</p>
-          )}
-        </div>
-
-        {/* Online Users */}
-        <div className="online-users">
-          <h2>Online Users</h2>
-          <UserList users={users} />
+        {/* Right Column */}
+        <div>
+          <div className="online-users">
+            <h2>Online Users</h2>
+            <div className="dashboard-layout">
+              <div className="card">
+                <h2>Online Technicians</h2>
+                <UserList users={technicians} />
+              </div>
+              <div className="card">
+                <h2>Online Customers</h2>
+                <UserList users={customersList} />
+              </div>
+              <div className="card">
+                <h2>Active Chats</h2>
+                <ChatList chats={activeChats} onSelectChat={() => {}} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -197,6 +222,7 @@ const TechnicianPage = () => {
           </button>
         </div>
       )}
+      <Footer />
     </div>
   );
 };
