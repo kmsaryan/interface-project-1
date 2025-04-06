@@ -1,48 +1,24 @@
-.login-container {
+.login-container, .register-container {
   width: 100%;
   max-width: 400px;
   margin: 80px auto;
   padding: 30px;
-  background: #ffffff;
+  background: var(--background, #ffffff); /* Use global variable */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   text-align: center;
-  font-family: "VolvoNovumLight", Arial, sans-serif;
-}
-
-.register-container {
-  width: 100%;
-  max-width: 400px;
-  margin: 80px auto;
-  padding: 30px;
-  background: #ffffff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  text-align: center;
-  font-family: "VolvoNovumLight", Arial, sans-serif;
+  font-family: var(--font-family, "Arial, sans-serif"); /* Use global font */
 }
 
 h2 {
-  color: #333;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.register-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-h2 {
-  color: #333;
+  color: var(--text, #333); /* Use global variable */
   font-size: 24px;
   margin-bottom: 20px;
 }
 
 .input-group {
   display: flex;
-  width: 100%; 
+  width: 100%;
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 15px;
@@ -51,63 +27,52 @@ h2 {
 label {
   font-size: 14px;
   font-weight: bold;
-  color: #333;
+  color: var(--text, #333); /* Use global variable */
   margin-bottom: 5px;
 }
 
-input {
+input, select {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-.input-group input, 
-.input-group select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-subtle, #ccc); /* Use global variable */
   border-radius: 5px;
   font-size: 16px;
 }
 
-
-.input-group input:focus, 
-.input-group select:focus {
-  border-color: #ffffff;
+input:focus, select:focus {
+  border-color: var(--highlight, #4f4f50); /* Use global variable */
   outline: none;
 }
 
 button {
   padding: 12px;
-  background-color: #4f4f50;
-  color: white;
+  background-color: var(--button-primary, #4f4f50); /* Use global variable */
+  color: var(--background, white); /* Use global variable */
   font-size: 16px;
   border: none;
   width: 100px;
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s;
-  font-family: "VolvoNovumLight", Arial, sans-serif;
-
+  font-family: var(--font-family, "Arial, sans-serif"); /* Use global font */
 }
 
 button:hover {
-  background-color: #9299a0;
+  background-color: var(--button-primary-hover, #9299a0); /* Use global variable */
 }
 
 .error {
   background-color: rgba(255, 0, 0, 0.1);
-  color: #d9534f;
+  color: var(--error, #d9534f); /* Use global variable */
   padding: 10px;
-  border: 1px solid #d9534f;
+  border: 1px solid var(--error, #d9534f); /* Use global variable */
   border-radius: 5px;
   margin-bottom: 15px;
   font-size: 14px;
 }
 
 @media (max-width: 500px) {
-  .login-container {
+  .login-container, .register-container {
     width: 90%;
     padding: 20px;
   }

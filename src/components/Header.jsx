@@ -51,7 +51,7 @@ export default function Header() {
           </button>
         ) : (
           <>
-            <Link to="/signin" className="nav-button">
+            <Link to="/login" className="nav-button">
               Login
             </Link>
             <Link to="/register" className="nav-button">

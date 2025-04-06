@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/GlobalHomePage.css"; // Page-specific styles
+import "../styles/HomePage.css"; // Page-specific styles
 import "../styles/fonts.css"; // Import custom fonts
 import "../styles/App.css"; // Import global styles
 import technician1 from "../assets/images/Technicain1.jpeg";

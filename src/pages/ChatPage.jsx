@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import ReactHelmet from "react-helmet"; // Ensure this import is correct
 import { Chatbot, MessageParser, ActionProvider } from "../react-chatbot-kit"; // Ensure the path is correct
 import { Helmet } from "react-helmet";
-import ChatbotKit from "../react-chatbot-kit"; // Ensure this import points to the correct module
-import '../styles/ChatPage.css'
-import config from "../components/chatbotConfig";
 import TypedReact from "../components/TypedReact";
-import logo from "../assets/volvo_logo.png";
+import logo from "../assets/icons/volvo_logo.png"; // Updated path
+import "../styles/global.css"; // Use global styles
+import "../styles/ChatPage.css"; // Import updated ChatPage styles
 
 export default function ChatPage() {
   const [showBot, toggleBot] = useState(false);
 
   return (
-    <div className="ChatPage">
+    <div className="container text-center">
       <Helmet>
         <title>Volvo CE Chatbot</title>
         <meta name="description" content="Repair AI assistance" />
@@ -22,13 +21,13 @@ export default function ChatPage() {
         <img src={logo} alt="Volvo Logo" className="logo" width="200" />
       </div>
 
-      <h1>Volvo CE Chatbot</h1>
-      <h2>Start chatting with the Volvo CE Chatbot!</h2>
+      <h1 className="heading">Volvo CE Chatbot</h1>
+      <h2 className="subheading">Start chatting with the Volvo CE Chatbot!</h2>
 
       <TypedReact />
 
       {showBot && (
-        <div className="app-chatbot-container">
+        <div className="card shadow">
           <Chatbot
             config={config}
             messageParser={MessageParser}
@@ -38,7 +37,7 @@ export default function ChatPage() {
       )}
 
       <button
-        className="app-chatbot-button"
+        className="button button-primary"
         onClick={() => toggleBot((prev) => !prev)}
       >
         <div>Bot</div>

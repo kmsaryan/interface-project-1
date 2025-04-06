@@ -30,7 +30,6 @@ export default function RegistrationPage() {
 
   return (
     <div className="registration-page">
-      <Header />
       <h1>Register</h1>
       <form className="registration-form" onSubmit={handleRegister}>
         <input
@@ -55,7 +54,6 @@ export default function RegistrationPage() {
         </select>
         <button type="submit">Register</button>
       </form>
-      <Footer />
     </div>
   );
 }

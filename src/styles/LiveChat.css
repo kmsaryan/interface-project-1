@@ -6,6 +6,7 @@
   min-height: 100vh; /* Ensure the page takes full viewport height */
   background-color: var(--background-base);
   padding-top: 1rem; /* Add spacing between header and chat container */
+  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoNovumLight for body text */
 }
 
 .chat-container {
@@ -28,6 +29,10 @@
   border-radius: 10px;
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-sidebar h3 {
+  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for sidebar headings */
 }
 
 .chat-main {
@@ -67,6 +72,7 @@
   padding: 0.5rem;
   border: 1px solid var(--border-subtle);
   border-radius: 5px;
+  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for input and buttons */
 }
 
 .message-input button {
@@ -76,6 +82,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for input and buttons */
 }
 
 .typing-indicator {

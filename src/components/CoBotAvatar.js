@@ -1,5 +1,5 @@
 import React from "react";
-import BotAvatar from "../icons/bot1.png";
+import BotAvatar from "../assets/icons/bot1.png"; // Updated path
 
 const CoBotAvatar = () => {
   return (
