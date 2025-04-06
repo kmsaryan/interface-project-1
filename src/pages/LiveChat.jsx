@@ -125,7 +125,9 @@ const LiveChat = () => {
             <div className="chat-main">
               <ChatWindow
                 messages={messages[connectedTechnician?.technicianId] || []}
-                readReceipts={readReceipts}
+                socket={socket} // Pass the socket instance
+                readReceipts={readReceipts} // Pass read receipts
+                role={role} // Pass the role
               />
               <MessageInput onSendMessage={handleSendMessage} onTyping={handleTyping} />
               {typingIndicator && <div className="typing-indicator">Technician is typing...</div>}
@@ -157,7 +159,9 @@ const LiveChat = () => {
           <div className="chat-main">
             <ChatWindow
               messages={messages[selectedCustomer?.id] || []}
-              readReceipts={readReceipts}
+              socket={socket} // Pass the socket instance
+              readReceipts={readReceipts} // Pass read receipts
+              role={role} // Pass the role
             />
             <MessageInput onSendMessage={handleSendMessage} onTyping={handleTyping} />
             {typingIndicator && <div className="typing-indicator">Customer is typing...</div>}

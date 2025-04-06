@@ -57,6 +57,14 @@ socket.on("chat_error", (error) => {
   console.error(`[CHAT ERROR]:`, error);
 });
 
+socket.on("message", (data) => {
+  console.log("Received message:", data);
+  if (data.message) {
+    // Process and display only the message field
+    updateChatWindow(data.message);
+  }
+});
+
 // Wrap emit to log outgoing messages
 const originalEmit = socket.emit;
 socket.emit = function (event, ...args) {
