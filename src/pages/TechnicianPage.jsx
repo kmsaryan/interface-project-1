@@ -127,7 +127,6 @@ const TechnicianPage = () => {
 
   return (
     <div className="container technician-page">
-      <Header />
       <h1>Technician Dashboard</h1>
       <img src={technicianGif} alt="Technician GIF" className="technician-gif" />
       <div className="technician-layout">
@@ -222,7 +221,6 @@ const TechnicianPage = () => {
           </button>
         </div>
       )}
-      <Footer />
     </div>
   );
 };

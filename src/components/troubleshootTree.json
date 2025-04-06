@@ -1,0 +1,24 @@
+{
+  "question": "Is the engine starting?",
+  "yes": {
+    "question": "Does it make a clicking sound?",
+    "yes": {
+      "solution": {
+        "text": "Check the battery connection.",
+        "image": "/images/battery_connection.jpg"
+      }
+    },
+    "no": {
+      "solution": {
+        "text": "Inspect the ignition switch.",
+        "image": "/images/ignition_switch.jpg"
+      }
+    }
+  },
+  "no": {
+    "solution": {
+      "text": "Verify fuel level and pump functionality.",
+      "image": "/images/fuel_check.jpg"
+    }
+  }
+}

@@ -96,7 +96,6 @@ const LiveChat = () => {
   if (role === "customer") {
     return (
       <>
-        <Header />
         <div className="live-chat-page">
           <div className="chat-container">
             <div className="chat-sidebar">
@@ -123,14 +122,12 @@ const LiveChat = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </>
     );
   }
 
   return (
     <>
-      <Header />
       <div className="live-chat-page">
         <div className="chat-container">
           <div className="chat-sidebar">
@@ -157,7 +154,6 @@ const LiveChat = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

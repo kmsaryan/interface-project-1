@@ -1,10 +1,20 @@
+@font-face {
+  font-family: "VolvoNovumLight";
+  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "VolvoBroad";
+  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1rem 2rem; /* Add horizontal padding */
   background-color: var(--background); /* Use global background */
-  border-bottom: 1px solid var(--border-subtle); /* Use global border */
+  border-bottom: 1px solid var(--border-subtle); /* Add subtle border */
   color: var(--text); /* Use global text color */
   text-align: center;
 }
@@ -15,12 +25,14 @@
 }
 
 .logo img {
-  height: 40px;
+  width: 150px; /* Adjust logo size */
+  object-fit: contain;
 }
 
 .nav {
   display: flex;
-  gap: 20px;
+  gap: 15px; /* Add spacing between navigation items */
+  justify-content: flex-end; 
 }
 
 .nav a {
@@ -31,33 +43,32 @@
   font-size: 16px;
 }
 
+.user-info span {
+  color: black;
+}
+
 .nav a:hover {
   color: var(--highlight); /* Use global highlight color */
 }
 
 .auth-buttons button {
-  margin-left: 10px;
+  margin: 10px; /* Remove unwanted left margin */
   padding: 10px 15px;
-  background-color: #4a90e2;
-  color: white;
+  font-family: "VolvoNovumLight", Arial, sans-serif;
+  background-color: #b3b9bf;
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .auth-buttons button:hover {
-  background-color: #357ab8;
-}
-
-.sign-in {
-  background-color: transparent;
-  color: #fff;
+  background-color: #cbd0d5;
 }
 
 .register {
   background-color: #fff;
   color: #000;
-  border-radius: 5px;
 }
 
 .hamburger {
@@ -75,11 +86,6 @@
   background-color: var(--text);
   border-radius: 2px;
   transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.nav {
-  display: flex;
-  gap: 20px;
 }
 
 .nav.open {
@@ -127,6 +133,35 @@
 
 .close-btn:hover {
   color: var(--highlight);
+}
+
+.nav-button {
+  padding: 10px 20px; /* Increase padding for better spacing */
+  background-color: var(--button-primary); /* Use primary button color */
+  color: var(--background); /* Ensure text is visible */
+  border: none;
+  border-radius: 5px; /* Add rounded corners */
+  text-decoration: none;
+  font-family: "VolvoBroad", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold; /* Make text bold for better visibility */
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: var(--button-primary-hover); /* Change background on hover */
+  color: var(--background); /* Ensure text remains visible */
+}
+
+.nav-button:active {
+  background-color: var(--button-primary-pressed); /* Change background on click */
+}
+
+.nav-button:disabled {
+  background-color: var(--border-subtle); /* Use subtle color for disabled state */
+  color: var(--text-subtle); /* Use subtle text color */
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

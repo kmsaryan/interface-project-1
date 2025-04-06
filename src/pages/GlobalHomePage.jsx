@@ -1,7 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import "../styles/GlobalHomePage.css"; // Page-specific styles
 import "../styles/fonts.css"; // Import custom fonts
 import "../styles/App.css"; // Import global styles
@@ -23,10 +21,9 @@ export default function GlobalHomePage() {
 
   return (
     <div className="global-home-page">
-      <Header />
       <header className="global-header">
-        <h1>Welcome to Volvo AI Assistant</h1>
-        <p>Your one-stop solution for customer and technician support</p>
+        <h1>Welcome to Volvo CE Chatbot</h1>
+        <p>Navigate to the appropriate page using the menu above.</p>
       </header>
       <div className="slideshow">
         <div className="slideshow-images">
@@ -36,15 +33,6 @@ export default function GlobalHomePage() {
           <img src={excavatorC} alt="Excavator C" />
         </div>
       </div>
-      <div className="global-actions">
-        <button className="action-button" onClick={handleSignIn}>
-          Sign In
-        </button>
-        <button className="action-button" onClick={handleRegister}>
-          Register
-        </button>
-      </div>
-      <Footer />
     </div>
   );
 }

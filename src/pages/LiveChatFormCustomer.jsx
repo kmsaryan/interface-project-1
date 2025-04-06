@@ -5,19 +5,16 @@ import Footer from "../components/Footer";
 import socket from "../utils/socket";
 import "../styles/global.css"; // Ensure global styles are imported
 import customerGif from "../assets/images/Customer.gif"; // Import customer GIF
-import { Chatbot, MessageParser, ActionProvider } from "../react-chatbot-kit"; // Ensure the path is correct
-import config from "../components/chatbotConfig";
 import "../styles/Home.css";
 
-export default function Home() {
-  const [showBot, toggleBot] = useState(false); // state for toggling chatbot
-  const navigate = useNavigate();
+export default function LiveChatFormCustomer() {
   const [formData, setFormData] = useState({
     name: "",
     issue: "",
     machine: "",
     priority: "Medium", // Default priority
   });
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,9 +29,8 @@ export default function Home() {
 
   return (
     <div className="container">
-      <Header />
       <main className="main-content">
-        <h1>Customer Dashboard</h1>
+        <h1>Live Chat Form</h1>
         <p>Fill out the form below to start a live chat with a technician.</p>
         <img src={customerGif} alt="Customer GIF" className="customer-gif" />
         <form className="assistant-form" onSubmit={handleSubmit}>

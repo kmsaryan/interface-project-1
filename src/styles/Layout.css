@@ -1,0 +1,28 @@
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .main-content {
+    flex: 1;
+    overflow: auto;
+    background-color: #ffffff;
+
+  }
+  
+  .footer {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    font-family: "VolvoNovumLight";
+    color: rgb(54, 53, 53);
+    background-color: #f8f8f8;
+  }
+  
+
+  

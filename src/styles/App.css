@@ -52,7 +52,7 @@
     border: none;
     border-radius: 5px;
     background-color: #ffffff;
-    color: #4a90e2;
+    color: #e1dfdd;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -99,14 +99,14 @@
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
-    background-color: #4a90e2;
+    background-color: #e1dfdd;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .button-f:hover {
-    background-color: #357ab8;
+    background-color: #e1dfdd;
 }
 
 .footer {
