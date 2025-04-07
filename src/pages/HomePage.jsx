@@ -22,7 +22,7 @@ export default function GlobalHomePage() {
   return (
     <div className="global-home-page">
       <header className="global-header">
-        <h1>Welcome to Volvo CE Chatbot</h1>
+        <h1>Volvo CE Support Platform</h1>
         <p>Navigate to the appropriate page using the menu above.</p>
       </header>
       <div className="slideshow">

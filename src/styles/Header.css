@@ -17,7 +17,7 @@
   border-bottom: 1px solid var(--border-subtle); /* Add subtle border */
   color: var(--text); /* Use global text color */
   text-align: center;
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for header text */
+  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoBroad for header text */
 }
 
 .logo {
@@ -32,6 +32,7 @@
 
 .nav {
   display: flex;
+  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoBroad for header text */
   gap: 15px; /* Add spacing between navigation items */
   justify-content: flex-end; 
 }
@@ -40,8 +41,8 @@
   margin: 0 10px;
   text-decoration: none;
   color: var(--text); /* Use global text color */
-  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for navigation links */
-  font-size: 16px;
+  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoBroad for header text */
+
 }
 
 .user-info span {

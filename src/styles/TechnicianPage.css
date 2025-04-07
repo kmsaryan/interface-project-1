@@ -21,7 +21,15 @@
   Header
   =========================== */
 .technician-page h1 {
-  font-size: 1.5rem;
+  font-size: 4.0rem;
+  font-weight: bold;
+  color: var(--text);
+  text-align: center;
+  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for main heading */
+}
+
+.technician-page h2{
+  font-size: 2.5rem;
   font-weight: bold;
   color: var(--text);
   text-align: center;
@@ -58,6 +66,7 @@
   max-height: 100%;
   overflow-y: auto;
   margin: 0.5rem;
+  size: 2.0rem;
 }
 
 /* ===========================
@@ -132,7 +141,7 @@
   Online Users
   =========================== */
 .online-users h2 {
-  font-size: 1.25rem;
+  font-size: 2.0rem;
   font-weight: bold;
   color: var(--text);
 }
@@ -170,8 +179,8 @@
   Technician GIF
   =========================== */
 .technician-gif {
-  width: 100%;
-  max-width: 1200px;
+  width: 80%;
+  max-width: 800px;
   height: auto;
   display: block;
   margin: 0 auto;

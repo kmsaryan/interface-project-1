@@ -1,29 +1,26 @@
-/* General Page Styles */
+@font-face {
+  font-family: 'Novum-Light';
+  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Broad';
+  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
+}
+
 .ChatPage {
-  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoNovumLight for body text */
+  font-family: 'Novum-Light';
   text-align: center;
-  padding: 1rem;
-  background-color: var(--background-base); /* Use global background */
-}
-
-/* Header Styles */
-h1 {
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for main heading */
-  font-size: 2.5rem;
-  color: var(--text); /* Use global text color */
-  margin-bottom: 1rem;
-}
-
-h2 {
-  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for subheadings */
-  font-size: 1.25rem;
-  color: var(--text-subtle); /* Use global subtle text color */
-  margin-bottom: 1rem;
 }
 
 .options {
   padding-bottom: 15px;
   font-family: inherit;
+}
+
+h1 {
+  font-family: 'Broad', sans-serif !important;
+  font-size: 100px;
 }
 
 .options-header {
@@ -33,28 +30,27 @@ h2 {
   font-weight: normal;
 }
 
-/* Options Container */
 .options-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem;
 }
 
-/* Option Item */
 .option-item {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--highlight); /* Use global highlight color */
+  padding: 8px 15px;
+  border: 1px solid #2898ec;
   border-radius: 25px;
-  color: var(--highlight); /* Use global highlight color */
-  font-size: 0.875rem;
-  transition: all 0.3s ease;
+  color: #1f91e7;
+  font-size: 0.9rem;
+  margin: 3px;
+  box-shadow: inset 0px 0px 0px #2273c4;
+  transition: all 0.5s;
   cursor: pointer;
 }
 
 .option-item:hover {
-  background-color: var(--highlight); /* Use global highlight color */
-  color: var(--background); /* Use global background color */
+  box-shadow: inset 195px 0px 0px #2273c4;
+  color: #ffffff;
 }
 
 .stats {
@@ -99,54 +95,40 @@ h2 {
   justify-content: center;
 }
 
-/* Chatbot Button */
 .app-chatbot-button {
   width: 60px;
   height: 60px;
   font-family: inherit;
-  border-radius: 50%;
+  border-radius: 30px;
   padding: 10px;
-  color: var(--background); /* Use global background color */
-  background-color: var(--button-primary); /* Use global primary button color */
+  color: #fff;
+  background-color: #0d2d44;
   border: none;
   position: fixed;
   bottom: 25px;
+  z-index: 9999;
   left: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.6s ease-in-out;
 }
 
 .app-chatbot-button:hover {
   transform: scale(1.1);
-  background-color: var(--button-primary-hover); /* Use global hover color */
 }
 
-/* Chatbot Container */
 .app-chatbot-container {
-  margin: 2rem auto;
+  margin: 40px 0;
   display: flex;
+  width: 670px;
   justify-content: center;
-  max-width: 700px;
-  background-color: var(--background); /* Use global background color */
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .app-chatbot-container {
-    max-width: 90%;
-  }
-
-  .app-chatbot-button {
-    bottom: 15px;
-    left: 15px;
-  }
+  position: fixed;
+  left: 40px;
+  bottom: 55px;
+  z-index: 9999;
+  box-shadow: 5px 5px 13px rgba(91, 81, 81, 0.4);
+  border-radius: 5px;
 }
 
 .react-chatbot-kit-chat-bot-message {

@@ -3,6 +3,7 @@ import React from "react";
 import CoBotAvatar from "../components/CoBotAvatar";
 import CustomUserAvatar from "../components/CustomUserAvatar";
 import BotChatMessage from "../components/BotChatMessage";
+import LiveChatLink from "./LiveChatLink";
 
 const config = {
   lang: "no", // Set language to Norwegian
@@ -37,7 +38,10 @@ const config = {
   customMessages: {
   },
   widgets: [
-
+    {
+      widgetName: "liveChatLink",
+      widgetFunc: (props) => <LiveChatLink {...props} />,
+    }
   ],
 };
 

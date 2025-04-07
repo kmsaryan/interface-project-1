@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import "../styles/RegistrationPage.css";
 import "../styles/global.css";
 
@@ -30,30 +28,50 @@ export default function RegistrationPage() {
 
   return (
     <div className="registration-page">
-      <h1>Register</h1>
-      <form className="registration-form" onSubmit={handleRegister}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleInputChange}
-          required
-        />
-        <select name="role" value={formData.role} onChange={handleInputChange}>
-          <option value="customer">Customer</option>
-          <option value="technician">Technician</option>
-        </select>
+      <h2> Register </h2>
+        <form className="registration-form" onSubmit={handleRegister}>
+        <div className="input-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="role">Role</label>
+          <select
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleInputChange}
+          >
+            <option value="customer">Customer</option>
+            <option value="technician">Technician</option>
+          </select>
+        </div>
+
         <button type="submit">Register</button>
       </form>
+
     </div>
   );
 }

@@ -8,6 +8,7 @@ import technicianGif from "../assets/images/Technician.gif"; // Import technicia
 import { useNavigate } from "react-router-dom";
 import UserList from "../components/UserList";
 import ChatList from "../components/ChatList";
+import TechnicianSchedule from "../components/TechnicianSchedule";
 import "../styles/global.css"; // Import global styles
 
 const TechnicianPage = () => {
@@ -20,6 +21,11 @@ const TechnicianPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("All");
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const userData = localStorage.getItem("user");
+
+  const user = userData ? JSON.parse(userData) : null;
+  console.log(user);
 
   useEffect(() => {
     socket.on("updateLiveChatQueue", (queue) => {
@@ -232,6 +238,12 @@ const TechnicianPage = () => {
             ✖
           </button>
         </div>
+      )}
+
+{user ? (
+        <TechnicianSchedule technicianId={user.id} token={token} />
+      ) : (
+        <p>Loading user...</p>
       )}
     </div>
   );

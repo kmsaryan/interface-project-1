@@ -24,10 +24,7 @@ export default function CustomerHome() {
             <h2>Reports</h2>
             <p>Check performance and diagnostics reports.</p>
           </Link>
-          <Link to="/livechatform" className="option-card"> {/* Updated route */}
-            <h2>Live Chat</h2>
-            <p>Start a live chat with a technician.</p>
-          </Link>
+
         </div>
       </main>
     </div>

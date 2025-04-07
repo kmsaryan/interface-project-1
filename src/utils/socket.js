@@ -16,11 +16,16 @@ const getWebSocketURL = () => {
 const serverUrl = getWebSocketURL();
 console.log(`[SOCKET LOG]: Attempting to connect to WebSocket server at ${serverUrl}`);
 
+const token = localStorage.getItem("token"); // or sessionStorage.getItem("token")
+
 const socket = io(serverUrl, {
-  transports: ["websocket"], // Ensure WebSocket is used
-  reconnection: true, // Enable reconnection
-  reconnectionAttempts: 10, // Retry up to 10 times
-  timeout: 20000, // 20 seconds timeout
+  transports: ["websocket"],
+  reconnection: true,
+  reconnectionAttempts: 10,
+  timeout: 20000,
+  auth: {
+    token: token,
+  },
 });
 
 socket.on("connect", () => {
@@ -59,10 +64,7 @@ socket.on("chat_error", (error) => {
 
 socket.on("message", (data) => {
   console.log("Received message:", data);
-  if (data.message) {
-    // Process and display only the message field
-    updateChatWindow(data.message);
-  }
+
 });
 
 // Wrap emit to log outgoing messages

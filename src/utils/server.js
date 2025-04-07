@@ -60,6 +60,7 @@ io.on("connection", (socket) => {
 
   // Handle real-time messaging
   socket.on("message", ({ to, message }) => {
+    console.log(message);
     io.to(to).emit("message", { from: socket.id, message });
   });
 
