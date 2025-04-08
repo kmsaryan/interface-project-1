@@ -20,14 +20,7 @@ const config = {
     createChatBotMessage(
       `Hi, I'm here to provide you troubleshoot assistance with Volvo heavy machinery!`
     ),
-    createChatBotMessage(
-      "Here's a quick overview of what I can help you with. You can also type in.",
-      {
-        withAvatar: true,
-        delay: 400,
-        widget: "overview", // First widget to show up is overview
-      }
-    ),
+
   ],
   state: {},
   customComponents: {
