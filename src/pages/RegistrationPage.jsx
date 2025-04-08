@@ -8,10 +8,10 @@ export default function RegistrationPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
+    email: "",
     password: "",
-    role: "customer", // Default role
+    role: "customer",
   });
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -24,15 +24,15 @@ export default function RegistrationPage() {
       // Make API call to backend
       const response = await axios.post("http://localhost:5000/api/users/register", {
         name: formData.username,
-        email: formData.username, // Assuming username is the email
+        email: formData.email, // Assuming username is the email
         password: formData.password,
         role: formData.role,
       });
 
       if (response.status === 201) {
         console.log("User registered successfully:", response.data);
-        // Redirect user based on role
-        navigate("/home");
+
+        navigate("/");
         
       }
     } catch (error) {
@@ -44,6 +44,7 @@ export default function RegistrationPage() {
     <div className="registration-page">
       <h2> Register </h2>
         <form className="registration-form" onSubmit={handleRegister}>
+
         <div className="input-group">
           <label htmlFor="username">Username</label>
           <input
@@ -52,6 +53,19 @@ export default function RegistrationPage() {
             name="username"
             placeholder="Username"
             value={formData.username}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
             onChange={handleInputChange}
             required
           />

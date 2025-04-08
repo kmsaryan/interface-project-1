@@ -43,10 +43,18 @@ export const deleteNode = async (id) => {
 };
 
 export const findMainIssueByKeyword = async (keyword) => {
-  const response = await fetch(`${API_BASE}/trees/match?keyword=${encodeURIComponent(keyword)}`);
+  const response = await fetch(`${API_BASE}/match?keyword=${encodeURIComponent(keyword)}`);
   if (!response.ok) {
     throw new Error('No matching issue found');
   }
   return response.json();
 };
 
+export const findResponseWithKeywordAndParentId = async (parentId, responseText) => {
+  const url = `${API_BASE}/match-response?parent_id=${encodeURIComponent(parentId)}&response=${encodeURIComponent(responseText)}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('No matching response found');
+  }
+  return response.json();
+};

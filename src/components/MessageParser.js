@@ -1,4 +1,4 @@
-import { findMainIssueByKeyword } from "../components/treeService"; // adjust the path if needed
+import { findMainIssueByKeyword, findResponseWithKeywordAndParentId } from "../components/treeService"; // path as needed
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -104,7 +104,7 @@ class MessageParser {
         this.actionProvider.setState((state) => ({
           ...state,
           matchedRoot: matchedIssue,
-          awaitingTechConfirmation: true,
+          awaitingTroubleshootConfirmation: true,
         }));
     
         return this.actionProvider.addMessageToState(msg);
@@ -123,7 +123,36 @@ class MessageParser {
         return this.actionProvider.addMessageToState(msg);
       }
     }
-    
+    if (this.state.awaitingTroubleshootConfirmation && this.state.matchedRoot) {
+      const parentId = this.state.matchedRoot.id;
+
+      try {
+        const matchedResponse = await findResponseWithKeywordAndParentId(parentId, message);
+
+        if (matchedResponse.solution) {
+          const msg = this.actionProvider.createChatBotMessage(`Here's a possible solution: ${matchedResponse.solution}`);
+          this.actionProvider.setState((state) => ({
+            ...state,
+            awaitingTroubleshootConfirmation: false
+          }));
+          return this.actionProvider.addMessageToState(msg);
+        } else {
+          const msg = this.actionProvider.createChatBotMessage(`${matchedResponse.question}`);
+          this.actionProvider.setState((state) => ({
+            ...state,
+            matchedRoot: matchedResponse // update matchedRoot to continue down the tree
+          }));
+          return this.actionProvider.addMessageToState(msg);
+        }
+
+      } catch (err) {
+        console.error("Failed to match follow-up response:", err);
+
+        const msg = this.actionProvider.createChatBotMessage("I'm sorry, I couldn't understand that. Could you try rephrasing?");
+        return this.actionProvider.addMessageToState(msg);
+      }
+    }
+
     
     if (this.state.awaitingTechConfirmation) {
       if (["yes", "yeah", "sure", "ok", "okay", "please do", "connect me"].includes(message)) {
