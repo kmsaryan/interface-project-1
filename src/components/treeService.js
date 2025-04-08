@@ -41,3 +41,12 @@ export const updateNode = async (id, updatedNode) => {
 export const deleteNode = async (id) => {
   await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
 };
+
+export const findMainIssueByKeyword = async (keyword) => {
+  const response = await fetch(`${API_BASE}/trees/match?keyword=${encodeURIComponent(keyword)}`);
+  if (!response.ok) {
+    throw new Error('No matching issue found');
+  }
+  return response.json();
+};
+

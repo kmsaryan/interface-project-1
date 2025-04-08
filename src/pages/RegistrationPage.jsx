@@ -32,11 +32,8 @@ export default function RegistrationPage() {
       if (response.status === 201) {
         console.log("User registered successfully:", response.data);
         // Redirect user based on role
-        if (formData.role === "customer") {
-          navigate("/customer_home");
-        } else {
-          navigate("/technician");
-        }
+        navigate("/home");
+        
       }
     } catch (error) {
       console.error("Error registering user:", error.response?.data || error.message);
