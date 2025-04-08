@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios for API calls
 import "../styles/RegistrationPage.css";
 import "../styles/global.css";
 
@@ -16,13 +17,29 @@ export default function RegistrationPage() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("Registered User:", formData); // Simulate registration
-    if (formData.role === "customer") {
-      navigate("/home"); // Redirect to Customer Home Page
-    } else {
-      navigate("/technician"); // Redirect to Technician Dashboard
+
+    try {
+      // Make API call to backend
+      const response = await axios.post("http://localhost:5000/api/users/register", {
+        name: formData.username,
+        email: formData.username, // Assuming username is the email
+        password: formData.password,
+        role: formData.role,
+      });
+
+      if (response.status === 201) {
+        console.log("User registered successfully:", response.data);
+        // Redirect user based on role
+        if (formData.role === "customer") {
+          navigate("/customer_home");
+        } else {
+          navigate("/technician");
+        }
+      }
+    } catch (error) {
+      console.error("Error registering user:", error.response?.data || error.message);
     }
   };
 
