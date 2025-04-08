@@ -89,109 +89,119 @@ If you encounter socket connection errors:
 ## Project Structure
 ```
 .
-├── CHANGELOG.md
-├── config-overrides.js
-├── package.json
-├── package-lock.json
-├── public
-│   ├── favicon.ico
-│   └── index.html
-├── README.md
-└── src
-    ├── App.jsx
-    ├── assets
-    │   ├── fonts
-    │   │   ├── VolvoBroad.ttf
-    │   │   └── Volvo_Novum_Light.ttf
-    │   └── images
-    │       ├── Customer.gif
-    │       ├── ExcavatersB.jpeg
-    │       ├── ExcavatersC.jpeg
-    │       ├── ExcavatersD.jpeg
-    │       ├── Technicain1.jpeg
-    │       ├── Technicain2.jpeg
-    │       ├── Technician.gif
-    │       └── volvo-alt.svg
-    ├── components
-    │   ├── ChatInterface.jsx
-    │   ├── Footer.jsx
-    │   ├── Header.jsx
-    │   ├── LiveChat.jsx
-    │   ├── Solution.jsx
-    │   ├── Suggestions.jsx
-    │   ├── TechnicianConnect.jsx
-    │   ├── TechnicianSchedule.jsx
-    │   ├── Troubleshoot.jsx
-    │   └── VideoCallButton.jsx
-    ├── index.jsx
-    ├── pages
-    │   ├── ChatPage.jsx
-    │   ├── Home.jsx
-    │   ├── LoginPage.jsx
-    │   ├── SignInPage.jsx
-    │   └── TechnicianPage.jsx
-    ├── server
-    │   └── server.js
-    ├── styles
-    │   ├── App.css
-    │   ├── ChatInterface.css
-    │   ├── ChatPage.css
-    │   ├── fonts.css
-    │   ├── Footer.css
-    │   ├── global.css
-    │   ├── Header.css
-    │   ├── Home.css
-    │   ├── LiveChat.css
-    │   ├── LoginPage.css
-    │   ├── SignInPage.css
-    │   ├── Solution.css
-    │   ├── Suggestions.css
-    │   ├── TechnicianConnect.css
-    │   ├── TechnicianPage.css
-    │   ├── Troubleshoot.css
-    │   └── VideoCallButton.css
-    └── utils
-        ├── server.js
-        ├── socket.js
-        └── stream-http
-            ├── index.js
-            ├── lib
-            │   ├── capability.js
-            │   ├── request.js
-            │   └── response.js
-            ├── LICENSE
-            ├── node_modules
-            │   └── readable-stream
-            │       ├── CONTRIBUTING.md
-            │       ├── errors-browser.js
-            │       ├── errors.js
-            │       ├── experimentalWarning.js
-            │       ├── GOVERNANCE.md
-            │       ├── lib
-            │       │   ├── internal
-            │       │   │   └── streams
-            │       │   │       ├── async_iterator.js
-            │       │   │       ├── buffer_list.js
-            │       │   │       ├── destroy.js
-            │       │   │       ├── end-of-stream.js
-            │       │   │       ├── from-browser.js
-            │       │   │       ├── from.js
-            │       │   │       ├── pipeline.js
-            │       │   │       ├── state.js
-            │       │   │       ├── stream-browser.js
-            │       │   │       └── stream.js
-            │       │   ├── _stream_duplex.js
-            │       │   ├── _stream_passthrough.js
-            │       │   ├── _stream_readable.js
-            │       │   ├── _stream_transform.js
-            │       │   └── _stream_writable.js
-            │       ├── LICENSE
-            │       ├── package.json
-            │       ├── readable-browser.js
-            │       ├── readable.js
-            │       └── README.md
-            ├── package.json
-            └── README.md
+├── App.jsx
+├── assets
+│   ├── fonts
+│   │   ├── VolvoBroad.ttf
+│   │   ├── Volvo_Novum_Light.ttf
+│   │   └── Volvo_Novum_Medium.ttf
+│   ├── icons
+│   │   ├── bot1.png
+│   │   ├── bot.png
+│   │   ├── bot.svg
+│   │   ├── call.svg
+│   │   ├── comment-alt-lines.svg
+│   │   ├── link.svg
+│   │   ├── mechanic copy.png
+│   │   ├── mechanic.png
+│   │   ├── paper-plane.svg
+│   │   ├── plane-alt.svg
+│   │   ├── Three-dimensional-3D-digital-model-of-the-loader-drive-axle.jpg
+│   │   ├── user-alt.svg
+│   │   └── volvo_logo.png
+│   └── images
+│       ├── Customer.gif
+│       ├── ExcavatersB.jpeg
+│       ├── ExcavatersC.jpeg
+│       ├── ExcavatersD.jpeg
+│       ├── Technicain1.jpeg
+│       ├── Technicain2.jpeg
+│       ├── Technician.gif
+│       └── volvo-alt.svg
+├── components
+│   ├── ActionProvider.js
+│   ├── BotChatMessage.js
+│   ├── chatbotConfig.jsx
+│   ├── ChatInterface.jsx
+│   ├── ChatList.jsx
+│   ├── ChatWindow.jsx
+│   ├── CoBotAvatar.js
+│   ├── CustomUserAvatar.js
+│   ├── ErrorBoundary.jsx
+│   ├── Footer.jsx
+│   ├── Header.jsx
+│   ├── Layout.jsx
+│   ├── LiveChatLink.jsx
+│   ├── Loader.js
+│   ├── MessageInput.jsx
+│   ├── Message.jsx
+│   ├── MessageParser.js
+│   ├── Notification.jsx
+│   ├── RegisterForm.jsx
+│   ├── TechnicianSchedule.jsx
+│   ├── TreeEditor.jsx
+│   ├── treeService.js
+│   ├── Troubleshoot.jsx
+│   ├── troubleshootTree.json
+│   ├── TypedReact.js
+│   └── UserList.jsx
+├── index.jsx
+├── pages
+│   ├── AdminDashboard.jsx
+│   ├── AdminLogin.jsx
+│   ├── ChatPage.jsx
+│   ├── CustomerHome.jsx
+│   ├── Fleet.jsx
+│   ├── HomePage.jsx
+│   ├── LiveChatForm.jsx
+│   ├── LiveChat.jsx
+│   ├── LoginPage.jsx
+│   ├── RegistrationPage.jsx
+│   └── TechnicianPage.jsx
+├── server
+│   ├── server.js
+│   └── websocket.js
+├── styles
+│   ├── AdminDashboard.css
+│   ├── App.css
+│   ├── BotChatMessage.css
+│   ├── ChatList.css
+│   ├── ChatPage.css
+│   ├── ChatWindow.css
+│   ├── CustomerChat.css
+│   ├── CustomerPage.css
+│   ├── FleetPage.css
+│   ├── fonts.css
+│   ├── Footer.css
+│   ├── global.css
+│   ├── Header.css
+│   ├── Home.css
+│   ├── HomePage.css
+│   ├── Layout.css
+│   ├── LiveChat.css
+│   ├── Loader.css
+│   ├── Message.css
+│   ├── MessageInput.css
+│   ├── Notification.css
+│   ├── RegisterLogin.css
+│   ├── RegistrationPage.css
+│   ├── TechnicianChat.css
+│   ├── TechnicianPage.css
+│   ├── TechnicianSchedule.css
+│   └── UserList.css
+└── utils
+    ├── server.js
+    ├── socket.js
+    └── stream-http
+        ├── index.js
+        ├── lib
+        │   ├── capability.js
+        │   ├── request.js
+        │   └── response.js
+        ├── LICENSE
+        ├── package.json
+        ├── package-lock.json
+        └── README.md
 ```
 
 ## Scripts

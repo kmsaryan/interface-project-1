@@ -22,12 +22,39 @@
 - **Global Styles**:
   - Integrated VolvoSans font for a consistent and modern look.
   - Applied a cohesive color palette across the application.
+- **Database Integration**:
+  - Added a database with the following tables:
+    - `technician_availability`: Tracks technician schedules and availability.
+    - `troubleshoot_tree`: Stores troubleshooting steps and solutions.
+    - `users`: Manages user information and authentication.
+  - Database schema:
+    ```
+    neondb=> \dt
+                        List of relations
+     Schema |          Name           | Type  |    Owner     
+    --------+-------------------------+-------+--------------
+     public | technician_availability | table | neondb_owner
+     public | troubleshoot_tree       | table | neondb_owner
+     public | users                   | table | neondb_owner
+    (3 rows)
+    ```
+- **Troubleshoot Tree**:
+  - Implemented a dynamic troubleshoot tree for guided problem-solving.
+  - Added backend support for editing, saving, and deleting tree nodes.
+- **Technician Availability**:
+  - Added a feature to display and update technician availability dynamically.
+  - Integrated availability checks into the live chat and scheduling system.
+- **Live Chat Enhancements**:
+  - Improved real-time messaging between customers and technicians.
+  - Enhanced the chat interface with better responsiveness and visual consistency.
 
 ### Changed
 - **ChatPage**:
   - Added predefined troubleshooting tips for customers.
   - Added a toggle button to view the technician's schedule.
   - Improved the form for collecting customer details before joining live chat.
+  - Enhanced message parsing and timestamp formatting.
+  - Improved user experience with better layout and styles.
 - **TechnicianPage**:
   - Improved UI with flexbox layout, shadows, and hover effects for better usability.
   - Enhanced the customer queue with dedicated styling and hover effects.
@@ -53,3 +80,4 @@
 - The UI now adheres to a modern design with material-style elements and a consistent color palette.
 - The project structure has been updated to ensure modularity and reusability of components.
 - Real-time messaging and dynamic updates are fully functional across all pages.
+- The project now includes a database for managing users, troubleshooting steps, and technician schedules.
