@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
-import Loader from '../components/Loader'; // Ensure the Loader component is correctly imported
-import '../styles/BotChatMessage.css'; // Ensure correct styles are imported
+import Loader from '../components/Loader'; 
+import '../styles/BotChatMessage.css';
 
 export default function BotChatMessage({ message }) {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(true); // Track loading state
 
-  // Simulate the loading state for 1 second before showing the message
   useEffect(() => {
     setTimeout(() => {
-      setLoading(false); // Stop loading after 1 second
-      setShow(true); // Show the message after the delay
+      setLoading(false); 
+      setShow(true);
     }, 1000);
   }, []);
 
@@ -24,7 +23,7 @@ export default function BotChatMessage({ message }) {
             <Loader />
           </div>
         ) : (
-          <Markdown>{message}</Markdown> // Render message with markdown if not loading
+          <Markdown>{message}</Markdown> 
         )}
       </div>
     </div>

@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'Novum-Light';
-  src: url('../fonts/fonnts.com-Volvo_Novum_Light.ttf') format('truetype');
+  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
 }
 
 @font-face {
   font-family: 'Broad';
-  src: url('../fonts/VolvoBroad.ttf') format('truetype');
+  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
 }
 
 .ChatPage {

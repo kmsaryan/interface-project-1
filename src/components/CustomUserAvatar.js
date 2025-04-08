@@ -1,5 +1,5 @@
 import React from "react";
-import UserAvatarImage from "../icons/mechanic.png"; // Make sure this path is correct!
+import UserAvatarImage from "../assets/icons/mechanic.png"; // Updated path
 
 const CustomUserAvatar = () => {
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/App.css";
-import logo from "../assets/volvo_logo.png";
+import "../styles/Header.css";
+import logo from "../assets/icons/volvo_logo.png";
 
 export default function Header() {
   const [user, setUser] = useState(null);

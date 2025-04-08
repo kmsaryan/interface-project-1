@@ -1,45 +1,55 @@
-import { Navigate } from 'react-router-dom';
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
-import Home from "./pages/Home";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 import Layout from "./components/Layout";
 import TechnicianPage from "./pages/TechnicianPage";
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/LoginPage"; // Updated import
 import CustomerHome from "./pages/CustomerHome";
 import Fleet from "./pages/Fleet";
-
+import ChatPage from "./pages/ChatPage";
+import LiveChat from "./pages/LiveChat";
+import RegistrationPage from "./pages/RegistrationPage";
+import LiveChatForm from "./pages/LiveChatForm"; // Updated import
+import "./styles/fonts.css";
 import "./styles/App.css";
+
 const ProtectedRoute = ({ children }) => {
-  const isAdmin = localStorage.getItem('isAdmin');
+  const isAdmin = localStorage.getItem("isAdmin");
   return isAdmin ? children : <Navigate to="/admin-login" />;
 };
-import ChatPage from "./pages/ChatPage";
 
 function App() {
   return (
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<Home />} /> {/* Home Page */}
-          <Route path="/customer_home" element={<CustomerHome />} /> {/* Customer Home */}
-          <Route path="/fleet" element={<Fleet />} /> {/* Customer Home */}
-          <Route path="/chatpage" element={<ChatPage />} /> {/* Customer Home */}
-          <Route path="/register" element={<RegisterPage />} /> {/* Register Page */}
-          <Route path="/login" element={<LoginPage />} /> {/* Login Page */}
-          <Route path="/admin-login" element={<AdminLogin />} /> {/* Admin Login */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />  {/* Admin Page */}
-        <Route path="/technician" element={<TechnicianPage />} /> {/* Technician Page */}
-          <Route path="/signin" element={<LoginPage />} />
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/fleet" element={<Fleet />} />
+          <Route path="/chatpage" element={<ChatPage />} />
+          <Route path="/livechat" element={<LiveChat />} />
+          <Route path="/livechatform" element={<LiveChatForm />} />
+          <Route path="/login" element={<LoginPage />} /> {/* Updated route */}
+
+          {/* Customer Routes */}
+          <Route path="/customer_home" element={<CustomerHome />} />
+
+          {/* Technician Routes */}
+          <Route path="/technician" element={<TechnicianPage />} />
+
+          {/* Admin Routes */}
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Layout>
     </Router>

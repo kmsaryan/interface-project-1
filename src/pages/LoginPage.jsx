@@ -1,9 +1,10 @@
 // /src/pages/LoginPage.jsx
 
 import React, { useState } from "react";
+import socket from "../utils/socket";
 import axios from "axios";
 import "../styles/RegisterLogin.css";
-import Header from "../components/Header";
+
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -21,6 +22,8 @@ const LoginPage = () => {
   
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      socket.emit("userConnected", { userId: response.data.user.id });
+
   
       if (response.data.user.role === "customer") {
         window.location.href = "/customer_home";

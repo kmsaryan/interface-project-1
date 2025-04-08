@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import Typed from "typed.js";
+import Typed from "typed.js"; // Ensure this import is correct
 
 export default function TypedReact() {
   const typedRef = useRef(null);

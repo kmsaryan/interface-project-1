@@ -1,9 +1,23 @@
+import socket from "../utils/socket";
+import { useLocation, useNavigate } from "react-router-dom";
+
 class ActionProvider {
   constructor(createChatBotMessage, setStateFunc, createClientMessage) {
     this.createChatBotMessage = createChatBotMessage;
     this.setState = setStateFunc;
     this.createClientMessage = createClientMessage;
+    this.navigate = useNavigate; // Store for later
   }
+
+  setTechnicianSocketId = (id) => {
+    this.technicianSocketId = id;
+  
+    this.setState((state) => ({
+      ...state,
+      technicianSocketId: id
+    }));
+  };
+  
 
   handleGreeting = () => {
     const message = this.createChatBotMessage("Hello! How can I assist you today?", { withAvatar: true});
@@ -30,6 +44,7 @@ class ActionProvider {
     this.addMessageToState(message);
   };
 
+
   handleFindTech = async (dayOfWeek, timeSlot) => {
     try {
       const response = await fetch(
@@ -38,18 +53,68 @@ class ActionProvider {
       const data = await response.json();
   
       if (response.ok) {
+        this.setTechnicianSocketId(data.socket_id);
+  
         const message = this.createChatBotMessage(
-          `We are going to connect you with ${data.name}. More contact info: ${data.email}`, 
+          `${data.name} is available! Would you like to connect now?`,
           { withAvatar: true }
         );
         this.addMessageToState(message);
+        
+        // ✅ Set confirmation flag and form data
+        this.setState((state) => ({
+          ...state,
+          awaitingTechConfirmation: true,
+          formData: {
+            issue: "FUMAÇA",    // or from user
+            machine: "LX500",
+            priority: "Medium"
+          }
+        }));
+        
       } else {
-        this.handleBotResponse("Sorry, no available technician was found at this time.");
+        const errorMessage = this.createChatBotMessage(
+          "No technician is available at the moment. Please try again later."
+        );
+        this.addMessageToState(errorMessage);
       }
     } catch (error) {
-      console.error("Error fetching technician:", error);
-      this.handleBotResponse("Oops! Something went wrong while finding a technician.");
+      console.error("Error finding technician:", error);
+      const errorMessage = this.createChatBotMessage(
+        "An error occurred while trying to find a technician."
+      );
+      this.addMessageToState(errorMessage);
     }
+  };
+  
+  handleConnectToTech = (formData) => {
+    const user = JSON.parse(localStorage.getItem("user"));    
+  
+    socket.emit("joinLiveChatQueue", {
+      name: user?.name || "Anonymous",
+      issue: formData.issue,
+      machine: formData.machine,
+      priority: formData.priority || "Medium",
+    });
+  
+    // You could also emit a message to the technician here if you want
+    localStorage.setItem("livechatFormData", JSON.stringify({
+      name: user?.name,
+      issue: formData.issue,
+      machine: formData.machine,
+      priority: formData.priority,
+      
+    }));
+
+    const message = this.createChatBotMessage(
+      "You're now connected!",
+      {
+        withAvatar: true,
+        widget: "liveChatLink"
+      }
+    );
+    this.addMessageToState(message);
+  
   };
 
   // Handle Thank You responses

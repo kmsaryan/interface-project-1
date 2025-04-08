@@ -6,7 +6,6 @@ import config from "../components/chatbotConfig";
 import MessageParser from "../components/MessageParser";
 import ActionProvider from "../components/ActionProvider";
 import TypedReact from "../components/TypedReact";
-import logo from "../assets/volvo_logo.png";
 
 export default function ChatPage() {
   const [showBot, toggleBot] = useState(false);
@@ -17,10 +16,6 @@ export default function ChatPage() {
         <title>Volvo CE Chatbot</title>
         <meta name="description" content="Repair AI assistance" />
       </Helmet>
-
-      <div className="logo-container">
-        <img src={logo} alt="Volvo Logo" className="logo" width="200" />
-      </div>
 
       <h1>Volvo CE Chatbot</h1>
       <h2>Start chatting with the Volvo CE Chatbot!</h2>

@@ -1,0 +1,60 @@
+.global-home-page {
+  text-align: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.global-header h1 {
+  font-size: 70px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for main heading */
+}
+
+.global-header p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoNovumLight for paragraph text */
+}
+
+.slideshow {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 20px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.slideshow-images {
+  display: flex;
+  animation: slide 10s infinite;
+}
+
+.slideshow-images img {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(-200%);
+  }
+  75% {
+    transform: translateX(-300%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Remove styles for the buttons below the slideshow */
+.global-actions {
+  display: none;
+}

@@ -1,13 +1,16 @@
 import React from "react";
-import ReactDOM from "react-dom/client";  // Notice the new import path
+import ReactDOM from "react-dom/client"; // Use ReactDOM.createRoot
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import { ToastContainer } from "react-toastify";
+import ErrorBoundary from "./components/ErrorBoundary";
 
-// Create a root using the new API
-const root = ReactDOM.createRoot(document.getElementById("root"));
-
-// Render the app inside StrictMode
+const root = ReactDOM.createRoot(document.getElementById("root")); // Create root
 root.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  </React.StrictMode>,
+  document.getElementById("root")
 );

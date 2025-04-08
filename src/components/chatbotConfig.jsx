@@ -1,9 +1,9 @@
 import { createChatBotMessage } from "../react-chatbot-kit";
 import React from "react";
-
-import CoBotAvatar from "./CoBotAvatar";
-import CustomUserAvatar from "./CustomUserAvatar"; // Import custom user avatar
-import BotChatMessage from "./BotChatMessage";
+import CoBotAvatar from "../components/CoBotAvatar";
+import CustomUserAvatar from "../components/CustomUserAvatar";
+import BotChatMessage from "../components/BotChatMessage";
+import LiveChatLink from "./LiveChatLink";
 
 const config = {
   lang: "no", // Set language to Norwegian
@@ -38,7 +38,10 @@ const config = {
   customMessages: {
   },
   widgets: [
-
+    {
+      widgetName: "liveChatLink",
+      widgetFunc: (props) => <LiveChatLink {...props} />,
+    }
   ],
 };
 

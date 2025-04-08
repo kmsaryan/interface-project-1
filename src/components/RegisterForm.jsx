@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/RegisterLogin.css"; 
-import axios from "axios";
+import axios from "axios"; // Ensure this import is correct
 
 export default function RegisterForm() {
   const [name, setName] = useState("");
