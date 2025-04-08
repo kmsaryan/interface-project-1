@@ -209,7 +209,7 @@ If you encounter socket connection errors:
   ```bash
   npm start
   ```
-- **Run WebSocket Server**:
+- **Run WebSocket Server**(Previously): 
   ```bash
   node src/server/server.js
   ```
@@ -221,7 +221,17 @@ If you encounter socket connection errors:
   ```bash
   npm run lint
   ```
-
+- **Now we have a combined backend into one script**
+``` 
+node /src/VolvoAssistant/server.js 
+```
+## New updated backend server.
+- you need to clone the VolvoAssistant Repo.
+```
+npm install
+```
+- you need to connect to the 
+(optional)
 ## Changelog
 See [CHANGELOG.md](./CHANGELOG.md) for details on recent changes.
 
