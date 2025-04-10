@@ -20,7 +20,12 @@ class ActionProvider {
   
 
   handleGreeting = () => {
-    const message = this.createChatBotMessage("Hello! How can I assist you today?", { withAvatar: true});
+    const message = this.createChatBotMessage("Hello! How can I assist you today? Please provide the model of the machine so I can assist you better", {withAvatar: true})
+    this.setState((state) => ({
+      ...state,
+      awaitingMachineModel: true
+
+    }));
     this.addMessageToState(message);
   };
 
@@ -60,18 +65,17 @@ class ActionProvider {
           { withAvatar: true }
         );
         this.addMessageToState(message);
-        
-        // ✅ Set confirmation flag and form data
+  
         this.setState((state) => ({
           ...state,
           awaitingTechConfirmation: true,
           formData: {
-            issue: "FUMAÇA",    // or from user
-            machine: "LX500",
+            ...state.formData,
+            issue: state.formData.machineIssue,
+            machine: state.formData.machineModel,
             priority: "Medium"
           }
         }));
-        
       } else {
         const errorMessage = this.createChatBotMessage(
           "No technician is available at the moment. Please try again later."
@@ -86,6 +90,7 @@ class ActionProvider {
       this.addMessageToState(errorMessage);
     }
   };
+  
   
   handleConnectToTech = (formData) => {
     const user = JSON.parse(localStorage.getItem("user"));    

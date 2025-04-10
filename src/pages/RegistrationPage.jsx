@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios for API calls
 import "../styles/RegistrationPage.css";
 import "../styles/global.css";
 
@@ -7,22 +8,35 @@ export default function RegistrationPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
+    email: "",
     password: "",
-    role: "customer", // Default role
+    role: "customer",
   });
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("Registered User:", formData); // Simulate registration
-    if (formData.role === "customer") {
-      navigate("/home"); // Redirect to Customer Home Page
-    } else {
-      navigate("/technician"); // Redirect to Technician Dashboard
+
+    try {
+      // Make API call to backend
+      const response = await axios.post("http://localhost:5000/api/users/register", {
+        name: formData.username,
+        email: formData.email, // Assuming username is the email
+        password: formData.password,
+        role: formData.role,
+      });
+
+      if (response.status === 201) {
+        console.log("User registered successfully:", response.data);
+
+        navigate("/");
+        
+      }
+    } catch (error) {
+      console.error("Error registering user:", error.response?.data || error.message);
     }
   };
 
@@ -30,6 +44,7 @@ export default function RegistrationPage() {
     <div className="registration-page">
       <h2> Register </h2>
         <form className="registration-form" onSubmit={handleRegister}>
+
         <div className="input-group">
           <label htmlFor="username">Username</label>
           <input
@@ -38,6 +53,19 @@ export default function RegistrationPage() {
             name="username"
             placeholder="Username"
             value={formData.username}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
             onChange={handleInputChange}
             required
           />
