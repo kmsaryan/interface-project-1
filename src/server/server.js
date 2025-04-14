@@ -21,6 +21,7 @@ io.on("connection", (socket) => {
 
   // Handle user registration (customer or technician)
   socket.on("registerUser", (userDetails) => {
+    console.log("[DEBUG] registerUser event received:", userDetails);
     users.set(socket.id, userDetails);
     console.log("User registered:", userDetails);
 
@@ -31,12 +32,14 @@ io.on("connection", (socket) => {
 
   // Handle customer joining live chat queue
   socket.on("joinLiveChatQueue", (customerDetails) => {
+    console.log("[DEBUG] joinLiveChatQueue event received:", customerDetails);
     liveChatQueue.push({ id: socket.id, ...customerDetails });
     io.emit("updateLiveChatQueue", liveChatQueue); // Notify all technicians
   });
 
   // Handle technician selecting a customer
   socket.on("selectCustomer", (customerId) => {
+    console.log("[DEBUG] selectCustomer event received:", customerId);
     const customer = liveChatQueue.find((c) => c.id === customerId);
     if (customer) {
       liveChatQueue = liveChatQueue.filter((c) => c.id !== customerId);
@@ -51,7 +54,12 @@ io.on("connection", (socket) => {
 
   // Handle real-time messaging
   socket.on("sendMessage", ({ to, message }) => {
-    io.to(to).emit("receiveMessage", { from: socket.id, message }); // Send message to the recipient
+    console.log("[DEBUG] sendMessage event received:", { to, message });
+    if (to) {
+      io.to(to).emit("receiveMessage", { from: socket.id, message }); // Send message to the recipient
+    } else {
+      console.warn("[WARN] Message not sent. Missing recipient (to).");
+    }
   });
 
   // Handle disconnection
