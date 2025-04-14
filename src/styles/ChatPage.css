@@ -106,7 +106,6 @@ h1 {
   border: none;
   position: fixed;
   bottom: 25px;
-  z-index: 9999;
   left: 40px;
   display: flex;
   flex-direction: column;
@@ -119,16 +118,31 @@ h1 {
 }
 
 .app-chatbot-container {
-  margin: 40px 0;
-  display: flex;
-  width: 670px;
-  justify-content: center;
+  /* Removed unnecessary styles causing extra space */
+  display: none; /* Hide this container as it's no longer used */
+}
+
+.chatbot-container {
   position: fixed;
-  left: 40px;
-  bottom: 55px;
-  z-index: 9999;
-  box-shadow: 5px 5px 13px rgba(91, 81, 81, 0.4);
-  border-radius: 5px;
+  bottom: 90px; /* Position above the button */
+  left: 40px; /* Align with the button */
+  width: 350px; /* Set a fixed width for the chatbot */
+  max-height: 500px; /* Limit the height */
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.rsc {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 670px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .react-chatbot-kit-chat-bot-message {

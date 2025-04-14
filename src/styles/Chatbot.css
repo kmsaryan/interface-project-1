@@ -1,0 +1,87 @@
+.chatbot-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.chatbot-container {
+  width: 350px;
+  max-height: 500px;
+  background-color: #f5f8fb;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: none; /* Initially hidden */
+}
+
+.chatbot-wrapper.active .chatbot-container {
+  display: block; /* Show when active */
+}
+
+.chatbot-toggle-button {
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background-color: #0f5faf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.chatbot-toggle-button:hover {
+  transform: scale(1.1);
+}
+
+.chatbot-toggle-button img {
+  width: 30px;
+  height: 30px;
+}
+
+.chatbot-container .rsc-header {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.chatbot-container .rsc-footer {
+  background-color: var(--background-light);
+}
+
+.chatbot-container .rsc-input {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+.chatbot-container .rsc-send-button {
+  background: url("../assets/icons/paper-plane.svg") no-repeat center;
+  background-size: contain;
+}
+
+.chatbot-footer {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f5f8fb;
+}
+
+.chatbot-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.chatbot-send-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.chatbot-send-button img {
+  width: 20px;
+  height: 20px;
+}

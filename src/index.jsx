@@ -11,6 +11,5 @@ root.render(
     <ErrorBoundary>
       <App />
     </ErrorBoundary>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );

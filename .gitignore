@@ -3,7 +3,6 @@ node_modules/
 
 # Ignore build folder
 build/
-/src/react-chatbot-kit
 /VolvoAssistant
 # Ignore log files
 npm-debug.log*

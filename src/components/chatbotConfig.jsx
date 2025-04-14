@@ -1,13 +1,15 @@
-import { createChatBotMessage } from "../react-chatbot-kit";
+import { createChatBotMessage } from "react-chatbot-kit"; // Updated path
 import React from "react";
-import CoBotAvatar from "../components/CoBotAvatar";
+import CoBotAvatar from "./CoBotAvatar";
 import CustomUserAvatar from "../components/CustomUserAvatar";
 import BotChatMessage from "../components/BotChatMessage";
 import LiveChatLink from "./LiveChatLink";
+import ActionProvider from "./ActionProvider"; // Ensure this is imported correctly
+import MessageParser from "./MessageParser"; // Ensure this is imported correctly
 
 const config = {
   lang: "no", // Set language to Norwegian
-  botName: "R2-D2", // Set bot name
+  botName: "VolvoBot", // Set bot name
   customStyles: {
     botMessageBox: {
       backgroundColor: "#04668a", // Bot's message box color
@@ -17,10 +19,7 @@ const config = {
     },
   },
   initialMessages: [
-    createChatBotMessage(
-      `Hi, I'm here to provide you troubleshoot assistance with Volvo heavy machinery!`
-    ),
-
+    createChatBotMessage("Hi! How can I assist you today?"),
   ],
   state: {},
   customComponents: {
@@ -36,6 +35,9 @@ const config = {
       widgetFunc: (props) => <LiveChatLink {...props} />,
     }
   ],
+  actionProvider: (createChatBotMessage, setStateFunc, createClientMessage) =>
+    new ActionProvider(createChatBotMessage, setStateFunc, createClientMessage), // Ensure proper instantiation
+  messageParser: (actionProvider, state) => new MessageParser(actionProvider, state), // Instantiate with `new`
 };
 
 export default config;
