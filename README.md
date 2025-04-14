@@ -62,6 +62,10 @@ This project is a customer support interface that allows customers to chat with 
    ```bash
    npm start
    ```
+7. submodules 
+``` bash
+  git submodule update --init --recursive
+ ```
 
 ## Configuration
 
