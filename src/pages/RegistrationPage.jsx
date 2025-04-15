@@ -32,8 +32,14 @@ export default function RegistrationPage() {
       if (response.status === 201) {
         console.log("User registered successfully:", response.data);
 
-        navigate("/");
-        
+        // Role-based navigation
+        if (formData.role === "customer") {
+          navigate("/customer_home");
+        } else if (formData.role === "technician") {
+          navigate("/technician");
+        } else if (formData.role === "dealer") {
+          navigate("/dealer");
+        }
       }
     } catch (error) {
       console.error("Error registering user:", error.response?.data || error.message);
@@ -94,6 +100,7 @@ export default function RegistrationPage() {
           >
             <option value="customer">Customer</option>
             <option value="technician">Technician</option>
+            <option value="dealer">Dealer</option> {/* Added dealer role */}
           </select>
         </div>
 

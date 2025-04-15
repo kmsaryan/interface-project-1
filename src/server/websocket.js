@@ -6,17 +6,39 @@ let activeChats = new Map(); // Map to track active chats (technicianId -> custo
 let technicianSchedule = []; // Store the technician's schedule
 
 function setupWebSocket(server) {
-  const io = new Server(server, {
+  const io = require("socket.io")(server, {
     cors: {
-      origin: process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000", // Use frontend URL from .env
+      origin: "http://localhost:3000", // Ensure this matches the frontend URL
       methods: ["GET", "POST"],
-      credentials: true,
     },
+  });
+
+  io.use((socket, next) => {
+    const token = socket.handshake.auth?.token;
+    console.log("[SOCKET AUTH]: Incoming token:", token);
+
+    if (!token) {
+      console.error("[SOCKET AUTH ERROR]: No token provided");
+      return next(new Error("Authentication error: No token provided"));
+    }
+
+    // Add token validation logic here (e.g., JWT verification)
+    next();
   });
 
   console.log("[WEBSOCKET LOG]: WebSocket server initialized and listening");
 
   io.on("connection", (socket) => {
+    console.log("WebSocket connected:", socket.id);
+
+    socket.on("error", (err) => {
+      console.error("WebSocket error:", err);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("WebSocket disconnected:", socket.id);
+    });
+
     console.log(`[WEBSOCKET LOG]: A user connected: ${socket.id}`);
     users.set(socket.id, { status: "online" }); // Set user status to online
     io.emit("updateUserStatus", Array.from(users.values())); // Notify all clients
