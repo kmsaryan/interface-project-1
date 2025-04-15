@@ -24,7 +24,6 @@ export default function CustomerHome() {
             <h2>Reports</h2>
             <p>Check performance and diagnostics reports.</p>
           </Link>
-
         </div>
       </main>
     </div>

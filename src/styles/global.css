@@ -300,36 +300,3 @@ a:active {
 .badge-low {
   background-color: var(--success);
 }
-
-/* ===========================
-  Dealer Dashboard Styles
-  =========================== */
-.dealer-dashboard {
-  padding: 2rem;
-}
-
-.dashboard-section {
-  margin-bottom: 2rem;
-}
-
-.dashboard-section h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.dashboard-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-.dashboard-section li {
-  cursor: pointer;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  margin-bottom: 0.5rem;
-  border-radius: 5px;
-}
-
-.dashboard-section li:hover {
-  background-color: #f0f0f0;
-}

@@ -24,13 +24,23 @@ export default function RegistrationPage() {
       // Make API call to backend
       const response = await axios.post("http://localhost:5000/api/users/register", {
         name: formData.username,
-        email: formData.email, // Assuming username is the email
+        email: formData.email,
         password: formData.password,
         role: formData.role,
       });
 
       if (response.status === 201) {
         console.log("User registered successfully:", response.data);
+
+        // Store user data in localStorage
+        localStorage.setItem("userRole", formData.role);
+        localStorage.setItem("user", JSON.stringify({
+          name: formData.username,
+          role: formData.role
+        }));
+
+        // Dispatch custom event to notify Header component
+        window.dispatchEvent(new Event("authChange"));
 
         // Role-based navigation
         if (formData.role === "customer") {

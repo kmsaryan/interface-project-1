@@ -1,15 +1,13 @@
-import { createChatBotMessage } from "react-chatbot-kit"; // Updated path
+import { createChatBotMessage } from "react-chatbot-kit";
 import React from "react";
 import CoBotAvatar from "./CoBotAvatar";
-import CustomUserAvatar from "../components/CustomUserAvatar";
-import BotChatMessage from "../components/BotChatMessage";
+import CustomUserAvatar from "./CustomUserAvatar";
+import BotChatMessage from "./BotChatMessage";
 import LiveChatLink from "./LiveChatLink";
-import ActionProvider from "../components/ActionProvider";
-import { useNavigate } from "react-router-dom";
+import ActionProvider from "./ActionProvider";
 
-const config = (props) => {
-  const navigate = useNavigate();
-
+// Config factory without using hooks directly
+const createConfig = (navigate) => {
   return {
     lang: "no",
     botName: "R2-D2",
@@ -42,4 +40,10 @@ const config = (props) => {
   };
 };
 
-export default config;
+// A wrapper component that uses the hook and passes it to the config
+const ConfigWithNavigate = (props) => {
+  // Here we'll create the config without hooks, to be used directly
+  return createConfig(null); // Passing null for navigate as we'll use the simplified implementation
+};
+
+export default ConfigWithNavigate;

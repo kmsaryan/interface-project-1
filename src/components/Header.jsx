@@ -8,21 +8,44 @@ export default function Header() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error("Error parsing user from localStorage:", error);
-        localStorage.removeItem("user");
+    const updateUser = () => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+        } catch (error) {
+          console.error("Error parsing user from localStorage:", error);
+          localStorage.removeItem("user");
+        }
+      } else {
+        setUser(null);
       }
-    }
+    };
+
+    // Update user on component mount
+    updateUser();
+
+    // Listen for storage events (from other tabs)
+    window.addEventListener("storage", updateUser);
+    
+    // Listen for custom auth change events (within the same tab)
+    window.addEventListener("authChange", updateUser);
+
+    return () => {
+      window.removeEventListener("storage", updateUser);
+      window.removeEventListener("authChange", updateUser);
+    };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event("authChange"));
+    
     navigate("/");
   };
 
@@ -37,7 +60,8 @@ export default function Header() {
         <Link to="/news">NEWS</Link>
         {user && user.role === "customer" && <Link to="/customer_home">MY SERVICES</Link>}
         {user && user.role === "technician" && <Link to="/technician">MY DASHBOARD</Link>}
-
+        {user && user.role === "dealer" && <Link to="/dealer">MY DASHBOARD</Link>}
+        {user && user.role === "admin" && <Link to="/admin">ADMIN DASHBOARD</Link>}
       </nav>
       <div className="auth-buttons">
         {user ? (
