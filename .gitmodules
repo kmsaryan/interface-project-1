@@ -1,6 +1,6 @@
 [submodule "src/react-chatbot-kit"]
 	path = src/react-chatbot-kit
-	url = git@github.com:hmoyen/react-chatbot-kit.git
+	url = https://github.com/hmoyen/react-chatbot-kit.git
 [submodule "VolvoAssistantDatabase"]
 	path = VolvoAssistantDatabase
 	url = https://github.com/kmsaryan/VolvoAssistantDatabase.git
