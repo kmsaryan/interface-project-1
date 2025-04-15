@@ -24,7 +24,7 @@ const socket = io(serverUrl, {
   reconnectionAttempts: 10,
   timeout: 20000,
   auth: {
-    token: token,
+    token: token, // Send token during connection
   },
 });
 

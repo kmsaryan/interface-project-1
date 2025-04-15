@@ -339,3 +339,27 @@ h1 {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.app-chatbot-container {
+  width: 400px;
+  height: 500px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.app-chatbot-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #0f5faf;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}

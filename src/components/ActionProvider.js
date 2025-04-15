@@ -2,11 +2,11 @@ import socket from "../utils/socket";
 import { useLocation, useNavigate } from "react-router-dom";
 
 class ActionProvider {
-  constructor(createChatBotMessage, setStateFunc, createClientMessage) {
+  constructor(createChatBotMessage, setStateFunc, createClientMessage, navigate) {
     this.createChatBotMessage = createChatBotMessage;
     this.setState = setStateFunc;
     this.createClientMessage = createClientMessage;
-    this.navigate = useNavigate; // Store for later
+    this.navigate = navigate; // Accept navigate as a parameter
   }
 
   setTechnicianSocketId = (id) => {
