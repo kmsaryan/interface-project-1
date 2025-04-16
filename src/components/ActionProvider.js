@@ -6,18 +6,26 @@ class ActionProvider {
     this.createChatBotMessage = createChatBotMessage;
     this.setState = setStateFunc;
     this.createClientMessage = createClientMessage;
-    this.navigate = navigate; // Accept navigate as a parameter
+    this.navigate = navigate || this.defaultNavigate; // Fallback to default if not provided
   }
+  
+  // Default navigation function as fallback
+  defaultNavigate = (path) => {
+    console.log("Navigation requested to:", path);
+    // For basic navigation, we can use window.location
+    if (path && typeof path === 'string') {
+      window.location.href = path;
+    }
+  };
 
   setTechnicianSocketId = (id) => {
     this.technicianSocketId = id;
-  
+    
     this.setState((state) => ({
       ...state,
       technicianSocketId: id
     }));
   };
-  
 
   handleGreeting = () => {
     const message = this.createChatBotMessage("Hello! How can I assist you today? Please provide the model of the machine so I can assist you better", {withAvatar: true})

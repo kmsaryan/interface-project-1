@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet"; // Updated import
 import '../styles/ChatPage.css';
 import TypedReact from "../components/TypedReact";
 import SimpleChatbot from "../components/SimpleChatbot";

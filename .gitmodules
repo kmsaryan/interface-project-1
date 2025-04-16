@@ -1,6 +1,12 @@
 [submodule "src/react-chatbot-kit"]
 	path = src/react-chatbot-kit
-	url = https://github.com/hmoyen/react-chatbot-kit.git
+	url = https://github.com/kmsaryan/react-chatbot-kit.git
+	# Use: gh repo clone kmsaryan/react-chatbot-kit src/react-chatbot-kit
 [submodule "VolvoAssistantDatabase"]
 	path = VolvoAssistantDatabase
 	url = https://github.com/kmsaryan/VolvoAssistantDatabase.git
+	# Use: gh repo clone kmsaryan/VolvoAssistantDatabase VolvoAssistantDatabase
+[submodule "src/react-simple-chatbot"]
+	path = src/react-simple-chatbot
+	url = https://github.com/kmsaryan/react-simple-chatbot.git
+	# Use: gh repo clone kmsaryan/react-simple-chatbot src/react-simple-chatbot

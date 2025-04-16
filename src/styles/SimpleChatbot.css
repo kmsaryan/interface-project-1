@@ -1,0 +1,65 @@
+.simple-chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+/* Custom styling for the technician connect button */
+.connect-technician-button {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.tech-link {
+  display: inline-block;
+  background-color: #0f5faf;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-family: 'Novum-Light', Arial, sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.tech-link:hover {
+  background-color: #04668a;
+}
+
+/* Override some default styles from react-simple-chatbot */
+.rsc-header {
+  background-color: #04668a !important;
+  font-family: 'Broad', 'Novum-Light', Arial, sans-serif !important;
+}
+
+.rsc-float-button {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease !important;
+}
+
+.rsc-float-button:hover {
+  transform: scale(1.05) !important;
+}
+
+.rsc-container {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.rsc-ts-bubble {
+  font-family: 'Novum-Light', Arial, sans-serif !important;
+  max-width: 85% !important;
+}
+
+.rsc-os-option-element {
+  font-family: 'Novum-Light', Arial, sans-serif !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.rsc-os-option-element:hover {
+  background-color: #e6f2ff !important;
+}
+
+.rsc-input {
+  font-family: 'Novum-Light', Arial, sans-serif !important;
+}
