@@ -1,5 +1,5 @@
 import { findMainIssueByKeyword, findResponseWithKeywordAndParentId } from "../components/treeService"; // path as needed
-
+import { v4 as uuidv4 } from 'uuid';
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 class MessageParser {
@@ -42,6 +42,24 @@ class MessageParser {
     message = message.toLowerCase().trim();
     console.log("User message:", message);
 
+    const issueId = localStorage.getItem("issue_id");  // Retrieve it from localStorage
+
+    if (issueId !== "0" && issueId!=="undefined"){
+      fetch("http://localhost:5000/api/conversations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          issue_id: issueId,
+          sender: "user",
+          message: message
+        })
+      }).catch((error) => {
+        console.error("Failed to save message to DB:", error);
+      });
+    }
+
     if (message.includes("activate voice control")) {
       console.log("Voice control activated.");
       this.startRecognition();
@@ -49,29 +67,88 @@ class MessageParser {
     }
 
     if (this.state.awaitingMachineModel) {
-      const model = message.trim();
+      return this.actionProvider.handleFindModel(message.trim());
+    }
+
+    if (this.state.awaitingSerialConfirmation) {
+
+      const confirm = message.trim();
+
+      if (
+        confirm.length < 3 ||
+        ["i don't know", "not sure", "no idea", "no"].includes(confirm.toLowerCase())
+      ) {
+        const msg = this.actionProvider.createChatBotMessage(
+          "Please provide the serial number, so I can assist you better"
+        );
+        return this.actionProvider.addMessageToState(msg);
+      }
+
+      this.actionProvider.setState((state) => ({
+        ...state,
+        awaitingSerialConfirmation: false,
+        awaitingIssueDescription: true
+      }));
+
+      const msg = this.actionProvider.createChatBotMessage("Thank you for confirming the serial number. Now, could you describe the issue you're experiencing?");
+      return this.actionProvider.addMessageToState(msg);
+  
+    }
+
+    if (this.state.awaitingMachineRegistrationConfirmation) {
+      
+      if (["yes", "yeah", "sure", "ok", "okay"].includes(message)) {
+        this.actionProvider.setState((state) => ({
+          ...state,
+          awaitingMachineRegistrationConfirmation: false,
+          awaitingSerialNumber: true
+        }));
     
-      // Simple validation: make sure user didn't say something too short or irrelevant
-      if (model.length < 3 || ["i don't know", "not sure", "no idea"].includes(model.toLowerCase())) {
-        const msg = this.actionProvider.createChatBotMessage("Please provide the model of the machine so I can assist you better.");
+        const msg = this.actionProvider.createChatBotMessage("Great! Please provide the serial number of the machine.");
+        return this.actionProvider.addMessageToState(msg);
+      } else if (["no", "not now", "maybe later"].includes(message)) {
+        this.actionProvider.setState((state) => ({
+          ...state,
+          awaitingMachineRegistrationConfirmation: false
+        }));
+    
+        const msg = this.actionProvider.createChatBotMessage("Alright. Let me know if you need anything else!");
+        return this.actionProvider.addMessageToState(msg);
+      }
+    }
+    
+    if (this.state.awaitingSerialNumber) {
+      const serial = message.trim();
+    
+      if (serial.length < 3) {
+        const msg = this.actionProvider.createChatBotMessage("That serial number seems too short. Please try again.");
         return this.actionProvider.addMessageToState(msg);
       }
     
-      // Save the model and move to next step
-      this.actionProvider.setState((state) => ({
-        ...state,
-        formData: {
-          ...state.formData,
-          machineModel: model
-        },
-        awaitingMachineModel: false,
-        awaitingIssueDescription: true
-      }));
+      try {
+        // Call your backend to register the new machine
+        const newMachine = await this.actionProvider.registerMachine({
+          model: this.state.formData.machineModel,
+          serial_number: serial,
+          user_id: this.state.formData.user_id
+        });
     
-      const msg = this.actionProvider.createChatBotMessage("Thanks! Now, could you describe the issue you're experiencing?");
-      return this.actionProvider.addMessageToState(msg);
+        this.actionProvider.setState((state) => ({
+          ...state,
+          machine: newMachine,
+          awaitingSerialNumber: false,
+          awaitingIssueDescription: true
+        }));
+    
+        const msg = this.actionProvider.createChatBotMessage("Machine registered successfully! Now, could you describe the issue you're experiencing?");
+        return this.actionProvider.addMessageToState(msg);
+      } catch (err) {
+        console.error("Failed to register machine:", err);
+        const msg = this.actionProvider.createChatBotMessage("Something went wrong while registering the machine. Please try again.");
+        return this.actionProvider.addMessageToState(msg);
+      }
     }
-
+    
     if (this.state.awaitingIssueDescription) {
       const issue = message.trim();
     
@@ -96,17 +173,20 @@ class MessageParser {
     
       try {
         const matchedIssue = await findMainIssueByKeyword(issue);
-    
+
+        const issueId = this.actionProvider.saveIssue(issue,matchedIssue.id, this.state);
+  
         const msg = this.actionProvider.createChatBotMessage(
           `Thanks! Based on your description, the issue might be: "${matchedIssue.question}". Would you like to troubleshoot this now?`
         );
     
         this.actionProvider.setState((state) => ({
           ...state,
+          issue_id: issueId,
           matchedRoot: matchedIssue,
           awaitingTroubleshootConfirmation: true,
         }));
-    
+
         return this.actionProvider.addMessageToState(msg);
       } catch (err) {
         console.error("Keyword match failed:", err);
