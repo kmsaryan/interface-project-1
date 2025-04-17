@@ -234,8 +234,20 @@ node /src/VolvoAssistant/server.js
 ```
 npm install
 ```
-- you need to connect to the 
-(optional)
+## Managing Submodules and Dependencies
+
+### Updating Submodules
+Run the following command to update all submodules:
+```bash
+git submodule update --init --recursive
+```
+
+### Installing Dependencies
+Run the provided script to install dependencies for all submodules:
+```bash
+./update-submodules.sh
+```
+
 ## Changelog
 See [CHANGELOG.md](./CHANGELOG.md) for details on recent changes.
 

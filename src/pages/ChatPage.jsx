@@ -34,7 +34,10 @@ export default function ChatPage() {
 
       <button
         className="app-chatbot-button"
-        onClick={() => toggleBot((prev) => !prev)}
+        onClick={() => {
+          toggleBot((prev) => !prev);
+          localStorage.setItem("issue_id", 0); // Reset issue_id to 0 in localStorage
+        }}
       >
         <div>Bot</div>
         <svg viewBox="0 0 640 512" className="app-chatbot-button-icon">

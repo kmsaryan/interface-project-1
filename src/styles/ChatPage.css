@@ -106,6 +106,7 @@ h1 {
   border: none;
   position: fixed;
   bottom: 25px;
+  z-index: 9999;
   left: 40px;
   display: flex;
   flex-direction: column;
@@ -118,31 +119,16 @@ h1 {
 }
 
 .app-chatbot-container {
-  /* Removed unnecessary styles causing extra space */
-  display: none; /* Hide this container as it's no longer used */
-}
-
-.chatbot-container {
+  margin: 40px 0;
+  display: flex;
+  width: 670px;
+  justify-content: center;
   position: fixed;
-  bottom: 90px; /* Position above the button */
-  left: 40px; /* Align with the button */
-  width: 350px; /* Set a fixed width for the chatbot */
-  max-height: 500px; /* Limit the height */
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  z-index: 1000;
-}
-
-.rsc {
-  margin: 0 auto;
-  width: 100%;
-  max-width: 670px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  left: 40px;
+  bottom: 55px;
+  z-index: 9999;
+  box-shadow: 5px 5px 13px rgba(91, 81, 81, 0.4);
+  border-radius: 5px;
 }
 
 .react-chatbot-kit-chat-bot-message {
@@ -272,8 +258,8 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 650px;
-  position: fixed;
+  width: 670px;
+  position: absolute;
   bottom: 0;
   left: 0;
   background-color: white;
@@ -352,28 +338,4 @@ h1 {
 .live-chat-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-}
-
-.app-chatbot-container {
-  width: 400px;
-  height: 500px;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.app-chatbot-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  background-color: #0f5faf;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
 }
