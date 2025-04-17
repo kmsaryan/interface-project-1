@@ -272,8 +272,8 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 650px;
-  position: fixed;
+  width: 670px;
+  position: absolute;
   bottom: 0;
   left: 0;
   background-color: white;

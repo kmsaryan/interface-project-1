@@ -7,35 +7,48 @@ class MessageParser {
     this.actionProvider = actionProvider;
     this.state = state;
 
-    this.recognition = new SpeechRecognition();
-    this.recognition.continuous = true;
-    this.recognition.interimResults = false;
-    this.recognition.lang = 'en-US';
-    this.recognition.maxAlternatives = 1;
+    if (SpeechRecognition) {
+      this.recognition = new SpeechRecognition();
+      this.recognition.continuous = true;
+      this.recognition.interimResults = false;
+      this.recognition.lang = 'en-US';
+      this.recognition.maxAlternatives = 1;
 
-    this.recognition.onresult = (e) => {
-      if (e.results[0].isFinal) {
-        const transcript = e.results[0][0].transcript;
-        this.recognition.abort();
-        this.parse_speech(transcript);
-      }
-    };
+      this.recognition.onresult = (e) => {
+        if (e.results[0].isFinal) {
+          const transcript = e.results[0][0].transcript;
+          this.recognition.abort();
+          this.parse_speech(transcript);
+        }
+      };
+    } else {
+      console.warn("SpeechRecognition is not supported in this browser.");
+      this.recognition = null; // Set to null if not supported
+    }
   }
 
   startRecognition() {
-    this.recognition.start();
+    if (this.recognition) {
+      this.recognition.start();
+    } else {
+      this.actionProvider.handleBotResponse("Voice control is not supported in your browser.");
+    }
   }
 
   stopRecognition() {
-    this.recognition.abort();
+    if (this.recognition) {
+      this.recognition.abort();
+    }
   }
 
   parse_speech(message) {
     console.log('Speech message:', message);
     this.parse(message);
-    setTimeout(() => {
-      this.recognition.start();
-    }, 2000);
+    if (this.recognition) {
+      setTimeout(() => {
+        this.recognition.start();
+      }, 2000);
+    }
   }
 
   async parse(message) {
@@ -187,10 +200,6 @@ class MessageParser {
       return this.actionProvider.handleThankYou();
     }
 
-    if (["image", "picture"].includes(message)) {
-      const imageUrl = loaderAxleImage;
-      return this.actionProvider.handleImageResponse(imageUrl);
-    }
 
     if (message.includes("technician") || message.includes("need help") || message.includes("mechanic")) {
       const now = new Date();

@@ -1,5 +1,5 @@
 import socket from "../utils/socket";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 class ActionProvider {
   constructor(createChatBotMessage, setStateFunc, createClientMessage, navigate) {
@@ -137,7 +137,6 @@ class ActionProvider {
   };
 
   handleImageResponse = (imageName) => {
-    const imageUrl = `/assets/${imageName}`; // Adjust this to match where your images are stored
     const message = this.createChatBotMessage(`http://localhost:3000${imageName}`); // Construct the full URL
     this.addMessageToState(message); // Add the URL to the chat
   };
