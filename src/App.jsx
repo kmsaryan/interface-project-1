@@ -12,6 +12,8 @@ import ChatPage from "./pages/ChatPage";
 import LiveChat from "./pages/LiveChat";
 import RegistrationPage from "./pages/RegistrationPage";
 import LiveChatForm from "./pages/LiveChatForm"; // Updated import
+import DealerDashboard from "./pages/DealerDashboard"; // Import DealerDashboard
+import ErrorBoundary from "./components/ErrorBoundary"; // Import ErrorBoundary
 import "./styles/fonts.css";
 import "./styles/App.css";
 
@@ -23,35 +25,38 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegistrationPage />} />
-          <Route path="/fleet" element={<Fleet />} />
-          <Route path="/chatpage" element={<ChatPage />} />
-          <Route path="/livechat" element={<LiveChat />} />
-          <Route path="/livechatform" element={<LiveChatForm />} />
-          <Route path="/login" element={<LoginPage />} /> {/* Updated route */}
+      <ErrorBoundary>
+        <Layout>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<RegistrationPage />} />
+            <Route path="/fleet" element={<Fleet />} />
+            <Route path="/chatpage" element={<ChatPage />} />
+            <Route path="/livechat" element={<LiveChat />} />
+            <Route path="/livechatform" element={<LiveChatForm />} />
+            <Route path="/login" element={<LoginPage />} /> {/* Updated route */}
 
-          {/* Customer Routes */}
-          <Route path="/customer_home" element={<CustomerHome />} />
+            {/* Customer Routes */}
+            <Route path="/customer_home" element={<CustomerHome />} />
 
-          {/* Technician Routes */}
-          <Route path="/technician" element={<TechnicianPage />} />
+            {/* Technician Routes */}
+            <Route path="/technician" element={<TechnicianPage />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </Layout>
+            {/* Admin Routes */}
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/dealer" element={<DealerDashboard />} /> {/* New route for dealer dashboard */}
+          </Routes>
+        </Layout>
+      </ErrorBoundary>
     </Router>
   );
 }

@@ -24,16 +24,16 @@ export default function RegistrationPage() {
       // Make API call to backend
       const response = await axios.post("http://localhost:5000/api/users/register", {
         name: formData.username,
-        email: formData.email, // Assuming username is the email
+        email: formData.email,
         password: formData.password,
         role: formData.role,
       });
 
       if (response.status === 201) {
         console.log("User registered successfully:", response.data);
-
         navigate("/");
-        
+        // Store userdata in localStorage
+
       }
     } catch (error) {
       console.error("Error registering user:", error.response?.data || error.message);
@@ -94,6 +94,7 @@ export default function RegistrationPage() {
           >
             <option value="customer">Customer</option>
             <option value="technician">Technician</option>
+            <option value="dealer">Dealer</option> 
           </select>
         </div>
 

@@ -24,12 +24,17 @@ const LoginPage = () => {
       localStorage.setItem("user", JSON.stringify(response.data.user));
       socket.emit("userConnected", { userId: response.data.user.id });
 
-  
-      if (response.data.user.role === "customer") {
-        window.location.href = "/customer_home";
-      } else {
-        window.location.href = "/technician";
-      }
+        // Dispatch custom event to notify Header component
+        window.dispatchEvent(new Event("authChange"));
+
+        // Navigate based on role
+        if (response.data.user.role === "dealer") {
+          window.location.href = "/dealer";
+        } else if (response.data.user.role === "customer") {
+          window.location.href = "/customer_home";
+        } else if (response.data.user.role === "technician") {
+          window.location.href = "/technician";
+        }
     } catch (err) {
       setError("Invalid email or password");
     }
