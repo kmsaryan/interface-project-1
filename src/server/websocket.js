@@ -109,9 +109,17 @@ function setupWebSocket(server) {
     });
 
     // Handle real-time messaging
-    socket.on("sendMessage", ({ to, message, attachment }) => {
+    socket.on("sendMessage", ({ to, message, file, attachment, timestamp }) => {
+      const messageData = {
+        from: socket.id,
+        message,
+        file,
+        attachment, // Forward the Base64 string
+        timestamp,
+      };
+
       if (to) {
-        io.to(to).emit("receiveMessage", { from: socket.id, message, attachment, timestamp: Date.now() });
+        io.to(to).emit("receiveMessage", messageData);
         console.log(`[WEBSOCKET LOG]: Message sent from ${socket.id} to ${to}`);
       } else {
         console.warn(`[WARN] Message not sent. Missing recipient (to).`);

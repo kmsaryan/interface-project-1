@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import ChatWindow from "../components/ChatWindow";
 import MessageInput from "../components/MessageInput";
 import socket from "../utils/socket";
@@ -10,7 +8,7 @@ import "../styles/LiveChat.css"; // Styles for the chat interface
 const LiveChat = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { role, customerId, name, queue = [] } = location.state || {};
+  const { role, name, queue = [] } = location.state || {};
   const [messages, setMessages] = useState({});
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [connectedTechnician, setConnectedTechnician] = useState(null);
@@ -60,7 +58,7 @@ const LiveChat = () => {
     };
   }, [role, name, selectedCustomer, connectedTechnician]);
 
-  const handleSendMessage = (message) => {
+  const handleSendMessage = (message, file) => {
     const recipientId = role === "technician" ? selectedCustomer?.id : connectedTechnician?.technicianId;
     if (!recipientId) {
       console.warn("No recipient ID found. Message not sent.");
@@ -70,20 +68,26 @@ const LiveChat = () => {
     const newMessage = {
       to: recipientId,
       message: typeof message === "string" ? message : JSON.stringify(message),
+      file: file ? file.name : null, // Include file name if present
       timestamp: Date.now(),
       from: socket.id,
     };
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        newMessage.attachment = reader.result; // Base64 string
+        socket.emit("sendMessage", newMessage); // Send message with attachment
+      };
+      reader.readAsDataURL(file); // Read file as Base64
+    } else {
+      socket.emit("sendMessage", newMessage); // Send message without attachment
+    }
 
     setMessages((prev) => ({
       ...prev,
       [recipientId]: [...(prev[recipientId] || []), newMessage],
     }));
-
-    if (socket.connected) {
-      socket.emit("sendMessage", newMessage);
-    } else {
-      console.error("Socket is not connected. Message not sent.");
-    }
   };
 
   const handleTyping = () => {

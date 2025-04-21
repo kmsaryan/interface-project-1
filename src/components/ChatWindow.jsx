@@ -31,7 +31,17 @@ const ChatWindow = ({ messages, socket, readReceipts, typingIndicator }) => {
             key={index}
             className={`chat-bubble ${isSent ? "sent" : "received"}`}
           >
-            <div className="message-body">{messageContent}</div>
+            {messageContent && <div className="message-body">{messageContent}</div>}
+            {msg.fileData && (
+              <div className="attachment">
+                <img src={msg.fileData} alt="Attachment" style={{ maxWidth: "100%" }} />
+              </div>
+            )}
+            {msg.attachment && (
+              <div className="attachment">
+                <img src={msg.attachment} alt="Attachment" style={{ maxWidth: "100%" }} />
+              </div>
+            )}
             <div className="message-footer">
               {isSent && <span className="read-receipt">{readReceipt}</span>}
               <span className="message-timestamp">{timestamp}</span>

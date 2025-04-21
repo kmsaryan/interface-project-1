@@ -1,5 +1,6 @@
 //socket.js
 import { io } from "socket.io-client";
+import axios from "axios";
 
 // Dynamically determine the WebSocket server URL
 const getWebSocketURL = () => {
@@ -28,6 +29,24 @@ const socket = io(serverUrl, {
   },
 });
 
+const refreshToken = async (expiredToken) => {
+  try {
+    const response = await axios.post("http://localhost:5000/api/users/refresh-token", {
+      token: expiredToken,
+    });
+
+    if (response.status === 200) {
+      const newToken = response.data.token;
+      localStorage.setItem("token", newToken); // Update token in localStorage
+      console.log("[SOCKET LOG]: Token refreshed successfully.");
+      return newToken;
+    }
+  } catch (error) {
+    console.error("[SOCKET ERROR]: Failed to refresh token:", error.message);
+    return null;
+  }
+};
+
 socket.on("connect", () => {
   console.log(`[SOCKET LOG]: Connected to server with ID: ${socket.id}`);
 });
@@ -36,9 +55,21 @@ socket.on("disconnect", (reason) => {
   console.log(`[SOCKET LOG]: Disconnected from server. Reason: ${reason}`);
 });
 
-socket.on("connect_error", (error) => {
+socket.on("connect_error", async (error) => {
   console.error(`[SOCKET ERROR]: Connection error`, error);
-  console.error(`[SOCKET ERROR DETAILS]:`, error.message);
+
+  if (error.message === "jwt expired") {
+    console.log("[SOCKET LOG]: Attempting to refresh token...");
+    const expiredToken = localStorage.getItem("token");
+    const newToken = await refreshToken(expiredToken);
+
+    if (newToken) {
+      socket.auth.token = newToken; // Update token in socket auth
+      socket.connect(); // Reconnect with the new token
+    } else {
+      console.error("[SOCKET ERROR]: Unable to refresh token. Please log in again.");
+    }
+  }
 });
 
 socket.on("reconnect_attempt", (attempt) => {

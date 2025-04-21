@@ -86,7 +86,7 @@ app.post("/api/users/login", async (req, res) => {
     const token = jwt.sign(
       { userId: user.id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "7d" } // Token valid for 7 days
     );
 
     console.log("[DEBUG] Token generated:", token);
@@ -95,6 +95,35 @@ app.post("/api/users/login", async (req, res) => {
   } catch (err) {
     console.error("[DEBUG] Error during login:", err);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/api/users/refresh-token", async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    // Verify the token without checking expiration
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, { ignoreExpiration: true });
+
+    // Check if the token is expired
+    const now = Math.floor(Date.now() / 1000);
+    if (decoded.exp < now) {
+      console.log("[DEBUG] Token expired, generating a new one.");
+
+      // Generate a new token
+      const newToken = jwt.sign(
+        { userId: decoded.userId, role: decoded.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" } // New token valid for 7 days
+      );
+
+      return res.status(200).json({ token: newToken });
+    }
+
+    res.status(400).json({ error: "Token is still valid." });
+  } catch (err) {
+    console.error("[ERROR] Refresh token failed:", err.message);
+    res.status(401).json({ error: "Invalid token." });
   }
 });
 

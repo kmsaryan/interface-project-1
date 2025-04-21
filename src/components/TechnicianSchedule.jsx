@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "../styles/TechnicianSchedule.css";
 
@@ -12,11 +12,7 @@ const timeSlots = Array.from({ length: 31 }, (_, i) => {
 export default function TechnicianSchedule({ technicianId, token }) {
   const [schedule, setSchedule] = useState(new Map());
 
-  useEffect(() => {
-    if (technicianId && token) fetchSchedule();
-  }, [technicianId, token]);
-
-  const fetchSchedule = async () => {
+  const fetchSchedule = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:5000/schedule/mechanic/${technicianId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -35,8 +31,11 @@ export default function TechnicianSchedule({ technicianId, token }) {
     } catch (err) {
       console.error("Error fetching schedule:", err);
     }
-  };
-  
+  }, [technicianId, token]);
+
+  useEffect(() => {
+    fetchSchedule();
+  }, [fetchSchedule]);
 
   const toggleSlot = async (day, time) => {
     const key = `${day}-${time}`;
