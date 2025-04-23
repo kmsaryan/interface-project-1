@@ -58,3 +58,25 @@ export const findResponseWithKeywordAndParentId = async (parentId, responseText)
   }
   return response.json();
 };
+
+export const fetchFullGraph = async () => {
+  const response = await fetch(`${API_BASE}/graph`);
+  return response.json();
+};
+
+export const addEdge = async (parent_id, child_id, response_label) => {
+  const response = await fetch(`${API_BASE}/edges`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ parent_id, child_id, response_label }),
+  });
+  return response.json();
+};
+
+export const deleteEdge = async (parent_id, child_id) => {
+  await fetch(`${API_BASE}/edges`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ parent_id, child_id }),
+  });
+}

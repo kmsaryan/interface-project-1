@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
-  fetchTreeList,
-  fetchTree,
+  fetchFullGraph,
   createTree,
   updateNode,
   deleteNode,
   addNode,
+  addEdge,
+  deleteEdge,
 } from "../components/treeService";
 
 const TreeEditor = () => {
@@ -17,29 +18,30 @@ const TreeEditor = () => {
   const [responseLabel, setResponseLabel] = useState("Yes");
   const [treeList, setTreeList] = useState([]); // list of root nodes (problems)
   const [selectedTreeId, setSelectedTreeId] = useState(null); // currently selected tree
+  const [loading, setLoading] = useState(true);
+  const [connectingFrom, setConnectingFrom] = useState(null);
+  const [connectLabel, setConnectLabel] = useState("");
+  const [disconnectingFrom, setDisconnectingFrom] = useState(null);
+  const [disconnectMode, setDisconnectMode] = useState(false);
 
-  useEffect(() => {
-    const loadTreeList = async () => {
-      const list = await fetchTreeList();
-      setTreeList(list);
-      if (list.length > 0 && !selectedTreeId) {
-        setSelectedTreeId(list[0].id); // seleciona o primeiro automaticamente
-      }
-    };
-    loadTreeList();
-  }, []);
-  
-  useEffect(() => {
-    if (selectedTreeId) {
-      loadTree(selectedTreeId || treeData?.id);
-    }
-  }, [selectedTreeId]);
-
-  const loadTree = async (treeId) => {
-    const tree = await fetchTree(treeId);
-    setTreeData(tree);
+  const loadTree = async () => {
+    setLoading(true);
+    const graph = await fetchFullGraph();
+    setTreeData(graph);
+    setLoading(false);
   };
-  
+
+  useEffect(() => {
+    loadTree();
+  }, []);
+
+  useEffect(() => {
+    const loadGraph = async () => {
+      const graph = await fetchFullGraph();
+      setTreeData(graph);
+    };
+    loadGraph();
+  }, []);
 
   const renderNode = (node, path = []) => {
     if (!node) return null;
@@ -70,23 +72,14 @@ const TreeEditor = () => {
         )}
   
         {/* Renderiza os filhos com labels de resposta */}
-        {node.children && node.children.map((child, idx) => (
+        {node.responses && Object.entries(node.responses).map(([label, child]) => (
           <div key={child.id}>
-            <strong>↳ {child.response_label || `Response ${idx + 1}`}</strong>
-            {renderNode(child, [...path, child.response_label || `Response ${idx + 1}`])}
+            <strong>↳ {label}</strong>
+            {renderNode(child, [...path, label])}
           </div>
         ))}
       </div>
     );
-  };
-  
-
-  const handleSelectNode = (node) => {
-    setSelectedNode(node);
-    setQuestion(node.question || "");
-    setSolution(node.solution || "");
-    setImageUrl(node.image_url || "");
-    setResponseLabel("");
   };
 
   const handleSaveNode = async () => {
@@ -99,97 +92,123 @@ const TreeEditor = () => {
     };
 
     await updateNode(selectedNode.id, updated);
-    await loadTree(selectedTreeId || treeData?.id);
+    await loadTree();
     setSelectedNode(null);
   };
 
   const handleDeleteNode = async () => {
     if (!selectedNode) return;
-    const isRoot = selectedNode.parent_id === null;
     await deleteNode(selectedNode.id);
-    if (isRoot) {
-      const updatedTreeList = treeList.filter(tree => tree.id !== selectedNode.id);
-      setTreeList(updatedTreeList);
-      setTreeData(null);
-      setSelectedTreeId(null);
-    } else {
-      await loadTree(treeData.id || treeData?.id);
-    }
+    await loadTree();
     setSelectedNode(null);
   };
 
   const handleAddChildNode = async () => {
-    if (!selectedNode || !responseLabel) return;
+  if (!selectedNode || !responseLabel) return;
 
-    await addNode({
-      parent_id: selectedNode.id,
-      response_label: responseLabel,
-      question: question || null,
-      solution: solution || null,
-      image_url: imageUrl || null,
-    });
+  const newNode = await addNode({
+    question: question || null,
+    solution: solution || null,
+    image_url: imageUrl || null,
+  });
 
-    await loadTree(selectedTreeId || treeData?.id);
-    setSelectedNode(null);
-  };
+  await addEdge(selectedNode.id, newNode.id, responseLabel);
+  await loadTree();
+  setSelectedNode(null);
+};
+
 
   const handleCreateNewTree = async () => {
     const question = prompt("Enter the main question or description for this problem:");
     if (!question) return;
-    const newTree = await createTree(question);
-    setTreeList([...treeList, newTree]);
-    setSelectedTreeId(newTree.id);
+    const newNode = await addNode({
+      question: question || null,
+      solution: solution || null,
+      image_url: imageUrl || null,
+    });
+    await loadTree();
+    setSelectedNode(newNode);
+  };
+
+  const handleConnectNodeClick = () => {
+    if (!selectedNode) return;
+    setConnectingFrom(selectedNode);
+    setSelectedNode(null); // limpa a seleção atual para o próximo clique
+  };
+
+  const handleSelectNode = async (node) => {
+    if (connectingFrom && connectLabel) {
+      // Conecta
+      await addEdge(connectingFrom.id, node.id, connectLabel);
+      await loadTree();
+      setConnectingFrom(null);
+      setConnectLabel("");
+      setSelectedNode(null);
+      return;
+    }
+  
+    if (disconnectMode && disconnectingFrom) {
+      // Desconecta
+      await deleteEdge(disconnectingFrom.id, node.id);
+      await loadTree();
+      setDisconnectingFrom(null);
+      setDisconnectMode(false);
+      setSelectedNode(null);
+      return;
+    }
+  
+    // Seleção normal
+    setSelectedNode(node);
+    setQuestion(node.question || "");
+    setSolution(node.solution || "");
+    setImageUrl(node.image_url || "");
+    setResponseLabel("");
+  };
+
+  const handleDisconnectNodeClick = () => {
+    if (!selectedNode) return;
+    setDisconnectingFrom(selectedNode);
+    setDisconnectMode(true);
+    setSelectedNode(null);
   };
 
   return (
     <div style={{ padding: 20 }}>
-    <h2>Decision Tree Editor</h2>
+      <h2>Decision Tree Editor</h2>
 
-    {/* Select dropdown for trees */}
-    <div style={{ marginBottom: 20 }}>
-      <label>Select a problem tree: </label>
-      <select
-        value={selectedTreeId || ""}
-        onChange={(e) => setSelectedTreeId(Number(e.target.value))}
-      >
-        <option value="" disabled>Select a tree</option>
-        {treeList.map(tree => (
-          <option key={tree.id} value={tree.id}>
-            {tree.question || `Problem ${tree.id}`}
-          </option>
-        ))}
-      </select>
+      <button onClick={handleCreateNewTree}>+ Create New Root</button>
 
-      <button
-        style={{ marginLeft: 10 }}
-        onClick={handleCreateNewTree}
-      >
-        + New Problem Tree
-      </button>
-    </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        treeData.map((root) => renderNode(root))
+      )}
 
-    {/* Show tree if loaded */}
-    {treeData && renderNode(treeData)}
+      {selectedNode && (
+        <div style={{ marginTop: 20, padding: 10, border: "1px solid gray" }}>
+          <h3>Edit Node</h3>
+          <label>Question:</label>
+          <input value={question} onChange={(e) => setQuestion(e.target.value)} /><br />
+          <label>Solution:</label>
+          <input value={solution} onChange={(e) => setSolution(e.target.value)} /><br />
+          <label>Image URL:</label>
+          <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} /><br />
+          <button onClick={handleSaveNode}>Save Changes</button>
+          <button onClick={handleDeleteNode} style={{ color: "red" }}>Delete Node</button>
 
-    {selectedNode && (
-      <div style={{ marginTop: 20, padding: 10, border: "1px solid gray" }}>
-        <h3>Edit Node</h3>
-        <label>Question:</label>
-        <input value={question} onChange={(e) => setQuestion(e.target.value)} /><br />
-        <label>Solution:</label>
-        <input value={solution} onChange={(e) => setSolution(e.target.value)} /><br />
-        <label>Image URL:</label>
-        <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} /><br />
-
-        <button onClick={handleSaveNode}>Save Changes</button>
-        <button onClick={handleDeleteNode} style={{ color: "red" }}>Delete Node</button>
-
-        <h3>Add Child Node</h3>
-        <label>Response Label (e.g., Yes or No):</label>
-        <input value={responseLabel} onChange={(e) => setResponseLabel(e.target.value)} /><br />
-        <button onClick={handleAddChildNode}>Add Child</button>
-      </div>
-    )}
+          <h3>Add Child Node</h3>
+          <label>Response Label (e.g., Yes or No):</label>
+          <input value={responseLabel} onChange={(e) => setResponseLabel(e.target.value)} /><br />
+          <button onClick={handleAddChildNode}>Add Child</button>
+          <h3>Connect Node</h3>
+          <label>Response Label for the Connection:</label>
+          <input value={connectLabel} onChange={(e) => setConnectLabel(e.target.value)} /><br />
+          <button onClick={handleConnectNodeClick}>Start Connecting</button>                                  
+          <button onClick={handleDisconnectNodeClick} style={{ color: "orange" }}>
+            Disconnect from Another Node
+          </button>
+        </div>
+      )}
     </div>
   );
 };
