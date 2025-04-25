@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../styles/AdminDashboard.css"; // Import styles
 import {
   fetchFullGraph,
   createTree,
@@ -16,8 +17,6 @@ const TreeEditor = () => {
   const [solution, setSolution] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [responseLabel, setResponseLabel] = useState("Yes");
-  const [treeList, setTreeList] = useState([]); // list of root nodes (problems)
-  const [selectedTreeId, setSelectedTreeId] = useState(null); // currently selected tree
   const [loading, setLoading] = useState(true);
   const [connectingFrom, setConnectingFrom] = useState(null);
   const [connectLabel, setConnectLabel] = useState("");
@@ -178,37 +177,42 @@ const TreeEditor = () => {
 
       <button onClick={handleCreateNewTree}>+ Create New Root</button>
 
+      {selectedNode && (
+        <div className="edit-node-box">
+          <h3 style={{color: "white"}}>Edit Node</h3>
+          <label style={{color: "white"}}>Question:</label>
+          <input className="edit-node-input-style oval-lg" value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Enter question..."/><br />
+          <label style={{color: "white"}}>Solution:</label>
+          <input className="edit-node-input-style oval-lg" value={solution} onChange={(e) => setSolution(e.target.value)} placeholder="Enter solution..."/><br />
+          <label style={{color: "white"}}>Image URL:</label>
+          <input className="edit-node-input-style oval-lg" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="Paste image URL..."/><br />
+          <div className="edit-node-box-buttons">
+            <div className="circle_black long"><button  onClick={handleSaveNode}>Save Changes</button></div>
+            <div className="circle_black long"><button onClick={handleDeleteNode} style={{ color: "red" , fontWeight: "bolder"}}>Delete Node</button></div>
+          </div>
+          <h3 style={{color: "white"}}>Add a New Node</h3>
+          <label style={{color: "white"}}>Response Label (e.g., Yes or No):</label>
+          <input className="edit-node-input-style oval-lg" value={responseLabel} onChange={(e) => setResponseLabel(e.target.value)} placeholder="Label"/><br />
+          <div className="edit-node-box-buttons">
+          <div className="circle_black long"><button onClick={handleAddChildNode}>Add Child</button></div>
+          </div>
+          <h3 style={{color: "white"}}>Connect Node</h3>
+          <label style={{color: "white"}}>Response Label for the Connection:</label>
+          <input className="edit-node-input-style oval-lg" value={connectLabel} onChange={(e) => setConnectLabel(e.target.value)} placeholder="Label"/><br />
+          <div className="edit-node-box-buttons">
+          <div className="circle_black long"><button onClick={handleConnectNodeClick}>Start Connecting</button></div>                                  
+          <div className="circle_black long"><button onClick={handleDisconnectNodeClick} style={{ color: "orange", fontWeight: "bolder" }}>
+              Disconnect
+            </button></div>
+          </div>
+        </div>
+      )}
       {loading ? (
         <p>Loading...</p>
       ) : (
         treeData.map((root) => renderNode(root))
       )}
 
-      {selectedNode && (
-        <div style={{ marginTop: 20, padding: 10, border: "1px solid gray" }}>
-          <h3>Edit Node</h3>
-          <label>Question:</label>
-          <input value={question} onChange={(e) => setQuestion(e.target.value)} /><br />
-          <label>Solution:</label>
-          <input value={solution} onChange={(e) => setSolution(e.target.value)} /><br />
-          <label>Image URL:</label>
-          <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} /><br />
-          <button onClick={handleSaveNode}>Save Changes</button>
-          <button onClick={handleDeleteNode} style={{ color: "red" }}>Delete Node</button>
-
-          <h3>Add Child Node</h3>
-          <label>Response Label (e.g., Yes or No):</label>
-          <input value={responseLabel} onChange={(e) => setResponseLabel(e.target.value)} /><br />
-          <button onClick={handleAddChildNode}>Add Child</button>
-          <h3>Connect Node</h3>
-          <label>Response Label for the Connection:</label>
-          <input value={connectLabel} onChange={(e) => setConnectLabel(e.target.value)} /><br />
-          <button onClick={handleConnectNodeClick}>Start Connecting</button>                                  
-          <button onClick={handleDisconnectNodeClick} style={{ color: "orange" }}>
-            Disconnect from Another Node
-          </button>
-        </div>
-      )}
     </div>
   );
 };
