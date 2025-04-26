@@ -68,7 +68,6 @@ const LiveChat = () => {
     const newMessage = {
       to: recipientId,
       message: typeof message === "string" ? message : JSON.stringify(message),
-      file: file ? file.name : null, // Include file name if present
       timestamp: Date.now(),
       from: socket.id,
     };
@@ -76,18 +75,42 @@ const LiveChat = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        newMessage.attachment = reader.result; // Base64 string
-        socket.emit("sendMessage", newMessage); // Send message with attachment
+        // Create file metadata
+        newMessage.fileData = {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          content: reader.result, // Base64 encoded content
+          id: `file-${Date.now()}`
+        };
+        
+        // Send message with file data
+        socket.emit("sendMessage", newMessage);
+        
+        // Add file metadata to local message state
+        setMessages((prev) => ({
+          ...prev,
+          [recipientId]: [...(prev[recipientId] || []), newMessage],
+        }));
       };
       reader.readAsDataURL(file); // Read file as Base64
     } else {
-      socket.emit("sendMessage", newMessage); // Send message without attachment
+      socket.emit("sendMessage", newMessage);
+      setMessages((prev) => ({
+        ...prev,
+        [recipientId]: [...(prev[recipientId] || []), newMessage],
+      }));
     }
+  };
 
-    setMessages((prev) => ({
-      ...prev,
-      [recipientId]: [...(prev[recipientId] || []), newMessage],
-    }));
+  const handleDownloadFile = (fileData) => {
+    // Create a temporary anchor element
+    const link = document.createElement('a');
+    link.href = fileData.content; // Base64 data URL
+    link.download = fileData.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleTyping = () => {
@@ -165,6 +188,7 @@ const LiveChat = () => {
               socket={socket}
               readReceipts={readReceipts}
               role={role}
+              onDownloadFile={handleDownloadFile}
             />
           </div>
           <div className="chat-actions">

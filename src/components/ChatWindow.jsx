@@ -2,7 +2,47 @@
 import React from "react";
 import "../styles/ChatWindow.css"; // Import styles
 
-const ChatWindow = ({ messages, socket, readReceipts, typingIndicator }) => {
+const ChatWindow = ({ messages, socket, readReceipts, typingIndicator, onDownloadFile }) => {
+  const getFilePreview = (fileData) => {
+    // If it's an image, show it
+    if (fileData.type && fileData.type.startsWith('image/')) {
+      return (
+        <div className="attachment-preview">
+          <img src={fileData.content} alt="Attachment" />
+          <button 
+            className="download-button"
+            onClick={() => onDownloadFile(fileData)}
+          >
+            Download
+          </button>
+        </div>
+      );
+    } else {
+      // For other files show an icon based on type
+      let icon = "📄"; // Default file icon
+      if (fileData.type === 'application/pdf') icon = "📑";
+      else if (fileData.type.includes('spreadsheet')) icon = "📊";
+      else if (fileData.type.includes('word')) icon = "📝";
+      else if (fileData.type === 'text/plain') icon = "📃";
+      
+      return (
+        <div className="attachment-file">
+          <div className="file-icon">{icon}</div>
+          <div className="file-details">
+            <span className="file-name">{fileData.name}</span>
+            <span className="file-size">{(fileData.size / 1024).toFixed(1)} KB</span>
+          </div>
+          <button 
+            className="download-button"
+            onClick={() => onDownloadFile(fileData)}
+          >
+            Download
+          </button>
+        </div>
+      );
+    }
+  };
+  
   return (
     <div className="chat-window">
       {messages.map((msg, index) => {
@@ -15,7 +55,7 @@ const ChatWindow = ({ messages, socket, readReceipts, typingIndicator }) => {
             messageContent = parsedMessage.message;
           }
         } catch (error) {
-          console.warn("Failed to parse message:", msg.message);
+          // Not a JSON string, use as is
         }
 
         const isSent = msg.from === socket.id;
@@ -32,16 +72,9 @@ const ChatWindow = ({ messages, socket, readReceipts, typingIndicator }) => {
             className={`chat-bubble ${isSent ? "sent" : "received"}`}
           >
             {messageContent && <div className="message-body">{messageContent}</div>}
-            {msg.fileData && (
-              <div className="attachment">
-                <img src={msg.fileData} alt="Attachment" style={{ maxWidth: "100%" }} />
-              </div>
-            )}
-            {msg.attachment && (
-              <div className="attachment">
-                <img src={msg.attachment} alt="Attachment" style={{ maxWidth: "100%" }} />
-              </div>
-            )}
+            
+            {msg.fileData && getFilePreview(msg.fileData)}
+            
             <div className="message-footer">
               {isSent && <span className="read-receipt">{readReceipt}</span>}
               <span className="message-timestamp">{timestamp}</span>

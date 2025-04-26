@@ -109,16 +109,24 @@ function setupWebSocket(server) {
     });
 
     // Handle real-time messaging
-    socket.on("sendMessage", ({ to, message, file, attachment, timestamp }) => {
+    socket.on("sendMessage", ({ to, message, fileData, timestamp }) => {
       const messageData = {
         from: socket.id,
         message,
-        file,
-        attachment, // Forward the Base64 string
+        fileData,
         timestamp,
       };
 
       if (to) {
+        // If message contains a file, store file metadata in-memory
+        // (In a production environment, we would store this in a database or cloud storage)
+        if (fileData) {
+          console.log(`[WEBSOCKET LOG]: Received file "${fileData.name}" (${Math.round(fileData.size/1024)} KB)`);
+          
+          // In a real application, we would store the file in cloud storage here
+          // For this example, we're just forwarding the Base64 data
+        }
+        
         io.to(to).emit("receiveMessage", messageData);
         console.log(`[WEBSOCKET LOG]: Message sent from ${socket.id} to ${to}`);
       } else {
