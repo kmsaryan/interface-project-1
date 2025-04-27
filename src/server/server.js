@@ -3,6 +3,9 @@ const http = require("http");
 const setupWebSocket = require("./websocket");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const app = express();
 const server = http.createServer(app);
@@ -13,6 +16,30 @@ let liveChatQueue = []; // Array to track live chat queue
 let activeChats = new Map(); // Map to track active chats (technicianId -> customerId)
 
 const PORT = process.env.PORT || 5000;
+
+// Configure multer for file uploads
+const upload = multer({
+  dest: "uploads/", // Save files in the 'uploads/' directory
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max file size
+});
+
+// Middleware to validate JWT
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ error: "Access token is missing" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: "Invalid or expired token" });
+    }
+    req.user = user; // Attach user info to the request
+    next();
+  });
+}
 
 app.get("/", (req, res) => {
   res.send("Welcome to the WebSocket Server!"); // Respond with a simple message
@@ -98,32 +125,31 @@ app.post("/api/users/login", async (req, res) => {
   }
 });
 
+// Refresh token endpoint
 app.post("/api/users/refresh-token", async (req, res) => {
   const { token } = req.body;
 
+  if (!token) {
+    return res.status(400).json({ error: "Refresh token is required" });
+  }
+
   try {
-    // Verify the token without checking expiration
     const decoded = jwt.verify(token, process.env.JWT_SECRET, { ignoreExpiration: true });
 
-    // Check if the token is expired
     const now = Math.floor(Date.now() / 1000);
     if (decoded.exp < now) {
-      console.log("[DEBUG] Token expired, generating a new one.");
-
-      // Generate a new token
       const newToken = jwt.sign(
         { userId: decoded.userId, role: decoded.role },
         process.env.JWT_SECRET,
-        { expiresIn: "7d" } // New token valid for 7 days
+        { expiresIn: "7d" }
       );
-
       return res.status(200).json({ token: newToken });
     }
 
-    res.status(400).json({ error: "Token is still valid." });
+    res.status(400).json({ error: "Token is still valid" });
   } catch (err) {
     console.error("[ERROR] Refresh token failed:", err.message);
-    res.status(401).json({ error: "Invalid token." });
+    res.status(401).json({ error: "Invalid token" });
   }
 });
 
@@ -162,6 +188,55 @@ app.get("/api/dealer/users", async (req, res) => {
     console.error("[ERROR] Fetching users failed:", err);
     res.status(500).json({ error: "Failed to fetch users" });
   }
+});
+
+// Upload a file
+app.post("/file/upload", upload.single("file"), async (req, res) => {
+  try {
+    const { originalname, mimetype, size, path: filepath } = req.file;
+
+    // Save file metadata to the database
+    const result = await pool.query(
+      "INSERT INTO files (filename, filepath, mimetype, size) VALUES ($1, $2, $3, $4) RETURNING id",
+      [originalname, filepath, mimetype, size]
+    );
+
+    res.status(201).json({ id: result.rows[0].id, filename: originalname });
+  } catch (err) {
+    console.error("[ERROR] File upload failed:", err.message);
+    res.status(500).json({ error: "Failed to upload file" });
+  }
+});
+
+// Download a file by ID
+app.get("/file/download/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Fetch file metadata from the database
+    const result = await pool.query("SELECT * FROM files WHERE id = $1", [id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "File not found" });
+    }
+
+    const { filepath, filename, mimetype } = result.rows[0];
+
+    // Serve the file to the client
+    res.download(filepath, filename, (err) => {
+      if (err) {
+        console.error("[ERROR] File download failed:", err.message);
+        res.status(500).json({ error: "Failed to download file" });
+      }
+    });
+  } catch (err) {
+    console.error("[ERROR] File download failed:", err.message);
+    res.status(500).json({ error: "Failed to download file" });
+  }
+});
+
+// Example of a protected route
+app.get("/api/protected", authenticateToken, (req, res) => {
+  res.json({ message: "This is a protected route", user: req.user });
 });
 
 io.on("connection", (socket) => {

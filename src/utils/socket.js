@@ -27,6 +27,8 @@ const socket = io(serverUrl, {
   auth: {
     token: token, // Send token during connection
   },
+  maxHttpBufferSize: 10e6, // Allow larger payloads (10MB)
+  binaryType: "arraybuffer", // Enhance binary data handling
 });
 
 const refreshToken = async (expiredToken) => {

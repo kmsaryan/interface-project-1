@@ -5,7 +5,6 @@ import "../styles/MessageInput.css"; // Import styles
 const MessageInput = ({ onSendMessage, onTyping }) => {
   const [message, setMessage] = useState("");
   const [attachment, setAttachment] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [fileError, setFileError] = useState("");
   
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB max file size
@@ -16,55 +15,83 @@ const MessageInput = ({ onSendMessage, onTyping }) => {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // .xlsx
   ];
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!message.trim() && !attachment) {
       setFileError("Cannot send an empty message.");
       return;
     }
-    
+
+    let fileData = null;
+
     if (attachment) {
-      // Start simulated progress
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 10;
-        setUploadProgress(progress);
-        if (progress >= 100) {
-          clearInterval(interval);
-          // Reset after a short delay
-          setTimeout(() => {
-            setUploadProgress(0);
-            onSendMessage(message, attachment);
-            setMessage("");
-            setAttachment(null);
-            setFileError("");
-          }, 500);
+      try {
+        const formData = new FormData();
+        formData.append("file", attachment);
+
+        // Upload the file to the backend
+        const response = await fetch("http://localhost:5000/file/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to upload file");
         }
-      }, 100);
-    } else {
-      onSendMessage(message, null);
-      setMessage("");
+
+        const result = await response.json();
+        fileData = {
+          id: result.id,
+          name: attachment.name,
+          type: attachment.type,
+          size: attachment.size,
+        };
+
+        console.log("File uploaded successfully:", fileData);
+      } catch (err) {
+        console.error("Error uploading file:", err);
+        setFileError("Failed to upload file. Please try again.");
+        return;
+      }
     }
+
+    onSendMessage(message, fileData);
+    setMessage("");
+    setAttachment(null);
+    setFileError("");
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFileError("");
-    
-    if (!file) return;
-    
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      setFileError(`File too large. Maximum size is ${MAX_FILE_SIZE/1024/1024}MB.`);
-      return;
-    }
-    
-    // Validate file type
-    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      setFileError("Unsupported file type. Please upload an image, PDF, or document.");
-      return;
-    }
+    try {
+      const file = e.target.files[0];
+      setFileError("");
+      
+      if (!file) return;
+      
+      console.log("File selected:", { name: file.name, type: file.type, size: file.size });
+      
+      // Validate file size
+      if (file.size > MAX_FILE_SIZE) {
+        setFileError(`File too large. Maximum size is ${MAX_FILE_SIZE/1024/1024}MB.`);
+        return;
+      }
+      
+      // Validate file type
+      if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+        setFileError("Unsupported file type. Please upload an image, PDF, or document.");
+        return;
+      }
 
-    setAttachment(file);
+      // Verify it's a proper Blob/File before setting
+      if (!(file instanceof Blob)) {
+        setFileError("Invalid file format. Please select a valid file.");
+        return;
+      }
+
+      setAttachment(file);
+    } catch (err) {
+      console.error("Error handling file selection:", err);
+      setFileError("Error selecting file. Please try again.");
+    }
   };
 
   const removeAttachment = () => {
@@ -79,14 +106,6 @@ const MessageInput = ({ onSendMessage, onTyping }) => {
         <div className="attachment-preview">
           <span>{attachment.name}</span>
           <button onClick={removeAttachment} className="remove-attachment">×</button>
-          {uploadProgress > 0 && (
-            <div className="upload-progress-container">
-              <div 
-                className="upload-progress-bar" 
-                style={{ width: `${uploadProgress}%` }}
-              ></div>
-            </div>
-          )}
         </div>
       )}
       
@@ -106,7 +125,7 @@ const MessageInput = ({ onSendMessage, onTyping }) => {
         />
         <button 
           onClick={handleSend} 
-          disabled={(!message.trim() && !attachment) || uploadProgress > 0} 
+          disabled={(!message.trim() && !attachment)} 
           className="send-button"
         >
           ➤

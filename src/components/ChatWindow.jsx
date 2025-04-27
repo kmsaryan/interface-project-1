@@ -3,28 +3,53 @@ import React from "react";
 import "../styles/ChatWindow.css"; // Import styles
 
 const ChatWindow = ({ messages, socket, readReceipts, typingIndicator, onDownloadFile }) => {
+  const handleDownloadFile = async (fileData) => {
+    try {
+      const response = await fetch(`http://localhost:5000/file/download/${fileData.id}`);
+      if (!response.ok) {
+        throw new Error("Failed to download file");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileData.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      console.log("File downloaded successfully:", fileData.name);
+    } catch (err) {
+      console.error("Error downloading file:", err);
+      alert("Failed to download file. Please try again.");
+    }
+  };
+
   const getFilePreview = (fileData) => {
-    // If it's an image, show it
+    // Log file data for debugging
+    console.log(`[CHAT WINDOW]: Processing file preview for ${fileData.name}, type: ${fileData.type}`);
+    
     if (fileData.type && fileData.type.startsWith('image/')) {
       return (
         <div className="attachment-preview">
           <img src={fileData.content} alt="Attachment" />
           <button 
             className="download-button"
-            onClick={() => onDownloadFile(fileData)}
+            onClick={() => handleDownloadFile(fileData)}
           >
             Download
           </button>
         </div>
       );
     } else {
-      // For other files show an icon based on type
       let icon = "📄"; // Default file icon
       if (fileData.type === 'application/pdf') icon = "📑";
       else if (fileData.type.includes('spreadsheet')) icon = "📊";
       else if (fileData.type.includes('word')) icon = "📝";
       else if (fileData.type === 'text/plain') icon = "📃";
-      
+
       return (
         <div className="attachment-file">
           <div className="file-icon">{icon}</div>
@@ -34,7 +59,7 @@ const ChatWindow = ({ messages, socket, readReceipts, typingIndicator, onDownloa
           </div>
           <button 
             className="download-button"
-            onClick={() => onDownloadFile(fileData)}
+            onClick={() => handleDownloadFile(fileData)}
           >
             Download
           </button>
@@ -42,7 +67,7 @@ const ChatWindow = ({ messages, socket, readReceipts, typingIndicator, onDownloa
       );
     }
   };
-  
+
   return (
     <div className="chat-window">
       {messages.map((msg, index) => {
@@ -61,11 +86,6 @@ const ChatWindow = ({ messages, socket, readReceipts, typingIndicator, onDownloa
         const isSent = msg.from === socket.id;
         const readReceipt = isSent && readReceipts[msg.to] ? "✓✓" : "✓";
 
-        // Parse and format the timestamp
-        const timestamp = msg.timestamp
-          ? new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-          : "N/A";
-
         return (
           <div
             key={index}
@@ -73,11 +93,14 @@ const ChatWindow = ({ messages, socket, readReceipts, typingIndicator, onDownloa
           >
             {messageContent && <div className="message-body">{messageContent}</div>}
             
+            {/* Check if fileData exists and render it */}
             {msg.fileData && getFilePreview(msg.fileData)}
             
             <div className="message-footer">
               {isSent && <span className="read-receipt">{readReceipt}</span>}
-              <span className="message-timestamp">{timestamp}</span>
+              <span className="message-timestamp">
+                {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+              </span>
             </div>
           </div>
         );
