@@ -26,26 +26,28 @@ const LoginPage = () => {
       });
 
       if (response.status === 200) {
-        console.log("[DEBUG] Login successful:", response.data);
+        const { token, user } = response.data;
 
         // Store token and user role in localStorage
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("userRole", response.data.user.role);
+        localStorage.setItem("token", token);
+        localStorage.setItem("userRole", user.role);
         localStorage.setItem("user", JSON.stringify({
-          id: response.data.user.id,
-          role: response.data.user.role,
+          id: user.id,
+          role: user.role,
           name: email.split('@')[0] // Use email username as display name
         }));
+
+        console.log("[DEBUG] Login successful. Token saved.");
 
         // Dispatch custom event to notify Header component
         window.dispatchEvent(new Event("authChange"));
 
         // Navigate based on role
-        if (response.data.user.role === "dealer") {
+        if (user.role === "dealer") {
           navigate("/dealer");
-        } else if (response.data.user.role === "customer") {
+        } else if (user.role === "customer") {
           navigate("/customer_home");
-        } else if (response.data.user.role === "technician") {
+        } else if (user.role === "technician") {
           navigate("/technician");
         }
       }

@@ -1,4 +1,5 @@
 const { Server } = require("socket.io");
+const jwt = require("jsonwebtoken");
 
 const users = new Map(); // Map to track connected users (socketId -> userDetails)
 let liveChatQueue = []; // Array to track live chat queue
@@ -13,7 +14,7 @@ function setupWebSocket(server) {
     },
   });
 
-  io.use((socket, next) => {
+  io.use(async (socket, next) => {
     const token = socket.handshake.auth?.token;
     console.log("[SOCKET AUTH]: Incoming token:", token);
 
@@ -22,21 +23,48 @@ function setupWebSocket(server) {
       return next(new Error("Authentication error: No token provided"));
     }
 
-    // Add token validation logic here (e.g., JWT verification)
-    next();
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("[SOCKET AUTH]: Decoded token payload:", decoded);
+      socket.user = decoded; // Attach user info to the socket
+      next();
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        console.log("[SOCKET AUTH]: Token expired, attempting to refresh...");
+        try {
+          const decoded = jwt.decode(token); // Decode the expired token
+          const newToken = jwt.sign(
+            { userId: decoded.userId, role: decoded.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" } // Set a new expiration time
+          );
+          console.log("[SOCKET AUTH]: Token refreshed successfully");
+          socket.handshake.auth.token = newToken; // Update the token in the handshake
+          socket.emit("tokenRefreshed", { token: newToken }); // Notify the client
+          socket.user = jwt.verify(newToken, process.env.JWT_SECRET); // Verify and attach the refreshed token
+          next();
+        } catch (refreshErr) {
+          console.error("[SOCKET AUTH ERROR]: Failed to refresh token:", refreshErr.message);
+          return next(new Error("Authentication error: Token refresh failed"));
+        }
+      } else {
+        console.error("[SOCKET AUTH ERROR]: Invalid token:", err.message);
+        return next(new Error("Authentication error: Invalid token"));
+      }
+    }
   });
 
   console.log("[WEBSOCKET LOG]: WebSocket server initialized and listening");
 
   io.on("connection", (socket) => {
-    console.log("WebSocket connected:", socket.id);
+    console.log("[WEBSOCKET LOG]: WebSocket connected:", socket.id, "User:", socket.user);
 
     socket.on("error", (err) => {
       console.error("WebSocket error:", err);
     });
 
     socket.on("disconnect", () => {
-      console.log("WebSocket disconnected:", socket.id);
+      console.log("[WEBSOCKET LOG]: WebSocket disconnected:", socket.id);
     });
 
     console.log(`[WEBSOCKET LOG]: A user connected: ${socket.id}`);
@@ -109,10 +137,27 @@ function setupWebSocket(server) {
     });
 
     // Handle real-time messaging
-    socket.on("sendMessage", ({ to, message, attachment }) => {
+    socket.on("sendMessage", ({ to, message, fileData, timestamp }) => {
+      // Enhanced debugging
+      console.log(`[WEBSOCKET LOG]: Processing message to ${to}`);
+      
+      if (fileData) {
+        console.log(`[WEBSOCKET LOG]: Message includes file: ${fileData.name}, type: ${fileData.type}, size: ${fileData.size}`);
+        // To avoid logging potentially large content, just check its presence
+        console.log(`[WEBSOCKET LOG]: File content is ${fileData.content ? 'present' : 'missing'}`);
+      }
+      
+      const messageData = {
+        from: socket.id,
+        message,
+        fileData, // Explicitly include file data
+        timestamp: timestamp || Date.now(),
+      };
+
       if (to) {
-        io.to(to).emit("receiveMessage", { from: socket.id, message, attachment, timestamp: Date.now() });
-        console.log(`[WEBSOCKET LOG]: Message sent from ${socket.id} to ${to}`);
+        // Send message to recipient
+        io.to(to).emit("receiveMessage", messageData);
+        console.log(`[WEBSOCKET LOG]: Message sent to ${to} ${fileData ? 'with file' : ''}`);
       } else {
         console.warn(`[WARN] Message not sent. Missing recipient (to).`);
       }

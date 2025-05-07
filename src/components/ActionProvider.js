@@ -1,13 +1,10 @@
 import socket from "../utils/socket";
-import { useLocation, useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid';
 
 class ActionProvider {
   constructor(createChatBotMessage, setStateFunc, createClientMessage) {
     this.createChatBotMessage = createChatBotMessage;
     this.setState = setStateFunc;
     this.createClientMessage = createClientMessage;
-    this.navigate = useNavigate; // Store for later
   }
 
   setTechnicianSocketId = (id) => {
@@ -183,6 +180,34 @@ class ActionProvider {
   
   };
 
+  handleLiveChatRequest = async () => {
+    const user = JSON.parse(localStorage.getItem("user")) || {};
+    const formData = {
+      name: user.name || "Anonymous",
+      issue: this.state.formData?.machineIssue || "General Inquiry",
+      machine: this.state.formData?.machineModel || "Unknown",
+      priority: "Medium",
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/api/livechat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        this.createChatBotMessage("Live chat session initiated!");
+        localStorage.setItem("livechatFormData", JSON.stringify(formData));
+        this.navigate("/livechat", { state: { role: "customer", ...formData } });
+      } else {
+        this.createChatBotMessage("Failed to initiate live chat. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error initiating live chat:", error);
+    }
+  };
+
   // Handle Thank You responses
   handleThankYou = () => {
     const message = this.createChatBotMessage("You're welcome! How else can I assist you?", { withAvatar: true});
@@ -190,7 +215,6 @@ class ActionProvider {
   };
 
   handleImageResponse = (imageName) => {
-    const imageUrl = `/assets/${imageName}`; // Adjust this to match where your images are stored
     const message = this.createChatBotMessage(`http://localhost:3000${imageName}`); // Construct the full URL
     this.addMessageToState(message); // Add the URL to the chat
   };

@@ -71,3 +71,57 @@ input[type="file"] {
 .send-button:active {
   transform: scale(0.95);
 }
+
+.message-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.file-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  padding: 4px 8px;
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 4px;
+}
+
+.attachment-preview {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+
+.remove-attachment {
+  margin-left: 8px;
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+}
+
+.remove-attachment:hover {
+  color: #e74c3c;
+}
+
+.upload-progress-container {
+  height: 4px;
+  background: #eee;
+  width: 100%;
+  border-radius: 2px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.upload-progress-bar {
+  height: 100%;
+  background: var(--button-primary);
+  transition: width 0.3s ease;
+}
