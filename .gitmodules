@@ -6,3 +6,6 @@
 	path = VolvoAssistantDatabase
 	url = https://github.com/kmsaryan/VolvoAssistantDatabase.git
 	# Use: gh repo clone kmsaryan/VolvoAssistantDatabase VolvoAssistantDatabase
+[submodule "BasicLivechat"]
+	path = BasicLivechat
+	url = https://github.com/kmsaryan/BasicLivechat.git
