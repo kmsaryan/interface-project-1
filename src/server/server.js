@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const dbRoutes = require("../../VolvoAssistantDatabase/routes"); // Import database routes
 
 const app = express();
 const server = http.createServer(app);
@@ -255,6 +256,9 @@ app.post("/api/db/execute", authenticateToken, async (req, res) => {
     res.status(400).json({ error: "Invalid query or execution failed" });
   }
 });
+
+// Use database routes
+app.use("/api/db", dbRoutes); // Mount the database routes under /api/db
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);

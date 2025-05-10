@@ -86,7 +86,7 @@ const LoginPage = () => {
             required
           />
         </div>
-        <button type="submit" disabled={loading}>
+        <button type="submit" className="button-primary" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>

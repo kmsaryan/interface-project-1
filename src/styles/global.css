@@ -178,8 +178,15 @@ a:active {
 }
 
 .button-primary {
+  padding: 12px;
   background-color: var(--button-primary);
   color: var(--background);
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: "VolvoNovumLight", Arial, sans-serif;
 }
 
 .button-primary:hover {
@@ -188,6 +195,11 @@ a:active {
 
 .button-primary:active {
   background-color: var(--button-primary-pressed);
+}
+
+.button-primary:disabled {
+  background-color: var(--disabled);
+  cursor: not-allowed;
 }
 
 .button-secondary {

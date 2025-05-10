@@ -45,12 +45,24 @@
 
 }
 
+.user-info {
+  display: flex; /* Use flexbox for layout */
+  gap: 10px; /* Add spacing between username and button */
+  align-items: center; /* Align items vertically */
+}
+
 .user-info span {
   color: black;
 }
 
 .nav a:hover {
   color: var(--highlight); /* Use global highlight color */
+}
+
+.auth-buttons {
+  display: flex; /* Use flexbox for layout */
+  gap: 10px; /* Add spacing between buttons */
+  align-items: center; /* Align items vertically */
 }
 
 .auth-buttons button {
