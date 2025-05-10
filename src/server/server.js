@@ -239,6 +239,23 @@ app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({ message: "This is a protected route", user: req.user });
 });
 
+// Execute SQL queries securely
+app.post("/api/db/execute", authenticateToken, async (req, res) => {
+  const { query } = req.body;
+
+  if (req.user.role !== "DBMS manager") {
+    return res.status(403).json({ error: "Access denied" });
+  }
+
+  try {
+    const result = await db.query(query);
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("[ERROR] Query execution failed:", err.message);
+    res.status(400).json({ error: "Invalid query or execution failed" });
+  }
+});
+
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 

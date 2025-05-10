@@ -49,6 +49,8 @@ const LoginPage = () => {
           navigate("/customer_home");
         } else if (user.role === "technician") {
           navigate("/technician");
+        } else if (user.role === "DBMS manager") {
+          navigate("/dbms-manager"); // Navigate to DBMSManagerPage
         }
       }
     } catch (error) {
