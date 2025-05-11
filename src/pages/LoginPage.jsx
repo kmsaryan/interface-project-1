@@ -20,7 +20,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/users/login", {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/users/login`, {
         email,
         password,
       });

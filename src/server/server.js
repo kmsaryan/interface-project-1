@@ -1,3 +1,5 @@
+require("dotenv").config(); // Load environment variables
+
 const express = require("express");
 const http = require("http");
 const setupWebSocket = require("./websocket");
@@ -5,14 +7,19 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const { Pool } = require("pg"); // Add PostgreSQL client
+const cors = require("cors"); // Import CORS
+
+const PORT = process.env.PORT || 8001; // Use PORT from .env
+const DB_HOST = process.env.DB_HOST || "localhost";
+const DB_PORT = process.env.DB_PORT || 5432;
 
 // Initialize database connection pool
 const pool = new Pool({
   user: process.env.DB_USER || "postgres",
-  host: process.env.DB_HOST || "localhost",
+  host: DB_HOST,
   database: process.env.DB_NAME || "volvo_assistant",
   password: process.env.DB_PASSWORD || "postgres",
-  port: process.env.DB_PORT || 5432,
+  port: DB_PORT,
 });
 
 // Create a database query helper
@@ -21,16 +28,13 @@ const db = {
 };
 
 const dbRoutes = require("../../VolvoAssistantDatabase/routes"); // Import database routes
-
 const app = express();
 const server = http.createServer(app);
 const io = setupWebSocket(server);
 
 const users = new Map(); // Map to track connected users (socketId -> userDetails)
-let liveChatQueue = []; // Array to track live chat queue
+let liveChatQueue = []; // Array to track live chat queue(socketId -> userDetails)
 let activeChats = new Map(); // Map to track active chats (technicianId -> customerId)
-
-const PORT = process.env.PORT || 5000;
 
 // Configure multer for file uploads
 const upload = multer({
@@ -38,11 +42,17 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max file size
 });
 
+// Add CORS middleware
+app.use(cors({
+  origin: process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000", // Use frontend URL from .env
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true, // Allow cookies if needed
+}));
+
 // Middleware to validate JWT
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-
   if (!token) {
     return res.status(401).json({ error: "Access token is missing" });
   }
@@ -91,12 +101,10 @@ app.post("/api/users/register", async (req, res) => {
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
     console.error("[ERROR] Registration failed:", err);
-
     if (err.code === "ETIMEDOUT") {
       console.error("[ERROR] Database connection timed out");
       return res.status(500).json({ error: "Database connection timed out" });
     }
-
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -132,7 +140,6 @@ app.post("/api/users/login", async (req, res) => {
     );
 
     console.log("[DEBUG] Token generated:", token);
-
     res.status(200).json({ message: "Login successful", token, user: { id: user.id, role: user.role } });
   } catch (err) {
     console.error("[DEBUG] Error during login:", err);
@@ -150,7 +157,6 @@ app.post("/api/users/refresh-token", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET, { ignoreExpiration: true });
-
     const now = Math.floor(Date.now() / 1000);
     if (decoded.exp < now) {
       const newToken = jwt.sign(
@@ -160,7 +166,6 @@ app.post("/api/users/refresh-token", async (req, res) => {
       );
       return res.status(200).json({ token: newToken });
     }
-
     res.status(400).json({ error: "Token is still valid" });
   } catch (err) {
     console.error("[ERROR] Refresh token failed:", err.message);
@@ -194,7 +199,6 @@ app.get("/api/dealer/users", async (req, res) => {
   try {
     const users = await db.query("SELECT id, name, email, role FROM users");
     console.log("[DEBUG] Fetched users:", users.rows);
-
     const customers = users.rows.filter(user => user.role === "customer");
     const technicians = users.rows.filter(user => user.role === "technician");
 

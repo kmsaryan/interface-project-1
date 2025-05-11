@@ -23,15 +23,15 @@ const DatabaseManager = () => {
 
   // Updated endpoint map based on available routes that actually work
   const endpointMap = {
-    "files": "/api/files",
-    "tickets": "/api/tickets",
-    "tree_edges": "/api/tree_edges",
-    "troubleshoot_tree": "/api/tree",
-    "machines": "/api/machines/8",
-    "conversations": "/api/conversations", // Fixed endpoint
-    "issues": "/api/issues/3",
-    "technician_availability": "/schedule/mechanic/8",
-    "users": "/api/users", // Updated endpoint
+    files: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/files`,
+    tickets: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/tickets`,
+    tree_edges: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/tree_edges`,
+    troubleshoot_tree: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/tree`,
+    machines: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/machines/8`,
+    conversations: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/conversations`, // Fixed endpoint
+    issues: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/issues/3`,
+    technician_availability: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/schedule/mechanic/8`,
+    users: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/users`, // Updated endpoint
   };
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const DatabaseManager = () => {
     try {
       const endpoint = endpointMap[table] || `/api/${table}`;
       const fetchData = async () => {
-        const response = await axios.get(`http://localhost:8001${endpoint}`);
+        const response = await axios.get(endpoint);
         return response;
       };
       const response = await retry(fetchData, MAX_RETRIES).catch((err) => {

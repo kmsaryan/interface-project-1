@@ -4,14 +4,8 @@ import axios from "axios";
 
 // Dynamically determine the WebSocket server URL
 const getWebSocketURL = () => {
-  if (process.env.REACT_APP_BACKEND_URL) {
-    return process.env.REACT_APP_BACKEND_URL.replace(/^http/, "ws");
-  }
-  if (window.location.hostname.includes("github.dev")) {
-    // Ensure the WebSocket URL uses port 5000
-    return `wss://${window.location.hostname.replace("-3000", "-5000")}`;
-  }
-  return "ws://localhost:5000"; // Default for local development
+  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"; // Updated default port
+  return backendUrl.replace(/^http/, "ws");
 };
 
 const serverUrl = getWebSocketURL();
@@ -33,7 +27,7 @@ const socket = io(serverUrl, {
 
 const refreshToken = async (expiredToken) => {
   try {
-    const response = await axios.post("http://localhost:5000/api/users/refresh-token", {
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/api/users/refresh-token`, {
       token: expiredToken,
     });
 
@@ -71,6 +65,8 @@ socket.on("connect_error", async (error) => {
     } else {
       console.error("[SOCKET ERROR]: Unable to refresh token. Please log in again.");
     }
+  } else {
+    console.error("[SOCKET ERROR]: WebSocket connection failed. Retrying...");
   }
 });
 

@@ -5,7 +5,7 @@ import "../styles/ChatWindow.css"; // Import styles
 const ChatWindow = ({ messages, socket, readReceipts, typingIndicator, onDownloadFile }) => {
   const handleDownloadFile = async (fileData) => {
     try {
-      const response = await fetch(`http://localhost:5000/file/download/${fileData.id}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/file/download/${fileData.id}`);
       if (!response.ok) {
         throw new Error("Failed to download file");
       }
