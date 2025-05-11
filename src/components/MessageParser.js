@@ -217,6 +217,11 @@ class MessageParser {
       return this.actionProvider.handleFindTech(dayOfWeek, timeSlot);
     }
 
+    if (message.includes("attach file") || message.includes("upload file")) {
+      this.actionProvider.handleFileAttachment();
+      return;
+    }
+
   }
 }
 

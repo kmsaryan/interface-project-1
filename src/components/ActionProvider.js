@@ -219,27 +219,99 @@ class ActionProvider {
     this.addMessageToState(message); // Add the URL to the chat
   };
 
+  handleFileAttachment = () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*,application/pdf,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    fileInput.onchange = async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Upload file to backend
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/file/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to upload file");
+        }
+
+        const result = await response.json();
+        const fileData = {
+          id: result.id,
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          url: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/file/download/${result.id}`,
+        };
+
+        const message = this.createChatBotMessage(
+          `File attached: ${file.name}`,
+          {
+            widget: "filePreview",
+            metadata: { fileData },
+          }
+        );
+        this.addMessageToState(message);
+      } catch (err) {
+        const errorMessage = this.createChatBotMessage("Failed to upload file. Please try again.");
+        this.addMessageToState(errorMessage);
+      }
+    };
+    fileInput.click();
+  };
+
   addMessageToState = (message) => {
     let issueId = localStorage.getItem("issue_id");
     console.log("Retrieved issue_id from localStorage:", issueId);  // Debugging log
   
     if (issueId !== "0" && issueId!=="undefined"){
     console.log(issueId);
-    fetch("http://localhost:5000/api/conversations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        issue_id: issueId,
-        sender: "bot",
-        message: message.message
-      })
-    }).catch((error) => {
-      console.error("Failed to save message to DB:", error);
-    });
+    // Save message to conversations table, and file to files table if present
+    if (issueId !== "0" && issueId !== "undefined") {
+      // Save message
+      fetch("http://localhost:5000/api/conversations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          issue_id: issueId,
+          sender: "bot",
+          message: message.message
+        })
+      }).catch((error) => {
+        console.error("Failed to save message to DB:", error);
+      });
+
+      // Save file if present in message.metadata.fileData
+      if (message.metadata && message.metadata.fileData && message.metadata.fileData.id) {
+        fetch("http://localhost:5000/api/files", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            file_id: message.metadata.fileData.id,
+            filename: message.metadata.fileData.name,
+            mimetype: message.metadata.fileData.type,
+            size: message.metadata.fileData.size,
+            conversation_issue_id: issueId
+          })
+        }).catch((error) => {
+          console.error("Failed to save file to DB:", error);
+        });
+      }
+    }
   }
-  
 
     this.setState((state) => ({
       ...state,
