@@ -4,8 +4,22 @@ const setupWebSocket = require("./websocket");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const { Pool } = require("pg"); // Add PostgreSQL client
+
+// Initialize database connection pool
+const pool = new Pool({
+  user: process.env.DB_USER || "postgres",
+  host: process.env.DB_HOST || "localhost",
+  database: process.env.DB_NAME || "volvo_assistant",
+  password: process.env.DB_PASSWORD || "postgres",
+  port: process.env.DB_PORT || 5432,
+});
+
+// Create a database query helper
+const db = {
+  query: (text, params) => pool.query(text, params),
+};
+
 const dbRoutes = require("../../VolvoAssistantDatabase/routes"); // Import database routes
 
 const app = express();
@@ -194,12 +208,12 @@ app.get("/api/dealer/users", async (req, res) => {
 // Upload a file
 app.post("/file/upload", upload.single("file"), async (req, res) => {
   try {
-    const { originalname, mimetype, size, path: filepath } = req.file;
+    const { originalname, size, path: filepath } = req.file;
 
     // Save file metadata to the database
     const result = await pool.query(
       "INSERT INTO files (filename, filepath, mimetype, size) VALUES ($1, $2, $3, $4) RETURNING id",
-      [originalname, filepath, mimetype, size]
+      [originalname, filepath, req.file.mimetype, size]
     );
 
     res.status(201).json({ id: result.rows[0].id, filename: originalname });
@@ -220,7 +234,7 @@ app.get("/file/download/:id", async (req, res) => {
       return res.status(404).json({ error: "File not found" });
     }
 
-    const { filepath, filename, mimetype } = result.rows[0];
+    const { filepath, filename } = result.rows[0];
 
     // Serve the file to the client
     res.download(filepath, filename, (err) => {
@@ -332,7 +346,7 @@ io.on("connection", (socket) => {
 
 server.listen(PORT, () => {
   const host = process.env.CODESPACE_NAME
-    ? `https://${process.env.CODESPACE_NAME}-5000.app.github.dev`
+    ? `https://${process.env.CODESPACE_NAME}-${PORT}.app.github.dev`
     : `http://localhost:${PORT}`;
   console.log(`Server is running on ${host}`);
 });
