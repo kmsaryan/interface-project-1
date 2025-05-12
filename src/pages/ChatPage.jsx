@@ -36,7 +36,7 @@ export default function ChatPage() {
         className="app-chatbot-button"
         onClick={() => {
           toggleBot((prev) => !prev);
-          localStorage.setItem("issue_id", 0); // Reset issue_id to 0 in localStorage
+          localStorage.setItem('hasSentFirstMessage', 'false');
         }}
       >
         <div>Bot</div>
