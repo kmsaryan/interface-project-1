@@ -33,7 +33,7 @@ const TreeEditor = () => {
     if (selectedTreeId) {
       loadTree(selectedTreeId);
     }
-  }, [selectedTreeId]); // Add missing dependency
+  }, [selectedTreeId]); // Add selectedTreeId to dependencies
 
   const loadTree = async (treeId) => {
     const tree = await fetchTree(treeId);

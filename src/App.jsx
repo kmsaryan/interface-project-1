@@ -14,7 +14,6 @@ import RegistrationPage from "./pages/RegistrationPage";
 import LiveChatForm from "./pages/LiveChatForm"; // Updated import
 import DealerDashboard from "./pages/DealerDashboard"; // Import DealerDashboard
 import ErrorBoundary from "./components/ErrorBoundary"; // Import ErrorBoundary
-import DBMSManagerPage from "./pages/DBMSManagerPage"; // Import DBMSManagerPage
 import "./styles/fonts.css";
 import "./styles/App.css";
 
@@ -55,7 +54,6 @@ function App() {
               }
             />
             <Route path="/dealer" element={<DealerDashboard />} /> {/* New route for dealer dashboard */}
-            <Route path="/dbms-manager" element={<DBMSManagerPage />} /> {/* New route for DBMS manager */}
           </Routes>
         </Layout>
       </ErrorBoundary>

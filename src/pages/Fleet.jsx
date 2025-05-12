@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "../styles/FleetPage.css";
 
 const fleetData = [
