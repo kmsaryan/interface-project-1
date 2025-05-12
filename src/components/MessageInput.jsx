@@ -28,8 +28,7 @@ const MessageInput = ({ onSendMessage, onTyping }) => {
         const formData = new FormData();
         formData.append("file", attachment);
 
-        // Upload the file to the backend
-        const response = await fetch("http://localhost:5000/file/upload", {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/file/upload`, {
           method: "POST",
           body: formData,
         });

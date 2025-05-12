@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for API calls
+import { api } from "../utils/api";
 import "../styles/RegistrationPage.css";
 import "../styles/global.css";
 
@@ -21,8 +22,8 @@ export default function RegistrationPage() {
     e.preventDefault();
 
     try {
-      // Make API call to backend
-      const response = await axios.post("http://localhost:5000/api/users/register", {
+      // Make API call to backend using the centralized API utility
+      const response = await axios.post(api.register, {
         name: formData.username,
         email: formData.email,
         password: formData.password,

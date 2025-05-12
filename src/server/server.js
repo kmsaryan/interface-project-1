@@ -1,21 +1,40 @@
+require("dotenv").config(); // Load environment variables
+
 const express = require("express");
 const http = require("http");
 const setupWebSocket = require("./websocket");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const { Pool } = require("pg"); // Add PostgreSQL client
+const cors = require("cors"); // Import CORS
 
+const PORT = process.env.PORT || 8001; // Use PORT from .env
+const DB_HOST = process.env.DB_HOST || "localhost";
+const DB_PORT = process.env.DB_PORT || 5432;
+
+// Initialize database connection pool
+const pool = new Pool({
+  user: process.env.DB_USER || "postgres",
+  host: DB_HOST,
+  database: process.env.DB_NAME || "volvo_assistant",
+  password: process.env.DB_PASSWORD || "postgres",
+  port: DB_PORT,
+});
+
+// Create a database query helper
+const db = {
+  query: (text, params) => pool.query(text, params),
+};
+
+const dbRoutes = require("../../VolvoAssistantDatabase/routes"); // Import database routes
 const app = express();
 const server = http.createServer(app);
 const io = setupWebSocket(server);
 
 const users = new Map(); // Map to track connected users (socketId -> userDetails)
-let liveChatQueue = []; // Array to track live chat queue
+let liveChatQueue = []; // Array to track live chat queue(socketId -> userDetails)
 let activeChats = new Map(); // Map to track active chats (technicianId -> customerId)
-
-const PORT = process.env.PORT || 5000;
 
 // Configure multer for file uploads
 const upload = multer({
@@ -23,11 +42,17 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max file size
 });
 
+// Add CORS middleware
+app.use(cors({
+  origin: process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000", // Use frontend URL from .env
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true, // Allow cookies if needed
+}));
+
 // Middleware to validate JWT
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-
   if (!token) {
     return res.status(401).json({ error: "Access token is missing" });
   }
@@ -76,12 +101,10 @@ app.post("/api/users/register", async (req, res) => {
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
     console.error("[ERROR] Registration failed:", err);
-
     if (err.code === "ETIMEDOUT") {
       console.error("[ERROR] Database connection timed out");
       return res.status(500).json({ error: "Database connection timed out" });
     }
-
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -117,7 +140,6 @@ app.post("/api/users/login", async (req, res) => {
     );
 
     console.log("[DEBUG] Token generated:", token);
-
     res.status(200).json({ message: "Login successful", token, user: { id: user.id, role: user.role } });
   } catch (err) {
     console.error("[DEBUG] Error during login:", err);
@@ -135,7 +157,6 @@ app.post("/api/users/refresh-token", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET, { ignoreExpiration: true });
-
     const now = Math.floor(Date.now() / 1000);
     if (decoded.exp < now) {
       const newToken = jwt.sign(
@@ -145,7 +166,6 @@ app.post("/api/users/refresh-token", async (req, res) => {
       );
       return res.status(200).json({ token: newToken });
     }
-
     res.status(400).json({ error: "Token is still valid" });
   } catch (err) {
     console.error("[ERROR] Refresh token failed:", err.message);
@@ -179,7 +199,6 @@ app.get("/api/dealer/users", async (req, res) => {
   try {
     const users = await db.query("SELECT id, name, email, role FROM users");
     console.log("[DEBUG] Fetched users:", users.rows);
-
     const customers = users.rows.filter(user => user.role === "customer");
     const technicians = users.rows.filter(user => user.role === "technician");
 
@@ -193,12 +212,12 @@ app.get("/api/dealer/users", async (req, res) => {
 // Upload a file
 app.post("/file/upload", upload.single("file"), async (req, res) => {
   try {
-    const { originalname, mimetype, size, path: filepath } = req.file;
+    const { originalname, size, path: filepath } = req.file;
 
     // Save file metadata to the database
     const result = await pool.query(
       "INSERT INTO files (filename, filepath, mimetype, size) VALUES ($1, $2, $3, $4) RETURNING id",
-      [originalname, filepath, mimetype, size]
+      [originalname, filepath, req.file.mimetype, size]
     );
 
     res.status(201).json({ id: result.rows[0].id, filename: originalname });
@@ -219,7 +238,7 @@ app.get("/file/download/:id", async (req, res) => {
       return res.status(404).json({ error: "File not found" });
     }
 
-    const { filepath, filename, mimetype } = result.rows[0];
+    const { filepath, filename } = result.rows[0];
 
     // Serve the file to the client
     res.download(filepath, filename, (err) => {
@@ -238,6 +257,26 @@ app.get("/file/download/:id", async (req, res) => {
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({ message: "This is a protected route", user: req.user });
 });
+
+// Execute SQL queries securely
+app.post("/api/db/execute", authenticateToken, async (req, res) => {
+  const { query } = req.body;
+
+  if (req.user.role !== "DBMS manager") {
+    return res.status(403).json({ error: "Access denied" });
+  }
+
+  try {
+    const result = await db.query(query);
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("[ERROR] Query execution failed:", err.message);
+    res.status(400).json({ error: "Invalid query or execution failed" });
+  }
+});
+
+// Use database routes
+app.use("/api/db", dbRoutes); // Mount the database routes under /api/db
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -311,7 +350,7 @@ io.on("connection", (socket) => {
 
 server.listen(PORT, () => {
   const host = process.env.CODESPACE_NAME
-    ? `https://${process.env.CODESPACE_NAME}-5000.app.github.dev`
+    ? `https://${process.env.CODESPACE_NAME}-${PORT}.app.github.dev`
     : `http://localhost:${PORT}`;
   console.log(`Server is running on ${host}`);
 });
