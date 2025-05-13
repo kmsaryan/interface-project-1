@@ -38,13 +38,15 @@ export default function FleetPage() {
         {machines.map((machine) => (
           <div key={machine.id} className="fleet-card">
             <img
-              src={machine.image_url || "https://via.placeholder.com/100"}
+              src={machine.url || "https://via.placeholder.com/100"}
               alt={machine.model}
               className="fleet-image"
             />
             <div className="fleet-info">
-              <h2 className="fleet-name">{machine.name}</h2>
-              <a href={`/fleet/${machine.id}`} className="fleet-button">
+              <h1 className="fleet-name">{machine.model}</h1>
+              <h3 className="fleet-number">{machine.serial_number}</h3>
+
+              <a href={`/fleet/${machine.machine_id}`} className="fleet-button">
                 View Profile
               </a>
             </div>

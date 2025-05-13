@@ -29,6 +29,7 @@
     "react-conditionally-render": "^1.0.2",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.3.8",
     "react-helmet": "^6.1.0",
     "react-markdown": "^10.1.0",
     "react-meta-tags": "^1.0.1",
