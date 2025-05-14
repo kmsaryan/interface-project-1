@@ -26,7 +26,7 @@ const TreeEditor = () => {
         setSelectedTreeId(list[0].id); // seleciona o primeiro automaticamente
       }
     };
-    loadTreeList();
+    loadTreeList();// eslint-disable-next-line
   }, []);
   
   useEffect(() => {

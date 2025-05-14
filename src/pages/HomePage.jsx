@@ -10,11 +10,11 @@ import excavatorC from "../assets/images/ExcavatersC.jpeg";
 
 export default function GlobalHomePage() {
   const navigate = useNavigate();
-
+// eslint-disable-next-line
   const handleSignIn = () => {
     navigate("/signin"); // Redirect to Sign-In Page
   };
-
+// eslint-disable-next-line
   const handleRegister = () => {
     navigate("/register"); // Redirect to Registration Page
   };

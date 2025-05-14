@@ -110,7 +110,7 @@ class ActionProvider {
   handleFindTech = async (dayOfWeek, timeSlot) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/schedule/first-available?day_of_week=${dayOfWeek}&time_slot=${timeSlot}`
+        `http://localhost:8002/schedule/first-available?day_of_week=${dayOfWeek}&time_slot=${timeSlot}`
       );
       const data = await response.json();
   
@@ -190,7 +190,7 @@ class ActionProvider {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/livechat", {
+      const response = await fetch("http://localhost:8002/api/livechat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -233,7 +233,7 @@ class ActionProvider {
         formData.append("file", file);
 
         const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/file/upload`,
+          `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8002"}/file/upload`,
           {
             method: "POST",
             body: formData,
@@ -250,7 +250,7 @@ class ActionProvider {
           name: file.name,
           type: file.type,
           size: file.size,
-          url: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"}/file/download/${result.id}`,
+          url: `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8002"}/file/download/${result.id}`,
         };
 
         const message = this.createChatBotMessage(
@@ -278,7 +278,7 @@ class ActionProvider {
     // Save message to conversations table, and file to files table if present
     if (issueId !== "0" && issueId !== "undefined") {
       // Save message
-      fetch("http://localhost:5000/api/conversations", {
+      fetch("http://localhost:8002/api/conversations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -294,7 +294,7 @@ class ActionProvider {
 
       // Save file if present in message.metadata.fileData
       if (message.metadata && message.metadata.fileData && message.metadata.fileData.id) {
-        fetch("http://localhost:5000/api/files", {
+        fetch("http://localhost:8002/api/files", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -325,7 +325,7 @@ class ActionProvider {
     console.log(model, userId);
   
     try {
-      const response = await fetch("http://localhost:5000/api/machines/find", {
+      const response = await fetch("http://localhost:8002/api/machines/find", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -356,7 +356,7 @@ class ActionProvider {
     }
   
     try {
-      const response = await fetch("http://localhost:5000/api/issues", {
+      const response = await fetch("http://localhost:8002/api/issues", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -384,7 +384,7 @@ class ActionProvider {
 
   registerMachine = async ({ user_id, model, serial_number }) => {
     try {
-      const response = await fetch("http://localhost:5000/api/machines", {  // Replace with your actual backend URL
+      const response = await fetch("http://localhost:8002/api/machines", {  // Replace with your actual backend URL
         method: "POST",
         headers: {
           "Content-Type": "application/json",
