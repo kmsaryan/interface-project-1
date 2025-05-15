@@ -7,7 +7,7 @@ import LiveChatLink from "./LiveChatLink";
 
 const config = {
   lang: "no", // Set language to Norwegian
-  botName: "R2-D2", // Set bot name
+  botName: "Jack", // Set bot name
   customStyles: {
     botMessageBox: {
       backgroundColor: "#04668a", // Bot's message box color

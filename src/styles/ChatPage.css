@@ -118,19 +118,6 @@ h1 {
   transform: scale(1.1);
 }
 
-.app-chatbot-container {
-  margin: 40px 0;
-  display: flex;
-  width: 670px;
-  justify-content: center;
-  position: fixed;
-  left: 40px;
-  bottom: 55px;
-  z-index: 9999;
-  box-shadow: 5px 5px 13px rgba(91, 81, 81, 0.4);
-  border-radius: 5px;
-}
-
 .react-chatbot-kit-chat-bot-message {
   background-color: #04668a;
   color: white;
@@ -259,9 +246,12 @@ h1 {
   align-items: center;
   justify-content: space-between;
   width: 670px;
+
   position: absolute;
-  bottom: 0;
-  left: 0;
+  bottom: -40px;
+  left: 50%;               /* move to the middle of the parent */
+  transform: translateX(-50%);  /* center it horizontally */
+
   background-color: white;
   padding: 10px;
   border-top: 1px solid #ddd;
@@ -338,4 +328,20 @@ h1 {
 .live-chat-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+.ChatPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* center vertically */
+  min-height: 100vh; /* full screen height */
+  text-align: center;
+  padding: 1rem;
+}
+
+.app-chatbot-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
 }

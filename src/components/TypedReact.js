@@ -6,7 +6,7 @@ export default function TypedReact() {
 
   useEffect(() => {
     const typed = new Typed(typedRef.current, {
-      strings: ["Welcome to Volvo CE Chatbot!", "How can I assist you today?"],
+      strings: ["Say Hi to Jack – Keeping Your Machines UP and Running!", "Chat with Jack – Because Every Machine Needs a Lift!"],
       typeSpeed: 50,
       backSpeed: 25,
       loop: true,
