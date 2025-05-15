@@ -9,6 +9,7 @@ const CustomUserAvatar = () => {
       style={{
         width: "40px",
         height: "40px",
+        marginRight: "20px",
         borderRadius: "50%",
         objectFit: "cover"
       }}
