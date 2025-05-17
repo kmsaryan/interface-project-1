@@ -30,11 +30,11 @@
 }
 
 .react-chatbot-kit-chat-bot-message {
-  background-color: #04668a;
+  background-color: var(--highlight);
   padding: 8px 9px;
   border-radius: 23px;
   font-size: 1.0rem;
-  color: #fff;
+  color: var(--eerie-black-2);
   font-weight: medium;
   position: relative;
   width: auto;
@@ -52,7 +52,7 @@
   height: 0;
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-right: 8px solid #04668a;
+  border-right: 8px solid var(--highlight);
   position: absolute;
   left: -7px;
   top: 12px; /* Adjusted position */

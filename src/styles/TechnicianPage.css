@@ -9,7 +9,8 @@
   gap: 1rem;
   padding: 1rem;
   overflow-y: auto;
-  background-color: var(--background-base);
+  background-color: var(--background);
+  color: var(--text);
 }
 
 .actions {
@@ -58,7 +59,7 @@
 .active-chats,
 .customer-details,
 .online-users {
-  background-color: var(--background);
+  background-color: var(--card-background);
   border: 1px solid var(--border-subtle);
   border-radius: 10px;
   padding: 1rem;
@@ -67,6 +68,7 @@
   overflow-y: auto;
   margin: 0.5rem;
   size: 2.0rem;
+  color: var(--text);
 }
 
 /* ===========================
@@ -86,7 +88,8 @@
   padding: 10px;
   border: 1px solid var(--border-subtle);
   border-radius: 5px;
-  background-color: var(--background);
+  background-color: var(--card-background);
+  color: var(--text);
 }
 
 .queue-item:hover {
@@ -118,7 +121,7 @@
 
 .customer-details button {
   background-color: var(--button-primary);
-  color: var(--background);
+  color: var(--text);
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 5px;
@@ -151,7 +154,7 @@
   =========================== */
 .notification {
   background-color: var(--warning);
-  color: var(--background);
+  color: var(--text);
   border: 1px solid var(--border-subtle);
   border-radius: 10px;
   padding: 1rem;

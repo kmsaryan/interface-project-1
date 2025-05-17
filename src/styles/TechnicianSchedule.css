@@ -13,7 +13,7 @@
 
 .schedule-table th,
 .schedule-table td {
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-subtle);
     padding: 6px; 
     font-size: 20px;
     text-align: center;
@@ -23,36 +23,42 @@
 }
 
 .schedule-table th {
-    background-color: #f2f2f2;
+    background-color: var(--background-light);
+    color: var(--text);
     padding: 8px;
 }
 
 .empty-slot {
-    background-color: #fff;
+    background-color: var(--background);
+    color: var(--text);
 }
 
 .empty-slot:hover {
-    background-color: #e0f7fa;
+    background-color: var(--hover);
 }
 
 .available-slot {
-    background-color: #c8e6c9;
+    background-color: var(--success);
+    color: var(--eerie-black-2);
 }
 
 .available-slot:hover {
-    background-color: #a5d6a7;
+    background-color: #b5b99a;
 }
 
 .busy-slot {
-    background-color: #ffcdd2;
+    background-color: var(--error);
+    color: var(--text);
 }
 
 .busy-slot:hover {
-    background-color: #ef9a9a;
+    background-color: #c96060;
 }
 
 .schedule-form-container {
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-subtle);
+    background-color: var(--card-background);
+    color: var(--text);
     padding: 15px;
     border-radius: 8px;
     max-width: 400px;

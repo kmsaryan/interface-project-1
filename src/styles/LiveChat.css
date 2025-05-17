@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* Ensure the page takes full viewport height */
-  background-color: var(--background-base);
+  background-color: var(--background);
+  color: var(--text);
   padding-top: 1rem; /* Add spacing between header and chat container */
   font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoNovumLight for body text */
 }
@@ -18,7 +19,7 @@
   padding: 1rem;
   max-width: 1400px; /* Increased max width */
   margin: 0 auto;
-  background-color: var(--background);
+  background-color: var(--background-light);
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-height: 800px; /* Set a maximum height for the chat container */
@@ -39,7 +40,8 @@
 .chat-main {
   display: flex;
   flex-direction: column;
-  background-color: var(--background);
+  background-color: var(--card-background);
+  color: var(--text);
   border-radius: 10px;
   padding: 1rem;
   height: 100%; /* Fill available height */
@@ -72,19 +74,29 @@
 .message-input input {
   flex-grow: 1;
   padding: 0.5rem;
+  background-color: var(--background-light);
+  color: var(--text);
   border: 1px solid var(--border-subtle);
   border-radius: 5px;
   font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for input and buttons */
 }
 
+.message-input input::placeholder {
+  color: var(--text-muted);
+}
+
 .message-input button {
   background-color: var(--button-primary);
-  color: var(--background);
+  color: var(--text);
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for input and buttons */
+}
+
+.message-input button:hover {
+  background-color: var(--button-primary-hover);
 }
 
 .typing-indicator {
@@ -104,7 +116,7 @@
   width: 100%; /* Span the width of the text input area */
   padding: 0.75rem;
   background-color: var(--error);
-  color: var(--background);
+  color: var(--text);
   border: none;
   border-radius: 5px;
   font-size: 1rem;
