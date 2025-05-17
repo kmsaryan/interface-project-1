@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400;300&display=swap');
+
 .customer-home-container {
     display: flex;
     flex-direction: column;
@@ -11,9 +13,10 @@
 
 .title {
     font-size: 6rem;
-    font-family: system-ui, Arial, sans-serif;
+    font-family: 'Montserrat', system-ui, Arial, sans-serif;
     margin-bottom: 20px;
     font-weight: 900;
+    letter-spacing: 2px;
 }
 
 .options-container {
@@ -31,26 +34,30 @@
     text-align: center;
     border-radius: 8px;
     transition: transform 0.2s ease-in-out, background 0.2s ease-in-out;
-    font-family: system-ui, Arial, sans-serif;
+    font-family: 'Montserrat', system-ui, Arial, sans-serif;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .option-card h2 {
-    font-family: system-ui, Arial, sans-serif;
-    font-size: 2.5rem;
+    font-family: 'Montserrat', system-ui, Arial, sans-serif;
+    font-size: 2.3rem;
     margin-bottom: 10px;
     font-weight: 700;
     color: #fff;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    line-height: 1.2;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 
 .option-card p {
-    font-family: system-ui, Arial, sans-serif;
-    font-size: 1.3rem;
+    font-family: 'Montserrat', system-ui, Arial, sans-serif;
+    font-size: 1.1rem;
     color: #e0e0e0;
-    font-weight: 400;
+    font-weight: 300;
     margin-top: 10px;
     margin-bottom: 0;
+    letter-spacing: 0.2px;
+    line-height: 1.5;
 }
 
 .option-card:hover {

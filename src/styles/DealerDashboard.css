@@ -4,14 +4,17 @@
     font-family: system-ui, Arial, sans-serif;
     max-width: 1200px;
     margin: 0 auto;
+    background: #f5f6fa; /* Lighter background for better contrast */
   }
   
   .dealer-dashboard h1 {
-    font-size: 28px;
-    color: #333;
+    font-size: 2.2rem;
+    color: #23272f; /* Very dark for visibility */
     margin-bottom: 20px;
-    border-bottom: 2px solid #eee;
+    border-bottom: 2px solid #e0e0e0;
     padding-bottom: 10px;
+    letter-spacing: 1px;
+    background: none;
   }
   
   /* Dashboard sections */
@@ -22,10 +25,13 @@
   }
   
   .dashboard-section h2 {
-    font-size: 22px;
-    color: #555;
+    font-size: 1.4rem;
+    color: #1976d2; /* Accent blue for section headers */
     margin-bottom: 15px;
     width: 100%;
+    background: none;
+    font-weight: 700;
+    letter-spacing: 0.5px;
   }
   
   /* User list styles */
@@ -34,98 +40,112 @@
     padding: 0;
     width: 300px;
     margin-right: 20px;
-    border: 1px solid #eee;
+    border: 1px solid #e0e0e0;
     border-radius: 5px;
     max-height: 500px;
     overflow-y: auto;
+    background: #23272f; /* Dark background for contrast */
   }
   
   .user-list li {
     padding: 10px 15px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #444857;
     cursor: pointer;
     transition: background-color 0.3s;
+    background: none;
   }
   
   .user-list li:hover {
-    background-color: #f5f5f5;
+    background-color: #31364a;
   }
   
   .user-list li.selected {
-    background-color: #f0f7ff;
-    border-left: 3px solid #2273c4;
+    background-color: #1976d2;
+    border-left: 3px solid #1976d2;
+    color: #fff;
   }
   
   .user-name {
     font-weight: bold;
     margin-bottom: 5px;
+    color: #fff;
   }
   
   .user-email {
-    font-size: 0.9em;
-    color: #777;
+    font-size: 0.95em;
+    color: #b0b0b0;
   }
   
   /* User details styles */
   .user-details {
     flex: 1;
     padding: 15px;
-    border: 1px solid #eee;
+    border: 1px solid #e0e0e0;
     border-radius: 5px;
+    background: #fff;
+    margin-left: 10px;
+    min-width: 320px;
   }
   
   .user-details h3 {
-    font-size: 20px;
-    color: #333;
+    font-size: 1.2rem;
+    color: #1976d2;
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: 700;
   }
   
   .user-details p {
     margin-bottom: 10px;
+    color: #23272f;
   }
   
   /* Placeholder sections */
   .placeholder-section {
     margin-top: 20px;
     padding-top: 10px;
-    border-top: 1px dashed #ccc;
+    border-top: 1px dashed #bdbdbd;
   }
   
   .placeholder-section h4 {
-    font-size: 16px;
-    color: #666;
+    font-size: 1rem;
+    color: #1976d2;
     margin-bottom: 10px;
+    font-weight: 700;
   }
   
   .placeholder-feature {
-    background-color: #f9f9f9;
+    background-color: #f8fafc;
     padding: 15px;
     border-radius: 5px;
-    border: 1px dashed #ddd;
+    border: 1px dashed #bdbdbd;
   }
   
   .placeholder-item {
     padding: 10px;
     margin: 5px 0;
-    background-color: #f0f0f0;
+    background-color: #e9ecef;
     border-radius: 3px;
+    color: #23272f;
   }
   
   .stats-placeholder {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    gap: 10px;
   }
   
   .stat-item {
     flex-basis: 48%;
-    background-color: #f0f0f0;
+    background-color: #e9ecef;
     padding: 10px;
     margin: 5px 0;
     border-radius: 3px;
     text-align: center;
+    color: #23272f;
+    font-weight: 500;
   }
   
   /* Loading and error states */
@@ -171,5 +191,7 @@
     
     .user-details {
       width: 100%;
+      margin-left: 0;
+      min-width: unset;
     }
   }
