@@ -1,25 +1,7 @@
 /* ===========================
   Font Definitions
   =========================== */
-@font-face {
-  font-family: "VolvoNovumLight";
-  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype"); /* Corrected relative path */
-  font-weight: 300; /* Use a valid numeric value */
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "VolvoBroad";
-  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype"); /* Corrected relative path */
-  font-weight: 700; /* Use a valid numeric value */
-  font-style: normal;
-}
-@font-face {
-  font-family: "VolvoNovum";
-  src: url("../assets/fonts/Volvo_Novum_Medium.ttf") format("truetype"); /* Corrected relative path */
-  font-weight: 400; /* Use a valid numeric value */
-  font-style: normal;
-}
+/* Remove Volvo font-face definitions if not used for icons */
 
 /* ===========================
   Global Variables
@@ -66,17 +48,18 @@
   Base Styles
   =========================== */
 body {
-  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoNovumLight for body text */
+  font-family: system-ui, Arial, sans-serif;
   background-color: var(--background-base);
   color: var(--text);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for headings */
+  font-family: system-ui, Arial, sans-serif;
+  font-weight: 900;
 }
 
 button, input, select, textarea {
-  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for form elements */
+  font-family: system-ui, Arial, sans-serif; /* Use VolvoNovum for form elements */
 }
 
 button {

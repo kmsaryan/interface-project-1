@@ -1,7 +1,7 @@
 /* Base styles */
 .dealer-dashboard {
     padding: 20px;
-    font-family: "VolvoNovumLight", Arial, sans-serif;
+    font-family: system-ui, Arial, sans-serif;
     max-width: 1200px;
     margin: 0 auto;
   }

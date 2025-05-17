@@ -17,12 +17,12 @@
   border-bottom: 1px solid var(--border-subtle); /* Add subtle border */
   color: var(--text); /* Use global text color */
   text-align: center;
-  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoBroad for header text */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for header text */
 }
 
 .logo {
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 900; /* Make logo text bold */
 }
 
 .logo img {
@@ -32,7 +32,7 @@
 
 .nav {
   display: flex;
-  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoBroad for header text */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for nav text */
   gap: 15px; /* Add spacing between navigation items */
   justify-content: flex-end; 
 }
@@ -41,7 +41,7 @@
   margin: 0 10px;
   text-decoration: none;
   color: var(--text); /* Use global text color */
-  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoBroad for header text */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for nav links */
 
 }
 
@@ -56,7 +56,7 @@
 .auth-buttons button {
   margin: 10px; /* Remove unwanted left margin */
   padding: 10px 15px;
-  font-family: "VolvoNovumLight", Arial, sans-serif;
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for button text */
   background-color: #b3b9bf;
   color: rgb(0, 0, 0);
   border: none;
@@ -144,9 +144,9 @@
   border: none;
   border-radius: 5px; /* Add rounded corners */
   text-decoration: none;
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for buttons */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for buttons */
   font-size: 14px;
-  font-weight: bold; /* Make text bold for better visibility */
+  font-weight: 700; /* Make text bold for better visibility */
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 }

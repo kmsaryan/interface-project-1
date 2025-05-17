@@ -11,7 +11,6 @@
   .fleet-title {
     font-size: 4rem;
     font-weight: bold;
-    font-family: "VolvoBroad";
     margin-bottom: 20px;
   }
   
@@ -25,7 +24,6 @@
   .fleet-card {
     display: flex;
     align-items: center;
-    font-family: "VolvoNovumLight";
     padding: 15px;
     background: var(--card-background);
     color: var(--text);
@@ -77,3 +75,13 @@
   .fleet-button:hover {
     background-color: var(--button-secondary-hover);
   }
+
+.fleet-container,
+.fleet-title,
+.fleet-card,
+.fleet-info,
+.fleet-name,
+.fleet-number,
+.fleet-button {
+  font-family: system-ui, Arial, sans-serif;
+}

@@ -22,7 +22,7 @@
   text-align: center;
   padding: 1rem;
   color: var(--text);
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for chat header */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for chat header */
 }
 
 .chat-container {
@@ -50,7 +50,7 @@
   gap: 0.5rem;
   font-size: 0.875rem;
   color: var(--text);
-  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for technician details */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for technician details */
 }
 
 .chat-main {
@@ -110,7 +110,7 @@
   color: var(--text);
   border: 1px solid var(--border-subtle);
   border-radius: 5px;
-  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for input and buttons */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for input and buttons */
 }
 
 .message-input input::placeholder {
@@ -124,7 +124,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for input and buttons */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for input and buttons */
 }
 
 .message-input button:hover {

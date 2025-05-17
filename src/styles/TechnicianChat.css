@@ -1,3 +1,17 @@
+.technician-chat-page,
+.technician-chat-page .technician-layout,
+.technician-chat-page .sidebar,
+.technician-chat-page .queue-section,
+.technician-chat-page .customer-details,
+.technician-chat-page .technician-chat-area,
+.technician-chat-page .chat-main,
+.technician-chat-page .chat-window,
+.message-input,
+.message-input input,
+.message-input button {
+  font-family: system-ui, Arial, sans-serif;
+}
+
 .technician-chat-page {
   display: grid;
   grid-template-columns: 30% 70%; /* Enforce 30% 70% layout */

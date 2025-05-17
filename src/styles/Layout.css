@@ -19,9 +19,13 @@
     display: flex;
     justify-content: space-around;
     padding: 20px;
-    font-family: "VolvoNovumLight";
     color: var(--text-subtle);
     background-color: var(--footer-background);
   }
+
+  .layout-container,
+.footer {
+  font-family: system-ui, Arial, sans-serif;
+}
 
 

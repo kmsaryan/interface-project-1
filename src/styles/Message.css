@@ -109,3 +109,11 @@
     max-width: 90%;
   }
 }
+
+.message,
+.message-header,
+.message-body,
+.message-timestamp,
+.attachment a {
+  font-family: system-ui, Arial, sans-serif;
+}

@@ -1,14 +1,4 @@
 /*Footer.css*/
-@font-face {
-  font-family: "VolvoNovumLight";
-  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "VolvoBroad";
-  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
-}
-
 .footer {
   background-color: var(--footer-background);
   color: var(--text-subtle);
@@ -18,6 +8,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  font-family: system-ui, Arial, sans-serif;
 }
 
 .footer-team-columns {
