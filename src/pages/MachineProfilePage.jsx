@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/MachineProfile.css";
-import { useDropzone } from "react-dropzone"; // Import dropzone
+import { useDropzone } from "react-dropzone";
 
-// Set up Cloudinary config (make sure to replace with your details)
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dn8rj0auz/image/upload";
 const UPLOAD_PRESET = "sugar-2025";
 
@@ -13,10 +12,12 @@ export default function MachineProfilePage() {
   const [tickets, setTickets] = useState([]);
   const [error, setError] = useState("");
   const [expandedTicket, setExpandedTicket] = useState(null);
-  const [imageUrl, setImageUrl] = useState(""); // State to hold image URL
+  const [imageUrl, setImageUrl] = useState("");
+
+  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/machines/get/${machineId}`)
+    fetch(`${backendUrl}/api/machines/get/${machineId}`)
       .then((res) => res.json())
       .then((data) => {
         if (data) {
@@ -31,7 +32,7 @@ export default function MachineProfilePage() {
         console.error(err);
       });
 
-    fetch(`http://localhost:5000/api/tickets/machine/${machineId}`)
+    fetch(`${backendUrl}/api/tickets/machine/${machineId}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -44,9 +45,8 @@ export default function MachineProfilePage() {
       .catch((err) => {
         console.error("Error fetching tickets:", err);
       });
-  }, [machineId]);
+  }, [machineId, backendUrl]);
 
-  // Image upload handler using Cloudinary
   const handleDrop = (acceptedFiles) => {
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
@@ -58,9 +58,8 @@ export default function MachineProfilePage() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setImageUrl(data.secure_url); // Set the image URL from Cloudinary
-        // Optionally, you can also send this URL to the backend to save it in the database
-        fetch(`http://localhost:5000/api/machines/update_url/${machineId}`, {
+        setImageUrl(data.secure_url);
+        fetch(`${backendUrl}/api/machines/update_url/${machineId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -78,11 +77,10 @@ export default function MachineProfilePage() {
       });
   };
 
-  // Dropzone configuration
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleDrop,
-    accept: "image/*", // Only accept image files
-    maxFiles: 1, // Only allow one file
+    accept: "image/*",
+    maxFiles: 1,
   });
 
   if (error) return <p>{error}</p>;
@@ -91,23 +89,19 @@ export default function MachineProfilePage() {
   return (
     <div className="machine-profile">
       <div className="profile-header">
-        {/* Profile image */}
         <div className="profile-image-container" {...getRootProps()}>
           <input {...getInputProps()} />
-          <img 
-            src={imageUrl || machine.url || "https://via.placeholder.com/100"} 
-            alt={machine.model} 
-            className="profile-image" 
+          <img
+            src={imageUrl || machine.url || "https://via.placeholder.com/100"}
+            alt={machine.model}
+            className="profile-image"
           />
         </div>
-
-        {/* Machine name and other details */}
         <div className="machine-details">
           <h1>{machine.machine_model} Profile</h1>
           <p><strong>Serial Number:</strong> {machine.machine_number}</p>
         </div>
       </div>
-
       <h2>Tickets</h2>
       {tickets.length === 0 ? (
         <p>No tickets found for this machine.</p>
@@ -122,7 +116,6 @@ export default function MachineProfilePage() {
               <h3>{ticket.title}</h3>
               <p>Status: {ticket.resolved ? "✅ Resolved" : "❌ Open"}</p>
               <p className="ticket-date">Created At: {new Date(ticket.created_at).toLocaleString()}</p>
-
               {expandedTicket === ticket.ticket_id && (
                 <p className="ticket-description">{ticket.description}</p>
               )}
