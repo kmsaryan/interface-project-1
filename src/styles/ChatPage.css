@@ -124,7 +124,10 @@ h1 {
   color: white;
   padding: 12px;
   border-radius: 15px;
-  max-width: 60%;
+  display: inline-block !important;
+  white-space: normal !important;
+  word-break: keep-all;
+  max-width: 60%;;
   position: relative;
   margin: 5px 0;
   text-align: left;
@@ -142,7 +145,7 @@ h1 {
 }
 
 .react-chatbot-kit-chat-user-message {
-  background-color: #0f5faf;
+  background-color: #a6b0b9;
   color: white;
   padding: 12px;
   border-radius: 15px;
@@ -160,12 +163,13 @@ h1 {
   top: 50%;
   border-width: 10px;
   border-style: solid;
-  border-color: transparent transparent transparent #0f5faf;
+  border-color: transparent transparent transparent #d7dbdf;
   transform: translateY(-50%);
 }
 
 .react-chatbot-kit-chat-inner-container .react-chatbot-kit-chat-user-message {
   align-self: flex-end;
+  
 }
 
 .react-chatbot-kit-chat-container {
@@ -233,7 +237,7 @@ h1 {
 .react-chatbot-kit-chat-bot-message-container 
 .react-chatbot-kit-chat-bot-message {
   display: flex;
-  
+  min-width: 400px; 
   align-items: center;
 }
 
@@ -260,7 +264,6 @@ h1 {
   padding: 8px 12px;
   border-radius: 15px;
   max-width: 60%;
-  word-wrap: break-word;
   text-align: right;
 }
 
@@ -268,7 +271,7 @@ h1 {
   flex: 1;
   padding: 12px 18px;
   width: 900px;
-  border: 2px solid #04668a;
+  border: 2px solid hsl(180, 1%, 46%);
   border-radius: 25px;
   outline: none;
   font-size: 16px;
@@ -277,6 +280,8 @@ h1 {
 
 .react-chatbot-kit-chat-btn-send {
   border: none;
+  background-color: #2898ec;
+
   padding: 10px;
   margin-left: 30px;
   border-radius: 50%;
@@ -286,6 +291,7 @@ h1 {
   height: 42px;
   bottom: 2px;
 }
+
 
 .chat-page {
   padding: 20px;
@@ -353,4 +359,19 @@ h1 {
   fill: #ffffff;
   width: 20px;
   margin: 0 auto;
+}
+
+.jack-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between image and text */
+  font-size: 10rem;
+}
+
+.jack-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #555d60; /* optional styling */
 }

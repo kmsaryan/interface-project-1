@@ -26,6 +26,7 @@
     "http": "^0.0.1-security",
     "path": "^0.12.7",
     "react": "^18.2.0",
+    "react-chatbotify": "^2.0.0-beta.36",
     "react-conditionally-render": "^1.0.2",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
