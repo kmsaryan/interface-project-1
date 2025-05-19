@@ -1,20 +1,9 @@
-@font-face {
-  font-family: "VolvoNovumLight";
-  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "VolvoBroad";
-  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
-}
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem; /* Add horizontal padding */
   background-color: var(--background); /* Use global background */
-  border-bottom: 1px solid var(--border-subtle); /* Add subtle border */
   color: var(--text); /* Use global text color */
   text-align: center;
   font-family: system-ui, Arial, sans-serif; /* Use system-ui for header text */
@@ -50,7 +39,7 @@
 }
 
 .nav a:hover {
-  color: var(--highlight); /* Use global highlight color */
+  color: black; /* Use global highlight color */
 }
 
 .auth-buttons button {

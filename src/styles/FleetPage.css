@@ -1,8 +1,3 @@
-@font-face {
-  font-family: 'Novum-Light';
-  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
-}
-
 .fleet-container {
     padding: 20px;
     text-align: center;
