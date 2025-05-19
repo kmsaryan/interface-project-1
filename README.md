@@ -62,10 +62,6 @@ This project is a customer support interface that allows customers to chat with 
    ```bash
    npm start
    ```
-7. submodules 
-``` bash
-  git submodule update --init --recursive
- ```
 
 ## Configuration
 
@@ -234,20 +230,8 @@ node /src/VolvoAssistant/server.js
 ```
 npm install
 ```
-## Managing Submodules and Dependencies
-
-### Updating Submodules
-Run the following command to update all submodules:
-```bash
-git submodule update --init --recursive
-```
-
-### Installing Dependencies
-Run the provided script to install dependencies for all submodules:
-```bash
-./update-submodules.sh
-```
-
+- you need to connect to the 
+(optional)
 ## Changelog
 See [CHANGELOG.md](./CHANGELOG.md) for details on recent changes.
 

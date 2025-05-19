@@ -11,6 +11,7 @@ import Fleet from "./pages/Fleet";
 import ChatPage from "./pages/ChatPage";
 import LiveChat from "./pages/LiveChat";
 import RegistrationPage from "./pages/RegistrationPage";
+import MachineProfilePage from "./pages/MachineProfilePage";
 import LiveChatForm from "./pages/LiveChatForm"; // Updated import
 import DealerDashboard from "./pages/DealerDashboard"; // Import DealerDashboard
 import ErrorBoundary from "./components/ErrorBoundary"; // Import ErrorBoundary
@@ -32,6 +33,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/fleet" element={<Fleet />} />
+            <Route path="/fleet/:machineId" element={<MachineProfilePage />} />
             <Route path="/chatpage" element={<ChatPage />} />
             <Route path="/livechat" element={<LiveChat />} />
             <Route path="/livechatform" element={<LiveChatForm />} />
