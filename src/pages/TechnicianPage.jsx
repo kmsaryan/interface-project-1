@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import socket from "../utils/socket";
 import "../styles/global.css";
 import "../styles/TechnicianPage.css";

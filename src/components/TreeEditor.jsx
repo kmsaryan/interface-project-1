@@ -31,9 +31,9 @@ const TreeEditor = () => {
   
   useEffect(() => {
     if (selectedTreeId) {
-      loadTree(selectedTreeId);
+      loadTree(selectedTreeId || treeData?.id);
     }
-  }, [selectedTreeId]); // Add selectedTreeId to dependencies
+  }, [selectedTreeId]);
 
   const loadTree = async (treeId) => {
     const tree = await fetchTree(treeId);

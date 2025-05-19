@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import Jack from "../assets/icons/jack.png";
-import JackBot from "../components/JackBot";
-import "../styles/ChatPage.css";
+import Chatbot from "../react-chatbot-kit";
+import '../styles/ChatPage.css'
+import config from "../components/chatbotConfig";
+import MessageParser from "../components/MessageParser";
+import ActionProvider from "../components/ActionProvider";
 import TypedReact from "../components/TypedReact";
 
 export default function ChatPage() {
-  const [chatOpen, setChatOpen] = useState(false);
-
-  // Reset the flag only once when the page loads (optional)
-  React.useEffect(() => {
-    localStorage.setItem("hasSentFirstMessage", "false");
-  }, []);
+  const [showBot, toggleBot] = useState(false);
+  localStorage.setItem('hasSentFirstMessage', 'false');
 
   return (
     <div className="ChatPage">
@@ -20,39 +18,19 @@ export default function ChatPage() {
         <meta name="description" content="Repair AI assistance" />
       </Helmet>
 
-      <h1 className="jack-heading">
-        <img src={Jack} alt="Jack" className="jack-avatar" />
-        Meet Jack
-      </h1>
+      <h1>Meet Jack</h1>
 
-      <div style={{ height: "20px" }}>
+      <div style={{ height: "20px" }}>  {/* Adjust height to fit your text */}
         <TypedReact />
       </div>
-
-      {/* Button to open the chatbot */}
-      {!chatOpen && (
-        <button
-          onClick={() => setChatOpen(true)}
-          style={{
-            padding: "12px 24px",
-            fontSize: "1rem",
-            borderRadius: "8px",
-            backgroundColor: "#2563eb",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Open Chat
-        </button>
-      )}
-
-      {/* Render chatbot only after button click */}
-      {chatOpen && (
         <div className="app-chatbot-container">
-          <JackBot />
+          <Chatbot
+            config={config}
+            messageParser={MessageParser}
+            actionProvider={ActionProvider}
+          />
         </div>
-      )}
+      
     </div>
   );
 }

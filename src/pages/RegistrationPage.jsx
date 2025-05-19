@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for API calls
-import { api } from "../utils/api";
 import "../styles/RegistrationPage.css";
 import "../styles/global.css";
 
@@ -22,8 +21,8 @@ export default function RegistrationPage() {
     e.preventDefault();
 
     try {
-      // Make API call to backend using the centralized API utility
-      const response = await axios.post(api.register, {
+      // Make API call to backend
+      const response = await axios.post("http://localhost:5000/api/users/register", {
         name: formData.username,
         email: formData.email,
         password: formData.password,
@@ -32,25 +31,9 @@ export default function RegistrationPage() {
 
       if (response.status === 201) {
         console.log("User registered successfully:", response.data);
+        navigate("/");
+        // Store userdata in localStorage
 
-        // Store user data in localStorage
-        localStorage.setItem("userRole", formData.role);
-        localStorage.setItem("user", JSON.stringify({
-          name: formData.username,
-          role: formData.role
-        }));
-
-        // Dispatch custom event to notify Header component
-        window.dispatchEvent(new Event("authChange"));
-
-        // Role-based navigation
-        if (formData.role === "customer") {
-          navigate("/customer_home");
-        } else if (formData.role === "technician") {
-          navigate("/technician");
-        } else if (formData.role === "dealer") {
-          navigate("/dealer");
-        }
       }
     } catch (error) {
       console.error("Error registering user:", error.response?.data || error.message);
@@ -111,7 +94,7 @@ export default function RegistrationPage() {
           >
             <option value="customer">Customer</option>
             <option value="technician">Technician</option>
-            <option value="dealer">Dealer</option> {/* Added dealer role */}
+            <option value="dealer">Dealer</option> 
           </select>
         </div>
 
