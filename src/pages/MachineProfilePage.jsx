@@ -14,7 +14,7 @@ export default function MachineProfilePage() {
   const [expandedTicket, setExpandedTicket] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     fetch(`${backendUrl}/api/machines/get/${machineId}`)

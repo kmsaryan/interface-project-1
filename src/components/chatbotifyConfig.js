@@ -1,5 +1,7 @@
 import { createChatbotMessage } from "react-chatbotify";
 
+const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+
 export const chatbotConfig = {
   theme: {
     primaryColor: "#0b5ed7",
@@ -24,4 +26,5 @@ export const chatbotConfig = {
       trigger: "userInput",
     },
   ],
+  backendUrl, // Add backend URL to the chatbot configuration
 };

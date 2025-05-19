@@ -1,5 +1,5 @@
 // /src/components/treeService.js
-const API_BASE = 'http://localhost:5000/api/tree'; // ajuste se seu backend estiver em outra porta ou domínio
+const API_BASE = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000/api/tree'; // Dynamically use backend URL
 
 export const fetchTreeList = async () => {
     const response = await fetch(`${API_BASE}/trees`);

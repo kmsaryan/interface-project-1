@@ -11,6 +11,17 @@ let liveChatQueue = []; // Array to track live chat queue
 let activeChats = new Map(); // Map to track active chats (technicianId -> customerId)
 
 const PORT = process.env.PORT || 5000;
+const FRONTEND_URL = process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || `http://localhost:${PORT}`;
+
+// Middleware to enable CORS
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, content-type");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
 
 app.get("/", (req, res) => {
   res.send("Welcome to the WebSocket Server!"); // Respond with a simple message

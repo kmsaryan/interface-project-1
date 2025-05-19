@@ -6,9 +6,11 @@ let activeChats = new Map(); // Map to track active chats (technicianId -> custo
 let technicianSchedule = []; // Store the technician's schedule
 
 function setupWebSocket(server) {
+  const FRONTEND_URL = process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
+
   const io = new Server(server, {
     cors: {
-      origin: process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000", // Use frontend URL from .env
+      origin: FRONTEND_URL, // Use frontend URL from .env
       methods: ["GET", "POST"],
       credentials: true,
     },

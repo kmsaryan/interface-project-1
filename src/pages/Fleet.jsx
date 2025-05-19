@@ -14,7 +14,7 @@ export default function FleetPage() {
     }
 
     const userId = user.id;
-    const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     fetch(`${backendUrl}/api/machines/${userId}`)
       .then((res) => res.json())
