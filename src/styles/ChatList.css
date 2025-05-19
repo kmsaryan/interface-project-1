@@ -1,22 +1,23 @@
 /* ChatList.css */
 .chat-list {
-  background-color: #ffffff; /* White background */
+  background-color: var(--card-background);
   padding: 10px;
-  border: 1px solid #e1e1e1; /* Light gray border */
+  border: 1px solid var(--border-subtle);
   border-radius: 5px;
   overflow-y: auto; /* Enable scrolling for the chat list */
   flex-shrink: 0; /* Prevent the list from shrinking */
+  color: var(--text);
 }
 
 .chat-list div {
   padding: 12px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border-subtle);
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .chat-list div:hover {
-  background-color: #f0f0f0;
+  background-color: var(--hover);
 }
 
 .chat-list div:last-child {

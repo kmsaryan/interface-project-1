@@ -2,9 +2,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #ffffff;
+  background-color: var(--background-light);
   padding: 0.75rem 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid var(--border-subtle);
   border-radius: 0.5rem;
   flex-shrink: 0;
 }
@@ -12,24 +12,25 @@
 .message-input input {
   flex: 1;
   padding: 0.625rem 0.75rem;
-  border: 1px solid #e1e1e1;
+  border: 1px solid var(--border-subtle);
   border-radius: 1.25rem;
   outline: none;
   font-size: 0.875rem;
-  font-family: "VolvoNovumLight", Arial, sans-serif;
   transition: border-color 0.2s;
+  background-color: var(--background-light);
+  color: var(--text);
 }
 
 .message-input input:focus {
-  border-color: #2a609d;
+  border-color: var(--highlight);
 }
 
 .message-input input::placeholder {
-  color: rgba(0, 0, 0, 0.3);
+  color: var(--text-muted);
 }
 
 .attachment-icon {
-  color: #575757;
+  color: var(--text-muted);
   font-size: 1.25rem;
   cursor: pointer;
   transition: color 0.2s;
@@ -41,7 +42,7 @@
 }
 
 .attachment-icon:hover {
-  color: #2a609d;
+  color: var(--highlight);
   background-color: rgba(0, 0, 0, 0.05);
 }
 
@@ -50,8 +51,8 @@ input[type="file"] {
 }
 
 .send-button {
-  background-color: #2a609d;
-  color: white;
+  background-color: var(--button-primary);
+  color: var(--text);
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
@@ -65,63 +66,15 @@ input[type="file"] {
 }
 
 .send-button:hover {
-  background-color: #224f82;
+  background-color: var(--button-primary-hover);
 }
 
 .send-button:active {
   transform: scale(0.95);
 }
 
-.message-input-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.file-error {
-  color: #e74c3c;
-  font-size: 0.85rem;
-  margin-bottom: 6px;
-  padding: 4px 8px;
-  background: rgba(231, 76, 60, 0.1);
-  border-radius: 4px;
-}
-
-.attachment-preview {
-  display: flex;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-  padding: 6px 10px;
-  margin-bottom: 8px;
-  font-size: 0.85rem;
-}
-
-.remove-attachment {
-  margin-left: 8px;
-  background: none;
-  border: none;
-  color: #999;
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 0;
-}
-
-.remove-attachment:hover {
-  color: #e74c3c;
-}
-
-.upload-progress-container {
-  height: 4px;
-  background: #eee;
-  width: 100%;
-  border-radius: 2px;
-  margin-top: 5px;
-  overflow: hidden;
-}
-
-.upload-progress-bar {
-  height: 100%;
-  background: var(--button-primary);
-  transition: width 0.3s ease;
+.message-input,
+.message-input input,
+.send-button {
+  font-family: system-ui, Arial, sans-serif;
 }

@@ -1,20 +1,20 @@
 .global-home-page {
   text-align: center;
   padding: 20px;
-  font-family: Arial, sans-serif;
+  font-family: system-ui, Arial, sans-serif;
 }
 
 .global-header h1 {
   font-size: 70px;
-  font-weight: bold;
+  font-weight: 900;
   margin-bottom: 10px;
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for main heading */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for main heading */
 }
 
 .global-header p {
   font-size: 18px;
   margin-bottom: 20px;
-  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoNovumLight for paragraph text */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for paragraph text */
 }
 
 .slideshow {

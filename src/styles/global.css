@@ -1,47 +1,38 @@
 /* ===========================
   Font Definitions
   =========================== */
-@font-face {
-  font-family: "VolvoNovumLight";
-  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype"); /* Corrected relative path */
-  font-weight: 300; /* Use a valid numeric value */
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "VolvoBroad";
-  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype"); /* Corrected relative path */
-  font-weight: 700; /* Use a valid numeric value */
-  font-style: normal;
-}
-@font-face {
-  font-family: "VolvoNovum";
-  src: url("../assets/fonts/Volvo_Novum_Medium.ttf") format("truetype"); /* Corrected relative path */
-  font-weight: 400; /* Use a valid numeric value */
-  font-style: normal;
-}
+/* Remove Volvo font-face definitions if not used for icons */
 
 /* ===========================
   Global Variables
   =========================== */
 :root {
-  --background: #ffffff;
-  --background-base: #f7f7f7;
-  --button-marketing: #2a609d;
-  --button-marketing-hover: #4781c4;
-  --button-marketing-pressed: #234d7d;
-  --button-primary: #212121;
-  --button-primary-hover: #333333;
-  --button-primary-pressed: #3d3d3d;
-  --border-subtle: #e1e1e1;
-  --highlight: #2a609d;
-  --hover: #f7f7f7;
-  --selected-subtle: #ededed;
-  --text: #212121;
-  --text-subtle: #575757;
-  --error: #bf2012;
-  --success: #177844;
-  --warning: #ffa000;
+  /* Industrial Volvo color palette */
+  --background: #ADB095;           /* sage - main background */
+  --background-base: #ADB095;      /* sage - main background */
+  --background-light: #454643;     /* black-olive - sidebar background */
+  --card-background: #252521;      /* eerie-black - card background */
+  --footer-background: #1B1C1B;    /* eerie-black-2 - footer */
+  --jet: #31312F;                  /* jet - secondary background, header strip */
+
+  --button-primary: #252521;       /* eerie-black */
+  --button-primary-hover: #454643; /* black-olive */
+  --button-primary-pressed: #3A3A3A; /* medium grey */
+  --button-secondary: #454643;     /* black-olive */
+  --button-secondary-hover: #5a5b58; /* lighter black-olive */
+
+  --border-subtle: #454643;        /* black-olive */
+  --border-focus: #ADB095;         /* sage */
+  --highlight: #ADB095;            /* sage */
+  --hover: #454643;                /* black-olive */
+  --selected-subtle: #5a5b58;      /* lighter black-olive */
+
+  --text: #FFFFFF;                 /* white */
+  --text-subtle: #DDDDDD;          /* secondary text */
+  --text-muted: #AAAAAA;           /* muted text */
+  --error: #B04D4D;                /* error */
+  --success: #C2C7AC;              /* success */
+  --warning: #BFAF77;              /* warning */
 }
 
 /* ===========================
@@ -57,17 +48,19 @@
   Base Styles
   =========================== */
 body {
-  font-family: "VolvoNovumLight", Arial, sans-serif; /* Use VolvoNovumLight for body text */
+  font-family: system-ui, Arial, sans-serif;
   background-color: var(--background-base);
   color: var(--text);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for headings */
+  font-family: 'Montserrat', system-ui, Arial, sans-serif;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
 button, input, select, textarea {
-  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for form elements */
+  font-family: system-ui, Arial, sans-serif; /* Use VolvoNovum for form elements */
 }
 
 button {
@@ -312,3 +305,5 @@ a:active {
 .badge-low {
   background-color: var(--success);
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400;300&display=swap');

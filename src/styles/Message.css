@@ -9,27 +9,31 @@
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   margin-bottom: 0.5rem;
   animation: fadeIn 0.2s ease-in-out;
+  background-color: var(--card-background);
+  color: var(--text);
 }
 
 /* Sent messages */
 .message.sent {
   align-self: flex-end;
-  background-color: #dcf8c6;
+  background-color: var(--highlight);
+  color: var(--eerie-black-2);
   border-top-right-radius: 0;
 }
 
 /* Received messages */
 .message.received {
   align-self: flex-start;
-  background-color: white;
+  background-color: var(--background-light);
+  color: var(--text);
   border-top-left-radius: 0;
 }
 
 /* System messages */
 .message.system {
   align-self: center;
-  background-color: rgba(255, 255, 255, 0.7);
-  color: #575757;
+  background-color: var(--background-light);
+  color: var(--text-muted);
   font-style: italic;
   border-radius: 1rem;
   padding: 0.5rem 1rem;
@@ -46,20 +50,20 @@
   align-items: center;
   margin-bottom: 0.25rem;
   font-size: 0.75rem;
-  color: #575757;
+  color: var(--text-muted);
 }
 
 /* Message body */
 .message-body {
   font-size: 0.875rem;
   line-height: 1.4;
-  color: #212121;
+  color: var(--text);
 }
 
 /* Message timestamp */
 .message-timestamp {
   font-size: 0.7rem;
-  color: rgba(0, 0, 0, 0.4);
+  color: var(--text-muted);
   align-self: flex-end;
   margin-top: 0.25rem;
   white-space: nowrap;
@@ -73,7 +77,7 @@
 }
 
 .attachment a {
-  color: #2a609d;
+  color: var(--highlight);
   text-decoration: none;
   font-size: 0.875rem;
 }
@@ -104,4 +108,12 @@
   .message {
     max-width: 90%;
   }
+}
+
+.message,
+.message-header,
+.message-body,
+.message-timestamp,
+.attachment a {
+  font-family: system-ui, Arial, sans-serif;
 }

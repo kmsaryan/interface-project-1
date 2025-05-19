@@ -64,3 +64,12 @@
   margin: 20px auto;
   display: block;
 }
+
+.home,
+.home h1,
+.home p,
+.assistant-form input,
+.assistant-form select,
+.assistant-form button {
+  font-family: system-ui, Arial, sans-serif;
+}

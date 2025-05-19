@@ -1,15 +1,16 @@
 .user-list {
-  background-color: #ffffff;
+  background-color: var(--card-background);
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--text);
 }
 
 .user {
   display: flex;
   align-items: center;
   padding: 8px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .user:last-child {
@@ -20,7 +21,7 @@
   content: "";
   width: 10px;
   height: 10px;
-  background-color: #4caf50;
+  background-color: var(--success);
   border-radius: 50%;
   margin-right: 8px;
 }
@@ -29,7 +30,7 @@
   content: "";
   width: 10px;
   height: 10px;
-  background-color: #f44336;
+  background-color: var(--error);
   border-radius: 50%;
   margin-right: 8px;
 }
@@ -38,7 +39,7 @@
   content: "";
   width: 10px;
   height: 10px;
-  background-color: #ff9800;
+  background-color: var(--warning);
   border-radius: 50%;
   margin-right: 8px;
 }

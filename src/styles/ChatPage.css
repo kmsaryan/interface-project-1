@@ -1,15 +1,4 @@
-@font-face {
-  font-family: 'Novum-Light';
-  src: url("../assets/fonts/Volvo_Novum_Light.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: 'Broad';
-  src: url("../assets/fonts/VolvoBroad.ttf") format("truetype");
-}
-
 .ChatPage {
-  font-family: 'Novum-Light';
   text-align: center;
 }
 
@@ -19,14 +8,12 @@
 }
 
 h1 {
-  font-family: 'Broad', sans-serif !important;
-  font-size: 100px;
+  font-size: 60px;
 }
 
 .options-header {
   text-align: center;
   font-size: 1rem;
-  font-family: 'Novum-Light';
   font-weight: normal;
 }
 
@@ -136,7 +123,10 @@ h1 {
   color: white;
   padding: 12px;
   border-radius: 15px;
-  max-width: 60%;
+  display: inline-block !important;
+  white-space: normal !important;
+  word-break: keep-all;
+  max-width: 60%;;
   position: relative;
   margin: 5px 0;
   text-align: left;
@@ -154,7 +144,7 @@ h1 {
 }
 
 .react-chatbot-kit-chat-user-message {
-  background-color: #0f5faf;
+  background-color: #a6b0b9;
   color: white;
   padding: 12px;
   border-radius: 15px;
@@ -172,12 +162,13 @@ h1 {
   top: 50%;
   border-width: 10px;
   border-style: solid;
-  border-color: transparent transparent transparent #0f5faf;
+  border-color: transparent transparent transparent #d7dbdf;
   transform: translateY(-50%);
 }
 
 .react-chatbot-kit-chat-inner-container .react-chatbot-kit-chat-user-message {
   align-self: flex-end;
+  
 }
 
 .react-chatbot-kit-chat-container {
@@ -225,6 +216,7 @@ h1 {
 .react-chatbot-kit-chat-bot-message-container,
 .react-chatbot-kit-chat-bot-message {
   display: flex;
+  min-width: 400px; 
   align-items: center;
 }
 
@@ -250,7 +242,6 @@ h1 {
   padding: 8px 12px;
   border-radius: 15px;
   max-width: 60%;
-  word-wrap: break-word;
   text-align: right;
 }
 
@@ -273,8 +264,8 @@ h1 {
 .react-chatbot-kit-chat-input {
   flex: 1;
   padding: 12px 18px;
-  width: 550px;
-  border: 2px solid #04668a;
+  width: 900px;
+  border: 2px solid hsl(180, 1%, 46%);
   border-radius: 25px;
   outline: none;
   font-size: 16px;
@@ -283,7 +274,8 @@ h1 {
 
 .react-chatbot-kit-chat-btn-send {
   border: none;
-  color: white;
+  background-color: #2898ec;
+
   padding: 10px;
   margin-left: 5px;
   border-radius: 50%;
@@ -293,6 +285,7 @@ h1 {
   height: 42px;
   bottom: 2px;
 }
+
 
 .chat-page {
   padding: 20px;
@@ -338,4 +331,41 @@ h1 {
 .live-chat-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+.ChatPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* center vertically */
+  min-height: 100vh; /* full screen height */
+  text-align: center;
+  padding: 1rem;
+}
+
+.app-chatbot-container {
+  display: flex;
+  justify-content: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.react-chatbot-kit-chat-btn-send-icon {
+  fill: #ffffff;
+  width: 20px;
+  margin: 0 auto;
+}
+
+.jack-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between image and text */
+  font-size: 6rem;
+}
+
+.jack-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #555d60; /* optional styling */
 }

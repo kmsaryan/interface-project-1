@@ -271,3 +271,13 @@
     max-width: 90%;
   }
 }
+
+.chat-window,
+.message,
+.message-header,
+.message-body,
+.message-timestamp,
+.chat-bubble,
+.message-footer {
+  font-family: system-ui, Arial, sans-serif;
+}

@@ -9,7 +9,8 @@
   gap: 1rem;
   padding: 1rem;
   overflow-y: auto;
-  background-color: var(--background-base);
+  background-color: var(--background);
+  color: var(--text);
 }
 
 .actions {
@@ -25,7 +26,7 @@
   font-weight: bold;
   color: var(--text);
   text-align: center;
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for main heading */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for main heading */
 }
 
 .technician-page h2{
@@ -33,7 +34,7 @@
   font-weight: bold;
   color: var(--text);
   text-align: center;
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for main heading */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for main heading */
 }
 
 /* ===========================
@@ -58,7 +59,7 @@
 .active-chats,
 .customer-details,
 .online-users {
-  background-color: var(--background);
+  background-color: var(--card-background);
   border: 1px solid var(--border-subtle);
   border-radius: 10px;
   padding: 1rem;
@@ -67,6 +68,7 @@
   overflow-y: auto;
   margin: 0.5rem;
   size: 2.0rem;
+  color: var(--text);
 }
 
 /* ===========================
@@ -86,7 +88,8 @@
   padding: 10px;
   border: 1px solid var(--border-subtle);
   border-radius: 5px;
-  background-color: var(--background);
+  background-color: var(--card-background);
+  color: var(--text);
 }
 
 .queue-item:hover {
@@ -113,12 +116,12 @@
   font-size: 1.25rem;
   font-weight: bold;
   color: var(--text);
-  font-family: "VolvoBroad", Arial, sans-serif; /* Use VolvoBroad for section headings */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for section headings */
 }
 
 .customer-details button {
   background-color: var(--button-primary);
-  color: var(--background);
+  color: var(--text);
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 5px;
@@ -126,7 +129,7 @@
   font-size: 0.875rem;
   transition: background-color 0.3s, color 0.3s;
   margin-top: 0.5rem;
-  font-family: "VolvoNovum", Arial, sans-serif; /* Use VolvoNovum for buttons */
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for buttons */
 }
 
 .customer-details button:hover {
@@ -144,6 +147,7 @@
   font-size: 2.0rem;
   font-weight: bold;
   color: var(--text);
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for section headings */
 }
 
 /* ===========================
@@ -151,7 +155,7 @@
   =========================== */
 .notification {
   background-color: var(--warning);
-  color: var(--background);
+  color: var(--text);
   border: 1px solid var(--border-subtle);
   border-radius: 10px;
   padding: 1rem;
@@ -164,6 +168,7 @@
 .custom-button {
   font-size: 1rem;
   padding: 12px 20px;
+  font-family: system-ui, Arial, sans-serif; /* Use system-ui for buttons */
 }
 
 /* ===========================
