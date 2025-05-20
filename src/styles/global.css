@@ -8,9 +8,9 @@
   =========================== */
 :root {
   /* Industrial Volvo color palette */
-  --background: #ADB095;           /* sage - main background */
-  --background-base: #ADB095;      /* sage - main background */
-  --background-light: #454643;     /* black-olive - sidebar background */
+  --background: #afe5eb;           /* sage - main background */
+  --background-base: #ffffff;      /* sage - main background */
+  --background-light: #a4dade;     /* black-olive - sidebar background */
   --card-background: #252521;      /* eerie-black - card background */
   --footer-background: #1B1C1B;    /* eerie-black-2 - footer */
   --jet: #31312F;                  /* jet - secondary background, header strip */
@@ -27,7 +27,7 @@
   --hover: #454643;                /* black-olive */
   --selected-subtle: #5a5b58;      /* lighter black-olive */
 
-  --text: #FFFFFF;                 /* white */
+  --text: #3f6267;                 /* white */
   --text-subtle: #DDDDDD;          /* secondary text */
   --text-muted: #AAAAAA;           /* muted text */
   --error: #B04D4D;                /* error */

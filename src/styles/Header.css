@@ -46,7 +46,7 @@
   margin: 10px; /* Remove unwanted left margin */
   padding: 10px 15px;
   font-family: system-ui, Arial, sans-serif; /* Use system-ui for button text */
-  background-color: #b3b9bf;
+  background-color: #71b9bc;
   color: rgb(0, 0, 0);
   border: none;
   border-radius: 5px;
@@ -54,7 +54,7 @@
 }
 
 .auth-buttons button:hover {
-  background-color: #cbd0d5;
+  background-color: #c6faff;
 }
 
 .register {

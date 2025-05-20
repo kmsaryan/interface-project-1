@@ -55,7 +55,7 @@ const JackBot = () => {
 		<ChatBot
 			settings={{
 				general: { embedded: true },
-				audio: { disabled: false, defaultToggledOn: true, tapToPlay: true },
+				audio: { disabled: false, defaultToggledOn: true, tapToPlay: true, language: "pt-BR" },
 				voice: { disabled: false },
 				chatHistory: { storageKey: "example_smart_conversation" },
 				header: {
@@ -65,7 +65,7 @@ const JackBot = () => {
 			}}
 			styles={{
 				headerStyle: {
-					background: "#1e3a8a", 
+					background: "#008080", // Teal
 					color: "#ffffff",
 					fontWeight: "bold",
 					fontSize: "1.2rem",
@@ -73,47 +73,48 @@ const JackBot = () => {
 					borderRadius: "10px 10px 0 0",
 				},
 				chatWindowStyle: {
-					border: "2px solidrgb(138, 147, 176)",
+					border: "2px solid #7fd1b9",
 					borderRadius: "10px",
-					background: "#f0f4ff",
+					background: "#e0f7f5", 
 				},
 				bodyStyle: {
-					background: "#f8fbff",
+					background: "#d6f5f2", 
 				},
 				chatInputContainerStyle: {
-					background: "#e0e7ff",
-					borderTop: "1px solid #93c5fd",
+					background: "#c0ebe7", 
+					borderTop: "1px solid #7fd1b9",
 				},
 				chatInputAreaStyle: {
 					background: "#ffffff",
-					border: "1px solid #3b82f6",
-					color: "#1e3a8a",
+					border: "1px solid #00b8b8", 
+					color: "#006666",
 					borderRadius: "8px",
 				},
 				userBubbleStyle: {
-					background: "#60a5fa",
+					background: "#20cfcf",
 					color: "#ffffff",
 				},
 				botBubbleStyle: {
-					background: "#3b82f6",
+					background: "#00a3a3", 
 					color: "#ffffff",
 				},
 				sendButtonStyle: {
-					background: "#2563eb",
+					background: "#00b3b3",
 					color: "#ffffff",
 					borderRadius: "8px",
 					padding: "6px 12px",
 				},
 				sendButtonHoveredStyle: {
-					background: "#1d4ed8",
+					background: "#008080",
 				},
 				sendIconStyle: {
 					fill: "#ffffff",
 				},
 				rcbTypingIndicatorDotStyle: {
-					background: "#3b82f6",
+					background: "#00b3b3",
 				},
 			}}
+			
 			flow={flow}
 		/>
 	);
