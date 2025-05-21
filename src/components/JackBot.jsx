@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ChatBot from "react-chatbotify";
 import BuddyAvatar from "../assets/icons/jack.png";
 
@@ -6,7 +6,6 @@ const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dn8rj0auz/image/upload";
 const UPLOAD_PRESET = "sugar-2025";
 
 const isImageUrl = (url) => {
-	console.log(url);
   const imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".webp"];
   try {
     const parsed = new URL(url);
@@ -17,19 +16,29 @@ const isImageUrl = (url) => {
 };
 
 const JackBot = () => {
-  const [lastImageUrl, setLastImageUrl] = useState(null);
+  const lastImageUrlRef = useRef(null);
+  const urlToUploadRef = useRef(null);
+  const uploadedFile = useRef(null);
+
+  const [, forceUpdate] = useState(false); 
 
   async function fetchFromBackend(message) {
+
+	if (uploadedFile.current) {
+		await waitUntilUploaded();
+	  }
+	  
     try {
       const user = JSON.parse(localStorage.getItem("user")) || { id: "guest" };
       const storedResetFlag = localStorage.getItem("hasSentFirstMessage") === "true";
       const resetFlag = !storedResetFlag;
+	  console.log("IN POST: ",urlToUploadRef.current);
 
       const payload = {
         user_id: user.id,
         message: message || "Hello!",
         reset: resetFlag,
-        media_url: ""
+        media_url: urlToUploadRef.current || "",
       };
 
       const response = await fetch("http://127.0.0.1:8000/chat", {
@@ -40,6 +49,11 @@ const JackBot = () => {
 
       const data = await response.json();
       localStorage.setItem("hasSentFirstMessage", "true");
+
+      urlToUploadRef.current = null;
+	  uploadedFile.current  = false;
+      lastImageUrlRef.current = data?.image_url || null;
+      forceUpdate((v) => !v); 
 
       return {
         message: data?.response || "Desculpe, algo deu errado.",
@@ -51,16 +65,24 @@ const JackBot = () => {
     }
   }
 
+  const waitUntilUploaded = () => {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        if (urlToUploadRef.current) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 300);
+    });
+  };
+
   const handleUpload = async (params) => {
     const files = params.files;
     if (!files || files.length === 0) return;
-
-    const user = JSON.parse(localStorage.getItem("user")) || { id: "guest" };
-    const storedResetFlag = localStorage.getItem("hasSentFirstMessage") === "true";
-    const resetFlag = !storedResetFlag;
+	uploadedFile.current = true;
 
     const formData = new FormData();
-    formData.append("file", files[0]); 
+    formData.append("file", files[0]);
     formData.append("upload_preset", UPLOAD_PRESET);
 
     try {
@@ -70,33 +92,10 @@ const JackBot = () => {
       });
 
       const cloudinaryData = await cloudinaryResponse.json();
-      const imageUrl = cloudinaryData.secure_url;
-
-      const payload = {
-        user_id: user.id,
-        message: params.userInput || " ", 
-        reset: resetFlag,
-        media_url: imageUrl,
-      };
-
-      const response = await fetch("http://127.0.0.1:8000/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-      localStorage.setItem("hasSentFirstMessage", "true");
-
-      setLastImageUrl(data?.image_url || null);
-
-      return {
-        message: data?.response || "Desculpe, algo deu errado.",
-        image_url: data?.image_url || null,
-      };
-    } catch (err) {
-      console.error("Upload error:", err);
-      return { message: "Erro ao enviar a imagem.", image_url: null };
+      urlToUploadRef.current = cloudinaryData.secure_url;
+      console.log("Image URL uploaded:", urlToUploadRef.current);
+    } catch (error) {
+      console.error("Erro ao fazer upload para Cloudinary:", error);
     }
   };
 
@@ -105,54 +104,56 @@ const JackBot = () => {
       message: "Hey!",
       path: "loop",
     },
+    image: {
+      component: () => (
+        <div style={{ display: "flex", justifyContent: "flex-start", marginTop: "10px", marginLeft: "20px" }}>
+          {lastImageUrlRef.current && isImageUrl(lastImageUrlRef.current) && (
+            <div
+              style={{
+                background: "#00a3a3",
+                padding: "20px",
+                borderRadius: "15px",
+                maxWidth: "60%",
+              }}
+            >
+              <img
+                src={lastImageUrlRef.current}
+                alt="response visual"
+                style={{
+                  width: "100%",
+                  borderRadius: "6px",
+                  display: "block",
+                }}
+              />
+            </div>
+          )}
+        </div>
+      ),
+      path: "wait",
+      transition: { duration: 0 },
+    },
+    wait: {
+      message: "",
+      file: async (params) => {
+        await handleUpload(params);
+      },
+      path: "loop",
+    },
     loop: {
       message: async (params) => {
-        const { message, image_url } = await fetchFromBackend(params.userInput);
-
-        setLastImageUrl(image_url);
-		console.log(lastImageUrl);
-
+        const { message } = await fetchFromBackend(params.userInput);
         return message;
       },
-	  transition: {duration: 1000},
-	  path: "image",
-	},
-	image : {
-		component: () => (
-			<div style={{ display: "flex", justifyContent: "flex-start", marginTop: "10px", marginLeft: "20px" }}>
-			  {lastImageUrl && isImageUrl(lastImageUrl) && (
-				<div
-				  style={{
-					background: "#00a3a3", // same as botBubbleStyle background
-					padding: "20px",
-					borderRadius: "15px",
-					maxWidth: "60%",
-				  }}
-				>
-				  <img
-					src={lastImageUrl}
-					alt="response visual"
-					style={{
-					  width: "100%",
-					  borderRadius: "6px",
-					  display: "block",
-					}}
-				  />
-				</div>
-			  )}
-			</div>
-		  ),
-		  
-	  file: (params) => handleUpload(params),
-      path: "loop",
-	}
+      path: "image",
+      transition: { duration: 0 },
+    },
   };
 
   return (
     <ChatBot
       settings={{
         general: { embedded: true },
-        fileAttachment: { multiple: true, showMediaDisplay: true, sendFileName: false },
+        fileAttachment: { multiple: true, showMediaDisplay: true, sendFileName: true },
         audio: { disabled: false, defaultToggledOn: true, tapToPlay: true, language: "pt-BR" },
         voice: { disabled: false, autoSendDisabled: true },
         chatHistory: { storageKey: "example_smart_conversation" },
