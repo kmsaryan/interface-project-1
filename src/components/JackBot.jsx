@@ -164,7 +164,7 @@ const JackBot = () => {
       }}
       styles={{
         headerStyle: {
-          background: "#008080",
+          background: "#487a71",
           color: "#ffffff",
           fontWeight: "bold",
           fontSize: "1.2rem",
@@ -172,20 +172,18 @@ const JackBot = () => {
           borderRadius: "10px 10px 0 0",
         },
         chatWindowStyle: {
-          border: "2px solid #7fd1b9",
           borderRadius: "10px",
-          background: "#e0f7f5",
+          background: "#487a71",
         },
         bodyStyle: {
-          background: "#d6f5f2",
+          background: "#cde8e3",
         },
         chatInputContainerStyle: {
-          background: "#c0ebe7",
+          background: "#7acccc",
           borderTop: "1px solid #7fd1b9",
         },
         chatInputAreaStyle: {
           background: "#ffffff",
-          border: "1px solid #00b8b8",
           color: "#006666",
           borderRadius: "8px",
         },
@@ -193,12 +191,15 @@ const JackBot = () => {
           background: "#20cfcf",
           color: "#ffffff",
         },
+        notificationIconStyle: {
+          color: "#ffffff",
+        },
         botBubbleStyle: {
           background: "#00a3a3",
           color: "#ffffff",
         },
         sendButtonStyle: {
-          background: "#00b3b3",
+          background: "#487a71",
           color: "#ffffff",
           borderRadius: "8px",
           padding: "6px 12px",
