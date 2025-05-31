@@ -101,7 +101,7 @@ const JackBot = () => {
 
   const flow = {
     start: {
-      message: "Hey!",
+      message: "",
       path: "loop",
     },
     image: {
@@ -154,7 +154,7 @@ const JackBot = () => {
       settings={{
         general: { embedded: true },
         fileAttachment: { multiple: true, showMediaDisplay: true, sendFileName: true },
-        audio: { disabled: false, defaultToggledOn: true, tapToPlay: true, language: "pt-BR" },
+        audio: { disabled: false, defaultToggledOn: true, tapToPlay: true, language: "en-US" },
         voice: { disabled: false, autoSendDisabled: true },
         chatHistory: { storageKey: "example_smart_conversation" },
         header: {
